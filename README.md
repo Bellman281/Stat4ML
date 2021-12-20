@@ -15,23 +15,23 @@ Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP
     Density and Mass
 
 ### Slide 2:
-Distribution of Functions of a Random Variable
-    Expected Value
-    Moments
-Common Families of Distributions
-    Discrete Distribution
-    Discrete Uniform Distribution
-    Binomial Distribution
-    Poisson Distribution
-    Continuous Distribution
-    Uniform Distribution
-    Exponential Distribution
-    Normal Distribution
-    Lognormal Distribution
-    Laplace distribution
-Moments and Moment Generating Functions
-    Gamma mgf
-    Normal mgf
+    Distribution of Functions of a Random Variable
+      Expected Value
+      Moments
+    Common Families of Distributions
+      Discrete Distribution
+      Discrete Uniform Distribution
+      Binomial Distribution
+      Poisson Distribution
+      Continuous Distribution
+      Uniform Distribution
+      Exponential Distribution
+      Normal Distribution
+      Lognormal Distribution
+      Laplace distribution
+    Moments and Moment Generating Functions
+      Gamma mgf
+      Normal mgf
     
 ### Slide 3:
     Joint and Marginal Distribution
