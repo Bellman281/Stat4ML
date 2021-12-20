@@ -1,7 +1,7 @@
 # Satat4ML
 Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP
 
-###Slide 1 :
+### Slide 1 :
   Set Theory Recall
   Probability Theory Foundation
     Axiomatic Foundations
@@ -14,7 +14,7 @@ Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP
     Distribution Functions
     Density and Mass
 
-###Slide 2:
+### Slide 2:
 Distribution of Functions of a Random Variable
     Expected Value
     Moments
@@ -33,7 +33,7 @@ Moments and Moment Generating Functions
     Gamma mgf
     Normal mgf
     
-###Slide 3:
+### Slide 3:
     Joint and Marginal Distribution
     Conditional Distributions and Independence
     Bivariate Transformations
@@ -43,7 +43,7 @@ Moments and Moment Generating Functions
     Multivariate Distribution
     Inequalities
     
-###Slide 4:
+### Slide 4:
     Variance of Sums of Random Variables
     Basic Concepts of Random Samples
     Sums of Random Variable from a Random Sample
@@ -55,7 +55,7 @@ Moments and Moment Generating Functions
     Some More Large Sample Results
     Matrix Notation for Moments
 
-###Slide 5:
+### Slide 5:
 Maximum Likelihood Estimation
   Motivation and the Main Ideas
   Properties of the Maximum Likelihood Estimator
