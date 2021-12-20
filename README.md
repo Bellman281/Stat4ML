@@ -2,17 +2,17 @@
 Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP
 
 ### Slide 1 :
-  Set Theory Recall
-  Probability Theory Foundation
-    Axiomatic Foundations
-    The Calculus of Probabilities
-    Conditional Probability and Independence
-    Bayes Theorem
-    Independence
-    Random Variables
-    Probability Function
-    Distribution Functions
-    Density and Mass
+    Set Theory Recall
+    Probability Theory Foundation
+      Axiomatic Foundations
+      The Calculus of Probabilities
+      Conditional Probability and Independence
+      Bayes Theorem
+      Independence
+      Random Variables
+      Probability Function
+      Distribution Functions
+      Density and Mass
 
 ### Slide 2:
     Distribution of Functions of a Random Variable
@@ -56,6 +56,6 @@ Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP
     Matrix Notation for Moments
 
 ### Slide 5:
-Maximum Likelihood Estimation
-  Motivation and the Main Ideas
-  Properties of the Maximum Likelihood Estimator
+    Maximum Likelihood Estimation
+      Motivation and the Main Ideas
+      Properties of the Maximum Likelihood Estimator
