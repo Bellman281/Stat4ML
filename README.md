@@ -1,6 +1,23 @@
 # Satat4ML
 **Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP**
 
+### Matrix Algebra Review:
+
+        Matrix operations
+        Matrix Multiplication
+           Properties of determinants
+           Inverse Matrix
+           Matrix Transpose
+           Properties of transpose
+        Partioned Matrices
+        Eigenvalues and Eigenvectors
+        Matrix decomposition
+           LU decomposition
+           Cholesky decomposition
+           QR decomposition
+           SVD
+        Matrix Differentiation
+
 ### Slide 1 :
     Set Theory Recall
     Probability Theory Foundation
