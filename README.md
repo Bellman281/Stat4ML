@@ -67,7 +67,8 @@ IG : @deepdatascientists
       Distribution Functions
       Density and Mass
 
-### Slide 2:
+### Slide 2: Common Families of Distributions
+
     Distribution of Functions of a Random Variable
       Expected Value
       Moments
@@ -86,7 +87,7 @@ IG : @deepdatascientists
       Gamma mgf
       Normal mgf
     
-### Slide 3:
+### Slide 3: Conditional and Multivariate Distributions
     Joint and Marginal Distribution
     Conditional Distributions and Independence
     Bivariate Transformations
@@ -96,7 +97,8 @@ IG : @deepdatascientists
     Multivariate Distribution
     Inequalities
     
-### Slide 4:
+### Slide 4:   Convergence Concepts
+
     Variance of Sums of Random Variables
     Basic Concepts of Random Samples
     Sums of Random Variable from a Random Sample
@@ -108,7 +110,7 @@ IG : @deepdatascientists
     Some More Large Sample Results
     Matrix Notation for Moments
 
-### Slide 5:
+### Slide 5: Maximum Likelihood Estimation
     Maximum Likelihood Estimation
       Motivation and the Main Ideas
       Properties of the Maximum Likelihood Estimator
