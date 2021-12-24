@@ -1,6 +1,14 @@
 # Satat4ML
 **Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP**
 
+### Recall from Calculus:
+        Derivative
+                Chain rule
+        Integral
+                Techniques of Integration
+                 Substitution
+        Integration by parts
+
 ### Matrix Algebra Review:
 
         Matrix operations
