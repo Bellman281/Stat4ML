@@ -1,7 +1,7 @@
 # Satat4ML
 **Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP**
 
-Intsructor : Omid Safarzadeh
+Instructor  : Omid Safarzadeh
 https://www.linkedin.com/in/omidsafarzadeh/
 
 ## Course 1
