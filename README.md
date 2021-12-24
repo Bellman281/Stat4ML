@@ -1,6 +1,9 @@
 # Satat4ML
 **Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP**
 
+Intsructor : Omid Safarzadeh
+https://www.linkedin.com/in/omidsafarzadeh/
+
 ### Recall from Calculus:
         Derivative
               Chain rule
