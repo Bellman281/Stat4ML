@@ -53,7 +53,8 @@ IG : @deepdatascientists
            SVD
         Matrix Differentiation
 
-### Slide 1 :
+### Slide 1 : Probability Theory Foundation
+
     Set Theory Recall
     Probability Theory Foundation
       Axiomatic Foundations
