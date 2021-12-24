@@ -25,11 +25,7 @@ https://www.linkedin.com/in/omidsafarzadeh/
 
 IG : @deepdatascientists
 
-5. Course contents:
-https://github.com/Bellman281/Satat4ML
 
-6. Book interview before the course:
-https://calendly.com/omidpoly/coffee
 
 ## Course 1
 ### Recall from Calculus:
