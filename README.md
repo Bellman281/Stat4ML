@@ -15,7 +15,7 @@ Notes about the course:
 3. Course Fee:
 
  Free for unemployed attendees. :)
-200 USD for employed candidates :).  
+ 200 USD for employed candidates :).  
 
 4. Instructor : 
 Omid Safarzadeh: 
@@ -25,7 +25,11 @@ https://www.linkedin.com/in/omidsafarzadeh/
 
 IG : @deepdatascientists
 
+5. Course Text Book:
+6. Statistical Inference 2nd Edition
+by George Casella  (Author), Roger L. Berger  (Author) :
 
+https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/0534243126/ref=mt_other?_encoding=UTF8&me=&qid=
 
 ## Course 1
 ### Recall from Calculus:
