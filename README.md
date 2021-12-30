@@ -26,7 +26,7 @@ https://www.linkedin.com/in/omidsafarzadeh/
 IG : @deepdatascientists
 
 5. Course Text Book:
-6. Statistical Inference 2nd Edition
+ Statistical Inference 2nd Edition
 by George Casella  (Author), Roger L. Berger  (Author) :
 
 https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/0534243126/ref=mt_other?_encoding=UTF8&me=&qid=
