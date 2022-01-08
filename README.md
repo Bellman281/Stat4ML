@@ -31,7 +31,7 @@ by George Casella  (Author), Roger L. Berger  (Author) :
 
 https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/0534243126/ref=mt_other?_encoding=UTF8&me=&qid=
 
-## Course 1
+## Pre Requisitives 
 ### Recall from Calculus:
         Derivative
               Chain rule
@@ -57,6 +57,7 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
            SVD
         Matrix Differentiation
 
+### Course 1 :
 ### Slide 1 : Probability Theory Foundation
      Sample Space
      Probability Theory Foundation
