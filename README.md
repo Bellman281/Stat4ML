@@ -58,18 +58,17 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
         Matrix Differentiation
 
 ### Slide 1 : Probability Theory Foundation
-
-    Set Theory Recall
-    Probability Theory Foundation
-      Axiomatic Foundations
-      The Calculus of Probabilities
-      Conditional Probability and Independence
-      Bayes Theorem
-      Independence
-      Random Variables
-      Probability Function
-      Distribution Functions
-      Density and Mass
+     Sample Space
+     Probability Theory Foundation
+        Axiomatic Foundations
+        The Calculus of Probabilities
+     Independence
+     Conditional Probability
+        Bayes Theorem
+     Random Variables
+     Probability Function
+        Distribution Functions
+        Density function
 
 ### Slide 2: Common Families of Distributions
 
