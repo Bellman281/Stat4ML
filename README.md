@@ -2,7 +2,7 @@
 **Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP**
 
 Registration Form for round2:
-https://docs.google.com/forms/d/e/1FAIpQLScmKYQ7tT9Kg5nYAN_RUYh4DagNtqcgmge6TTdAXxq6dbpsXA/viewform
+https://forms.gle/ZqLJLmv1K5nGVx3m7
 
 Notes about the course: 
 
