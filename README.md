@@ -1,31 +1,20 @@
 # Stat4ML
 **Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP**
 
-Registration Form:
-https://forms.gle/uV3qL9Wngtxxca9C6
-
-Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP.
+Registration Form for round2:
+https://docs.google.com/forms/d/e/1FAIpQLScmKYQ7tT9Kg5nYAN_RUYh4DagNtqcgmge6TTdAXxq6dbpsXA/viewform
 
 Notes about the course: 
 
-1. This course will be online (Zoom).
-
-2.The course starts on 15 Jan. 2021, each session will be 90 min. plus 60 min TA session.
-
-3. Course Fee:
-
- Free for unemployed attendees. :)
- 200 USD for employed candidates :).  
-
-4. Instructor : 
-Omid Safarzadeh: 
+Instructor :
+Omid Safarzadeh:
 
 LinkedIn:
 https://www.linkedin.com/in/omidsafarzadeh/
 
 IG : @deepdatascientists
 
-5. Course Text Book:
+Course Text Book:
  Statistical Inference 2nd Edition
 by George Casella  (Author), Roger L. Berger  (Author) :
 
