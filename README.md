@@ -1,7 +1,7 @@
 # Stat4ML
 **Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP**
 
-Registration Form for round2:
+Registration Form for cohort 2:
 https://forms.gle/ZqLJLmv1K5nGVx3m7
 
 Notes about the course: 
