@@ -1,6 +1,17 @@
 # Stat4ML
 **Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP**
 
+This is the firs course from our trio courses:
+
+1. Statistics Foundation for ML
+
+https://github.com/Bellman281/Stat4ML/
+
+2. Introduction to Statistical Learning 
+https://github.com/Bellman281/Intro_Statistical_Learning
+
+3. Advanced Statistical Learning for DL  ( to be anounced)
+
 Registration Form for cohort 2:
 https://forms.gle/ZqLJLmv1K5nGVx3m7
 
