@@ -1,7 +1,7 @@
 # Stat4ML
 **Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP**
 
-This is the firs course from our trio courses:
+This is the first course from our trio courses:
 
 1. Statistics Foundation for ML
 
@@ -12,13 +12,13 @@ https://github.com/Bellman281/Intro_Statistical_Learning
 
 3. Advanced Statistical Learning for DL  ( to be anounced)
 
-Registration Form for cohort 2:
+## Registration Form for cohort 2 of STAT4ML:
 https://forms.gle/ZqLJLmv1K5nGVx3m7
 
 Notes about the course: 
 
 Instructor :
-Omid Safarzadeh:
+Omid Safarzadeh, 
 
 LinkedIn:
 https://www.linkedin.com/in/omidsafarzadeh/
