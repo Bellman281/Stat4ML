@@ -104,8 +104,6 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
     
 ### Slide 4:   Convergence Concepts
 
-    Variance of Sums of Random Variables
-    Basic Concepts of Random Samples
     Sums of Random Variable from a Random Sample
     Convergence Concepts
     Almost Sure Convergence
@@ -113,7 +111,6 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
     Convergence in Distribution
     The Delta Method
     Some More Large Sample Results
-    Matrix Notation for Moments
 
 ### Slide 5: Maximum Likelihood Estimation
     Maximum Likelihood Estimation
