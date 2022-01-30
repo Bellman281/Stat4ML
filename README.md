@@ -72,31 +72,31 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
         Density function
 
 ### Slide 2: Common Families of Distributions
+       Moments
+           Expected Value
+           Variance
+           Covariance and Correlation
+       Moment Generating Functions
+           Normal mgf
 
-    Distribution of Functions of a Random Variable
-      Expected Value
-      Moments
-    Common Families of Distributions
-      Discrete Distribution
-      Discrete Uniform Distribution
-      Binomial Distribution
-      Poisson Distribution
-      Continuous Distribution
-      Uniform Distribution
-      Exponential Distribution
-      Normal Distribution
-      Lognormal Distribution
-      Laplace distribution
-    Moments and Moment Generating Functions
-      Gamma mgf
-      Normal mgf
+       Distributions
+         Discrete Distribution
+           Discrete Uniform Distribution
+           Binomial Distribution
+           Poisson Distribution
+         Continuous Distribution
+           Uniform Distribution
+           Exponential Distribution
+           Normal Distribution
+           Lognormal Distribution
+           Laplace distribution
+
     
 ### Slide 3: Conditional and Multivariate Distributions
     Joint and Marginal Distribution
     Conditional Distributions and Independence
     Bivariate Transformations
     Hierarchical Models and Mixture Distribution
-    Covariance and Correlation
     Bivariate Normal Distribution
     Multivariate Distribution
     Inequalities
