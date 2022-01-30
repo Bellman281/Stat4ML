@@ -78,7 +78,8 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
            Covariance and Correlation
        Moment Generating Functions
            Normal mgf
-
+       Matrix Notation for Moments
+       
        Distributions
          Discrete Distribution
            Discrete Uniform Distribution
