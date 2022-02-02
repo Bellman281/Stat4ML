@@ -71,7 +71,7 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
         Distribution Functions
         Density function
 
-### Slide 2: Common Families of Distributions
+### Slide 2: Distribution Functions
        Moments
            Expected Value
            Variance
