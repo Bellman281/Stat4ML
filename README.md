@@ -71,7 +71,7 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
         Distribution Functions
         Density function
 
-### Slide 2: Distribution Functions
+### Slide 2: Moments
        Moments
            Expected Value
            Variance
@@ -80,6 +80,7 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
            Normal mgf
        Matrix Notation for Moments
        
+### Slide 3: Distribution Functions
        Distributions
          Discrete Distribution
            Discrete Uniform Distribution
@@ -94,7 +95,7 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
            Beta Distribution
 
     
-### Slide 3: Conditional and Multivariate Distributions
+### Slide 4: Conditional and Multivariate Distributions
     Joint and Marginal Distribution
     Conditional Distributions and Independence
     Bivariate Transformations
@@ -102,22 +103,22 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
     Bivariate Normal Distribution
     Multivariate Distribution
     
-### Slide 4:   Convergence Concepts
-
-    Sums of Random Variable from a Random Sample
-    Convergence Concepts
-    Almost Sure Convergence
-    Convergence in Probability
-    Convergence in Distribution
+### Slide 5:   Convergence Concepts
+    Random Samples
+       Sums of Random Variable from a Random Sample
+    Inequalities
+    Convergence Concepts:
+       Almost Sure Convergence
+       Convergence in Probability
+       Convergence in Distribution
     The Delta Method
-    Some More Large Sample Results
 
-### Slide 5: Maximum Likelihood Estimation
+### Slide 6: Maximum Likelihood Estimation
     Maximum Likelihood Estimation
       Motivation and the Main Ideas
       Properties of the Maximum Likelihood Estimator
 
-### Slide 6: Likelihood and posterior distribution
+### Slide 7: Bayesian and posterior distribution Estimation
        Computing the posterior
        Maximum likelihood estimation (MLE)
     Maximum a posteriori (MAP) estimation
