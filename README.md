@@ -101,7 +101,6 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
     Hierarchical Models and Mixture Distribution
     Bivariate Normal Distribution
     Multivariate Distribution
-    Inequalities
     
 ### Slide 4:   Convergence Concepts
 
