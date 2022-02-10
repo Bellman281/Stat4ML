@@ -116,3 +116,11 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
     Maximum Likelihood Estimation
       Motivation and the Main Ideas
       Properties of the Maximum Likelihood Estimator
+
+### Slide 6: Likelihood and posterior distribution
+       Computing the posterior
+       Maximum likelihood estimation (MLE)
+    Maximum a posteriori (MAP) estimation
+       Posterior mean
+       MAP properties
+    Bayesian linear regression
