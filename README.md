@@ -90,7 +90,8 @@ https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/053
            Exponential Distribution
            Normal Distribution
            Lognormal Distribution
-           Laplace distribution
+           Laplace Distribution
+           Beta Distribution
 
     
 ### Slide 3: Conditional and Multivariate Distributions
