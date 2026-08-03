@@ -4,7 +4,7 @@ This repo's stated ambition is to become a single, spoon-feed-friendly
 source for the statistics underlying modern ML, deep learning,
 reinforcement learning, and LLM training -- not just a slide archive. This
 document is split into two horizons: (A) closing gaps in the three parts
-that already exist (`book/part1_*`, `part2_*`, `part3_*`), and (B) new
+that already exist (`part1_*`, `part2_*`, `part3_*`), and (B) new
 parts to add so the "trio" of courses grows into that fuller curriculum.
 Every proposed chapter follows the same O'Reilly-style folder contract
 already used in this repo: `chNN_text.tex`/`.pdf`, `exercises/{python,r,rust}`,
@@ -13,7 +13,7 @@ and a Rustlings-style buggy exercise per chapter (see `CONTRIBUTING.md`).
 ## Recently completed
 
 **Part I, Chapter 0 -- Matrix Algebra Review** is now fully authored (see
-`book/part1_statistics_foundations/ch00_matrix_algebra_review/`), expanding
+`part1_statistics_foundations/ch00_matrix_algebra_review/`), expanding
 the `PreReq1_Matrix_Calculus.pdf` prerequisite deck (previously just
 linked from the README, not its own chapter) into a full chapter with
 three exercises across Python/R/Rust: core matrix operations, LU

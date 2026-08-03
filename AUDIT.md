@@ -16,7 +16,7 @@ The `Intro_Statistical_Learning` README lists 13 "basic course" chapters
 by topic, but the PDF files actually committed to the repo use a
 different, inconsistent numbering. This was the single biggest structural
 issue found, and it directly motivated the "Separate parts, each
-renumbered" chapter scheme used in `book/part2_intro_statistical_learning/`
+renumbered" chapter scheme used in `part2_intro_statistical_learning/`
 (each chapter there is renumbered by topic order; the table below records
 which original file backs which renumbered chapter).
 
@@ -43,7 +43,7 @@ chapter (4, 9, 10, 11, 13) was skipped or reordered. Recommendation
 adopted in this reorg: treat the README's topic order as authoritative,
 renumber the chapter folders accordingly, and keep a note of the original
 filename in each chapter's `README.md` (already done for every chapter in
-`book/part2_intro_statistical_learning/`).
+`part2_intro_statistical_learning/`).
 
 ## 2. Confirmed typos and content errors
 
@@ -55,7 +55,7 @@ filename in each chapter's `README.md` (already done for every chapter in
   - "Whats is the sample space..." (x2, p.4/49) -> "What is the sample space...".
   - "Amazone's product page" -> "Amazon's product page" (p.5/49).
   - "The the pdf of Y is given by" (Theorem 7.2 statement, p.45/49) -> "Then the pdf of Y is given by".
-  - Fixed in `book/part1_statistics_foundations/ch01_probability_theory_foundations/ch01_text.tex`.
+  - Fixed in `part1_statistics_foundations/ch01_probability_theory_foundations/ch01_text.tex`.
 
 - **Slide 2 (Moments):** "Recall that"average" is..." -- missing space/quote mark around "average" (p.5/37); stylistic only, fixed in the rewritten chapter text.
 
@@ -75,7 +75,7 @@ filename in each chapter's `README.md` (already done for every chapter in
     consistent with `u11 = 4`, not `u11 = 14`, confirming this is a
     typo rather than a different (also valid) decomposition. Corrected,
     with the original slide's number called out explicitly, in
-    `book/part1_statistics_foundations/ch00_matrix_algebra_review/ch00_text.tex`
+    `part1_statistics_foundations/ch00_matrix_algebra_review/ch00_text.tex`
     Section 6.1.
   - **Real math bug (derivative of a matrix inverse):** the slide gives
     the identity for `d(A^-1)/d(alpha)` without a leading minus sign,
@@ -101,7 +101,7 @@ filename in each chapter's `README.md` (already done for every chapter in
     ELU'(x) = 1        if x < 0
               α e^x    if x < 0
     ```
-    both cases are labeled `x < 0`. The first case should be `x ≥ 0` (matching `ELU(x)`'s own case split). This is a genuine error, not just an extraction artifact -- fixed as a discussion point in `book/part2_intro_statistical_learning/ch08_nn_activation_and_loss_functions/README.md`.
+    both cases are labeled `x < 0`. The first case should be `x ≥ 0` (matching `ELU(x)`'s own case split). This is a genuine error, not just an extraction artifact -- fixed as a discussion point in `part2_intro_statistical_learning/ch08_nn_activation_and_loss_functions/README.md`.
   - The Mean Absolute Error and Mean Squared Error formulas are written with a plain `y` instead of `y_i` inside the sum (`MAE = (1/n) Σ |y − ŷ_i|`, `MSE = (1/n) Σ (y − ŷ_i)²`) -- missing subscript on the first term in both. MAPE, just below, has the subscript correct (`(y_i − ŷ_i)/y_i`), which makes the inconsistency clearer.
   - The "Mean Squared Logarithmic Error (MSLE)" slide defines its formula as `MSE = (1/n) Σ (log(y_i+1) − log(ŷ_i+1))²` -- the left-hand side is mislabeled `MSE` when it should be `MSLE` (copy-paste from the previous slide). This also explains why the table of contents lists "Mean Squared Error (MSE)" twice -- the second occurrence should read "Mean Squared Logarithmic Error (MSLE)".
 
@@ -118,7 +118,7 @@ this part, so they were only ever prose, not rendered math):
 - "YOLO5" -> "YOLOv5", "POSE Detection: BLAZE POSE" -> "BlazePose" (Chapter 6).
 - "Tacatron" -> "Tacotron" (Chapter 9, Speech Processing).
 
-All four are corrected in `book/part3_advanced_statistical_learning/`'s
+All four are corrected in `part3_advanced_statistical_learning/`'s
 chapter READMEs.
 
 ## 3. Content gaps (topics announced but no slide deck exists)

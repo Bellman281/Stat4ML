@@ -9,25 +9,25 @@ so new contributions land where they're most useful instead of colliding.
 ## Repository layout
 
 ```
-book/
-  part1_statistics_foundations/        Part I  (Statistics Foundation for ML)
-  part2_intro_statistical_learning/    Part II (Introduction to Statistical Learning)
-  part3_advanced_statistical_learning/ Part III (Advanced Statistical Learning for DL)
-    ch01_<slug>/
-      README.md               chapter summary, status (PILOT/STUB), topic list
-      ch01_text.tex            the chapter text (LaTeX)
-      ch01_text.pdf            compiled chapter text
-      figures/                 chapter figures
-      source_slides/           original course slide PDF, preserved unmodified (if one exists)
-      exercises/
-        python/
-          exercise01.py            working homework exercise
-          exercise01_buggy.py      Rustlings-style broken exercise (reader fixes it)
-          solutions/exercise01_solution.py
-          exercise02.py, exercise02_buggy.py, solutions/exercise02_solution.py  (2nd exercise)
-          exercise03.py, exercise03_buggy.py, solutions/exercise03_solution.py  (3rd exercise)
-        r/            (same file pattern, .R)
-        rust/         (same file pattern, .rs)
+part1_statistics_foundations/        Part I  (Statistics Foundation for ML)
+part2_intro_statistical_learning/    Part II (Introduction to Statistical Learning)
+part3_advanced_statistical_learning/ Part III (Advanced Statistical Learning for DL)
+  ch01_<slug>/
+    README.md               chapter summary, status (PILOT/STUB), topic list
+    ch01_text.tex            the chapter text (LaTeX)
+    ch01_text.pdf            compiled chapter text
+    figures/                 chapter figures
+    source_slides/           original course slide PDF, preserved unmodified (if one exists)
+    homework/                original homework PDF, preserved unmodified (if one exists)
+    exercises/
+      python/
+        exercise01.py            working homework exercise
+        exercise01_buggy.py      Rustlings-style broken exercise (reader fixes it)
+        solutions/exercise01_solution.py
+        exercise02.py, exercise02_buggy.py, solutions/exercise02_solution.py  (2nd exercise)
+        exercise03.py, exercise03_buggy.py, solutions/exercise03_solution.py  (3rd exercise)
+      r/            (same file pattern, .R)
+      rust/         (same file pattern, .rs)
 ```
 
 **Every chapter needs at least three exercises per language**, each
@@ -35,21 +35,46 @@ covering a different piece of the chapter's material (not three
 variations on the same formula) -- see "Exercises" below.
 
 Every chapter's original source PDF (when one exists) is preserved
-unmodified under `source_slides/` -- never edit or delete it. If a
+unmodified under `source_slides/` -- never edit or delete it. Likewise for
+a chapter's original homework PDF under `homework/`, when one exists. If a
 chapter has no original slide deck, its `README.md` says so explicitly
 (see `AUDIT.md` for the current list of these gaps) -- do not silently
 invent a "source" for it.
 
-**The root-level files of this repository (the original Stat4ML slide
-PDFs, homework PDFs, prerequisite PDFs, `distributions.ipynb`) are never
-to be modified, moved, or deleted by a contribution.** The `book/` tree is
-strictly additive on top of them.
+**Two files remain at the repository root and are never to be moved into
+a chapter: `PreReq0_Calculus.pdf`** (a general prerequisite, not tied to
+any single chapter) **and `LICENSE`.** Every other original Stat4ML slide
+deck and homework PDF has already been moved into its matching chapter's
+`source_slides/`/`homework/` folder (see the mapping below) -- new
+contributions should follow that same pattern rather than dropping loose
+PDFs back at the root. `distributions.ipynb` has been retired in favor of
+`part1_statistics_foundations/ch03_distribution_functions/distributions_demo.py`,
+a plain Python script with the same plots/derivations.
+
+| Original root file | Now lives at |
+|---|---|
+| `STAT4ML_Slide_1.pdf` | `part1_statistics_foundations/ch01_probability_theory_foundations/source_slides/` |
+| `STAT4ML_Slide_2__Moments.pdf` | `part1_statistics_foundations/ch02_moments/source_slides/` |
+| `STAT4ML_Slide_3__Distributions.pdf` | `part1_statistics_foundations/ch03_distribution_functions/source_slides/` |
+| `STAT4ML_Slide_4__Multivariate_Dist_.pdf` | `part1_statistics_foundations/ch04_conditional_and_multivariate_distributions/source_slides/` |
+| `STAT4ML_Slide_5__Convergence_in_Probability.pdf` | `part1_statistics_foundations/ch05_convergence_concepts/source_slides/` |
+| `STAT4ML_Slide_6__MLE.pdf` | `part1_statistics_foundations/ch06_maximum_likelihood_estimation/source_slides/` |
+| `STAT4ML_Slide_7__Bayesian_Estimation.pdf` | `part1_statistics_foundations/ch07_bayesian_estimation/source_slides/` |
+| `PreReq1_Matrix_Calculus.pdf` | `part1_statistics_foundations/ch00_matrix_algebra_review/source_slides/` |
+| `Homework1.pdf` | `part1_statistics_foundations/ch01_probability_theory_foundations/homework/` |
+| `Homework2.pdf` | `part1_statistics_foundations/ch02_moments/homework/` |
+| `Homework3.pdf` | `part1_statistics_foundations/ch03_distribution_functions/homework/` |
+| `STAT4ML_Homework4.pdf` | `part1_statistics_foundations/ch04_conditional_and_multivariate_distributions/homework/` |
+| `STAT4ML_Homework5.pdf` | `part1_statistics_foundations/ch05_convergence_concepts/homework/` |
+| `STAT4ML_Homework6.pdf` | `part1_statistics_foundations/ch06_maximum_likelihood_estimation/homework/` |
+| `STAT4ML_Homework7.pdf` | `part1_statistics_foundations/ch07_bayesian_estimation/homework/` |
+| `distributions.ipynb` | retired; see `ch03_distribution_functions/distributions_demo.py` |
 
 ## Adding or finishing a chapter
 
-Use `book/part1_statistics_foundations/ch00_matrix_algebra_review/`,
+Use `part1_statistics_foundations/ch00_matrix_algebra_review/`,
 `ch01_probability_theory_foundations/`, and `ch02_moments/`, and
-`book/part2_intro_statistical_learning/ch01_learning_algorithms_overview/`
+`part2_intro_statistical_learning/ch01_learning_algorithms_overview/`
 as the reference examples -- they are the four fully-authored ("PILOT")
 chapters this reorganization produced, and every new chapter should match
 their shape.
@@ -61,10 +86,10 @@ their shape.
    `source_slides/` PDF, ground the text in it, but expand -- don't just
    transcribe bullets. Start every chapter with
    `\usepackage{../../stat4ml_style}` (two directory levels up from
-   `book/partX/chYY/`) instead of a bespoke preamble -- this is the
+   `partX/chYY/`) instead of a bespoke preamble -- this is the
    shared style that gives every chapter its colored Definition/Theorem/
    Example boxes, `tryit`/`editorialnote`/`summarybox` callouts, and
-   colored section headings; see `book/stat4ml_style.sty` itself for the
+   colored section headings; see `stat4ml_style.sty` itself for the
    full list of environments it provides. Compile locally before opening
    a PR:
    ```

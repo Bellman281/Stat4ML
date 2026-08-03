@@ -10,22 +10,30 @@ so the whole sequence can be read, exercised, and audited together. See
 planned next, `AUDIT.md` for a list of typos/bugs found in the original
 material, and `CONTRIBUTING.md` if you want to help write a chapter.
 
-> **Note on this reorganization:** nothing at the repository root (slide
-> PDFs, homework PDFs, prerequisite PDFs, `distributions.ipynb`, `LICENSE`)
-> was moved, renamed, or deleted. Everything below is new, and lives
-> entirely under `book/`.
+> **Note on this reorganization:** this repo used to keep the original
+> Stat4ML slide/homework/prerequisite PDFs sitting loose at the repository
+> root, plus a separate `book/` folder for the merged text and exercises.
+> Both have since been cleaned up: the `book/` wrapper is gone (its three
+> parts now live directly at the repo root), and every original slide deck
+> and homework PDF has been moved into its matching chapter's
+> `source_slides/` or `homework/` folder (see the table in `CONTRIBUTING.md`
+> for the exact mapping). `PreReq0_Calculus.pdf` stays at the root, since
+> no single chapter is "the calculus chapter." `distributions.ipynb` has
+> been retired in favor of a plain-Python equivalent,
+> `part1_statistics_foundations/ch03_distribution_functions/distributions_demo.py`,
+> so the repo doesn't require a Jupyter runtime to reproduce it.
 
 ## The book
 
 ```
-book/
-  part1_statistics_foundations/         Part I:   Statistics Foundation for ML
-  part2_intro_statistical_learning/     Part II:  Introduction to Statistical Learning
-  part3_advanced_statistical_learning/  Part III: Advanced Statistical Learning for DL
+part1_statistics_foundations/         Part I:   Statistics Foundation for ML
+part2_intro_statistical_learning/     Part II:  Introduction to Statistical Learning
+part3_advanced_statistical_learning/  Part III: Advanced Statistical Learning for DL
 ```
 
 Each chapter is its own folder (O'Reilly-style): a LaTeX/PDF chapter
-text, a `source_slides/` copy of the original lecture PDF (when one
+text, a `source_slides/` copy of the original lecture slide PDF (when one
+exists), a `homework/` copy of the original homework PDF (when one
 exists), and **at least three homework exercises** in **Python, R, and
 Rust**, each covering a different piece of the chapter's material --
 every exercise, in every language, also gets a **Rustlings-style
@@ -37,10 +45,10 @@ layout.
 Four chapters are fully authored end to end (text + all three languages'
 exercises + buggy exercises, all verified to compile/run) as a reference
 for the rest:
-- `book/part1_statistics_foundations/ch00_matrix_algebra_review/`
-- `book/part1_statistics_foundations/ch01_probability_theory_foundations/`
-- `book/part1_statistics_foundations/ch02_moments/`
-- `book/part2_intro_statistical_learning/ch01_learning_algorithms_overview/`
+- `part1_statistics_foundations/ch00_matrix_algebra_review/`
+- `part1_statistics_foundations/ch01_probability_theory_foundations/`
+- `part1_statistics_foundations/ch02_moments/`
+- `part2_intro_statistical_learning/ch01_learning_algorithms_overview/`
 
 Every other chapter is scaffolded (folder structure, chapter README,
 topic list, exercise stubs) so contributors have a consistent shape to
@@ -60,16 +68,18 @@ Inference* (2nd ed.). Cengage Learning.
 ### Prerequisites
 - **Calculus:** derivatives (chain rule), integrals (techniques of
   integration, substitution, integration by parts). See
-  `PreReq0_Calculus.pdf`.
+  `PreReq0_Calculus.pdf` (repository root -- no dedicated calculus
+  chapter exists yet).
 - **Matrix algebra:** matrix operations and multiplication, determinants,
   inverses, transposes, partitioned matrices, eigenvalues/eigenvectors,
   matrix decompositions (LU, Cholesky, QR, SVD), matrix differentiation.
-  See `PreReq1_Matrix_Calculus.pdf`.
+  See `part1_statistics_foundations/ch00_matrix_algebra_review/source_slides/PreReq1_Matrix_Calculus.pdf`,
+  now expanded into Chapter 0 below.
 
 ### Chapters
-0. Matrix Algebra Review *(fully authored -- see `book/part1_statistics_foundations/ch00_matrix_algebra_review/`)*
-1. Probability Theory Foundations *(fully authored -- see `book/part1_statistics_foundations/ch01_probability_theory_foundations/`)*
-2. Moments *(fully authored -- see `book/part1_statistics_foundations/ch02_moments/`)*
+0. Matrix Algebra Review *(fully authored -- see `part1_statistics_foundations/ch00_matrix_algebra_review/`)*
+1. Probability Theory Foundations *(fully authored -- see `part1_statistics_foundations/ch01_probability_theory_foundations/`)*
+2. Moments *(fully authored -- see `part1_statistics_foundations/ch02_moments/`)*
 3. Distribution Functions
 4. Conditional and Multivariate Distributions
 5. Convergence Concepts
@@ -90,7 +100,7 @@ networks and Transformers.
 - Murphy, K. *Machine Learning: A Probabilistic Perspective*.
 
 ### Chapters
-1. Learning Algorithms Overview *(fully authored -- see `book/part2_intro_statistical_learning/ch01_learning_algorithms_overview/`)*
+1. Learning Algorithms Overview *(fully authored -- see `part2_intro_statistical_learning/ch01_learning_algorithms_overview/`)*
 2. Regression, Cross-Validation
 3. Logistic, Ridge, Lasso Regression
 4. Recommendation Systems *(content gap -- see `AUDIT.md`)*
@@ -111,7 +121,7 @@ topic list already sketched for it (automatic differentiation, AutoML,
 GANs, multi-armed bandits, neural architecture search, famous vision
 models, advanced language models, NLP downstream tasks, speech
 processing, multi-modal models, Gaussian processes, automatic feature
-extraction). See `book/part3_advanced_statistical_learning/README.md` for
+extraction). See `part3_advanced_statistical_learning/README.md` for
 the full chapter list and `ROADMAP.md` for authoring priority.
 
 ## Where this is going
