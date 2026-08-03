@@ -4,7 +4,7 @@ _Part II -- Introduction to Statistical Learning_
 
 **Status:** STUB -- scaffold only, content TODO
 
-> **Editorial note:** Original file is titled 'Regularization'; Lasso is listed in the course README topic list but is not yet covered in the source slides -- flagged as a content gap, see AUDIT.md.
+> **Editorial note:** Original file is titled 'Regularization'; Lasso is listed in the course README topic list but is not yet covered in the source slides -- flagged as a content gap.
 
 ## Contents
 

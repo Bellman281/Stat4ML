@@ -4,7 +4,7 @@ _Part III -- Advanced Statistical Learning for DL (to be announced)_
 
 **Status:** STUB -- scaffold only, content TODO
 
-> **Editorial note:** Original README topic list has 'epsilon Gridy' and 'UPC' -- typos for 'epsilon-greedy' and 'UCB', corrected here. See AUDIT.md.
+> **Editorial note:** Original README topic list has 'epsilon Gridy' and 'UPC' -- typos for 'epsilon-greedy' and 'UCB', corrected here.
 
 ## Contents
 
@@ -22,4 +22,4 @@ _Part III -- Advanced Statistical Learning for DL (to be announced)_
 
 ## Source
 
-_No original slide deck exists for this chapter -- see the repo-level `AUDIT.md` and `ROADMAP.md`._
+_No original slide deck exists for this chapter -- see the repo-level `ROADMAP.md`._

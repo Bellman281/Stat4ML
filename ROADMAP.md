@@ -23,9 +23,9 @@ chapter alongside Part I Ch. 1-2 and Part II Ch. 1.
 ## A. Close existing gaps (highest priority)
 
 These are chapters the two original READMEs already promised but that
-have no slide deck (see `AUDIT.md`, Section 3). Filling these in is
-lower-risk and higher-value than adding all-new parts, because the
-scaffolding, numbering, and topic scope are already agreed:
+have no slide deck. Filling these in is lower-risk and higher-value than
+adding all-new parts, because the scaffolding, numbering, and topic scope
+are already agreed:
 
 1. **Part II, Ch. 3 -- Lasso regression** (currently only Ridge is fully
    derived). Add: the L1 penalty, why it induces sparsity (geometric +

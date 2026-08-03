@@ -9,6 +9,7 @@ so new contributions land where they're most useful instead of colliding.
 ## Repository layout
 
 ```
+latex/stat4ml_style.sty              shared LaTeX style, included by every chapter
 part1_statistics_foundations/        Part I  (Statistics Foundation for ML)
 part2_intro_statistical_learning/    Part II (Introduction to Statistical Learning)
 part3_advanced_statistical_learning/ Part III (Advanced Statistical Learning for DL)
@@ -38,7 +39,7 @@ Every chapter's original source PDF (when one exists) is preserved
 unmodified under `source_slides/` -- never edit or delete it. Likewise for
 a chapter's original homework PDF under `homework/`, when one exists. If a
 chapter has no original slide deck, its `README.md` says so explicitly
-(see `AUDIT.md` for the current list of these gaps) -- do not silently
+(see `ROADMAP.md` for the current list of these gaps) -- do not silently
 invent a "source" for it.
 
 **Two files remain at the repository root and are never to be moved into
@@ -85,13 +86,13 @@ their shape.
    and a "Summary" + "Exercises" section at the end. If the chapter has a
    `source_slides/` PDF, ground the text in it, but expand -- don't just
    transcribe bullets. Start every chapter with
-   `\usepackage{../../stat4ml_style}` (two directory levels up from
-   `partX/chYY/`) instead of a bespoke preamble -- this is the
-   shared style that gives every chapter its colored Definition/Theorem/
-   Example boxes, `tryit`/`editorialnote`/`summarybox` callouts, and
-   colored section headings; see `stat4ml_style.sty` itself for the
-   full list of environments it provides. Compile locally before opening
-   a PR:
+   `\usepackage{../../latex/stat4ml_style}` (two directory levels up from
+   `partX/chYY/`, into the `latex/` folder) instead of a bespoke preamble
+   -- this is the shared style that gives every chapter its colored
+   Definition/Theorem/Example boxes, `tryit`/`editorialnote`/`summarybox`
+   callouts, and colored section headings; see `latex/stat4ml_style.sty`
+   itself for the full list of environments it provides. Compile locally
+   before opening a PR:
    ```
    pdflatex -interaction=nonstopmode chNN_text.tex   # run twice, for cross-references
    ```
@@ -140,15 +141,13 @@ their shape.
    filled in real content, and remove the "Editorial note" about missing
    content if you've resolved it.
 
-## Fixing an audited bug or typo
+## Fixing a bug or typo in an original slide deck
 
-`AUDIT.md` lists every typo/bug found in the original slide decks, plus a
-few items flagged "verify against the rendered PDF" that need a second
-pair of eyes before being treated as confirmed. If you fix one:
-- Fix it in the new `chNN_text.tex` (never edit the original PDF under
-  `source_slides/`).
-- Update `AUDIT.md` to mark the item resolved (don't delete the entry --
-  keep the history of what was found and fixed).
+If you spot a typo or a genuine error while turning a chapter's original
+slide deck into `chNN_text.tex`, fix it in the new text -- never edit the
+original PDF under `source_slides/`. Call it out inline with an
+`editorialnote` (see `latex/stat4ml_style.sty`) so readers know it was
+corrected and why.
 
 ## Adding a whole new chapter that isn't in `ROADMAP.md` yet
 

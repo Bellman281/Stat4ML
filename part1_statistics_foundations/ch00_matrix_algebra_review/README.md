@@ -46,12 +46,11 @@ backpropagation's Jacobians all lean on the material here.
 
 ## Editorial notes
 
-Two bugs found in the original `PreReq1_Matrix_Calculus.pdf` slides
-during the repo audit are called out directly in `ch00_text.tex` (with
-the correct derivation alongside), and are also logged in `AUDIT.md`:
-a digit typo in a worked LU-decomposition example (`u11` should equal
-`a11`, not a stray "14"), and a missing leading minus sign in the
-derivative-of-a-matrix-inverse identity.
+Two bugs found in the original `PreReq1_Matrix_Calculus.pdf` slides are
+called out directly in `ch00_text.tex`, with the correct derivation
+alongside: a digit typo in a worked LU-decomposition example (`u11`
+should equal `a11`, not a stray "14"), and a missing leading minus sign
+in the derivative-of-a-matrix-inverse identity.
 
 ## Source
 

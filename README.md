@@ -3,25 +3,12 @@
 **Statistics and Mathematics for Machine Learning, Deep Learning, Deep NLP,
 Reinforcement Learning, and LLM Training.**
 
-This repository is the merged home of Omid Safarzadeh's "trio" of
-courses -- previously split across two repos, now combined into one book
-so the whole sequence can be read, exercised, and audited together. See
-`ABOUT.md` for the full mission and background, `ROADMAP.md` for what's
-planned next, `AUDIT.md` for a list of typos/bugs found in the original
-material, and `CONTRIBUTING.md` if you want to help write a chapter.
-
-> **Note on this reorganization:** this repo used to keep the original
-> Stat4ML slide/homework/prerequisite PDFs sitting loose at the repository
-> root, plus a separate `book/` folder for the merged text and exercises.
-> Both have since been cleaned up: the `book/` wrapper is gone (its three
-> parts now live directly at the repo root), and every original slide deck
-> and homework PDF has been moved into its matching chapter's
-> `source_slides/` or `homework/` folder (see the table in `CONTRIBUTING.md`
-> for the exact mapping). `PreReq0_Calculus.pdf` stays at the root, since
-> no single chapter is "the calculus chapter." `distributions.ipynb` has
-> been retired in favor of a plain-Python equivalent,
-> `part1_statistics_foundations/ch03_distribution_functions/distributions_demo.py`,
-> so the repo doesn't require a Jupyter runtime to reproduce it.
+This repository is Omid Safarzadeh's "trio" of courses -- Statistics
+Foundation for ML, Introduction to Statistical Learning, and Advanced
+Statistical Learning for DL -- combined into one book so the whole
+sequence can be read and exercised together. See `ABOUT.md` for the
+mission, `ROADMAP.md` for what's planned next, and `CONTRIBUTING.md` if
+you want to help write a chapter.
 
 ## The book
 
@@ -99,7 +86,7 @@ networks and Transformers.
 1. Learning Algorithms Overview *(fully authored -- see `part2_intro_statistical_learning/ch01_learning_algorithms_overview/`)*
 2. Regression, Cross-Validation
 3. Logistic, Ridge, Lasso Regression
-4. Recommendation Systems *(content gap -- see `AUDIT.md`)*
+4. Recommendation Systems *(content gap)*
 5. Unsupervised Learning, PCA
 6. EM Algorithm
 7. Clustering

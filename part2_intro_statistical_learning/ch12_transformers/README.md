@@ -4,7 +4,7 @@ _Part II -- Introduction to Statistical Learning_
 
 **Status:** STUB -- scaffold only, content TODO
 
-> **Editorial note:** NUMBERING DRIFT: course chapter 12 by topic order; original file is named 'Chapter_11'. See AUDIT.md.
+> **Editorial note:** NUMBERING DRIFT: course chapter 12 by topic order; original file is named 'Chapter_11'.
 
 ## Contents
 

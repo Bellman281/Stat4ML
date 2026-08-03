@@ -1,5 +1,5 @@
 \documentclass[11pt]{article}
-\usepackage{../../stat4ml_style}
+\usepackage{../../latex/stat4ml_style}
 
 \title{Chapter 0: Matrix Algebra Review \\ \large Part I --- Statistics Foundation for ML}
 \author{Omid Safarzadeh}
@@ -208,7 +208,7 @@ The original prerequisite slide this example is drawn from has a digit
 typo at exactly this step -- it states ``$u_{11} = 14$'' where it means
 $u_{11} = 4$ (everything downstream in the original slide is computed
 correctly using $u_{11}=4$, so it is an isolated typo, not a repeated
-error). See \texttt{AUDIT.md} at the repo root.
+error).
 \end{editorialnote}
 
 \subsection{Cholesky Decomposition}
@@ -291,7 +291,6 @@ using the product rule to see why the minus sign is required:
 $\frac{\partial A}{\partial\alpha}A^{-1} + A\frac{\partial
 A^{-1}}{\partial\alpha} = 0 \Rightarrow \frac{\partial
 A^{-1}}{\partial\alpha} = -A^{-1}\frac{\partial A}{\partial\alpha}A^{-1}$.
-See \texttt{AUDIT.md}.
 \end{editorialnote}
 
 \section{Summary}

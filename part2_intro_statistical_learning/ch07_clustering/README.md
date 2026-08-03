@@ -4,7 +4,7 @@ _Part II -- Introduction to Statistical Learning_
 
 **Status:** STUB -- scaffold only, content TODO
 
-> **Editorial note:** NUMBERING DRIFT + TYPO: course chapter 7 by topic order; original file is named 'Chapter_8__Clustrering.pdf' (typo: 'Clustrering' -> 'Clustering'). See AUDIT.md.
+> **Editorial note:** NUMBERING DRIFT + TYPO: course chapter 7 by topic order; original file is named 'Chapter_8__Clustrering.pdf' (typo: 'Clustrering' -> 'Clustering').
 
 ## Contents
 
