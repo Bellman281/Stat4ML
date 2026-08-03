@@ -59,11 +59,6 @@ for ML, DL, RL, and LLM training" ambition.
 LinkedIn: https://www.linkedin.com/in/omidsafarzadeh/
 Instagram: @deepdatascientists
 
-## Course registration
-
-- STAT4ML (Statistics Foundation for ML), cohort 2: https://forms.gle/ZqLJLmv1K5nGVx3m7
-- Introduction to Statistical Learning, cohort 1: https://forms.gle/gRqq7uCp9FVcqgej9
-
 ## License
 
 The whole repository is licensed under the **GNU General Public License

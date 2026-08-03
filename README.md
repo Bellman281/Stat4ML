@@ -60,8 +60,6 @@ Probability theory and mathematical statistics: sample spaces, random
 variables, moments, the standard discrete/continuous distributions,
 convergence concepts, and estimation (MLE and Bayesian).
 
-**Registration (cohort 2):** https://forms.gle/ZqLJLmv1K5nGVx3m7
-
 **Course text:** Casella, G., & Berger, R. (2002). *Statistical
 Inference* (2nd ed.). Cengage Learning.
 
@@ -91,8 +89,6 @@ Inference* (2nd ed.). Cengage Learning.
 Core statistical/machine learning: regression, regularization, resampling,
 unsupervised learning, EM, clustering, and the on-ramp into neural
 networks and Transformers.
-
-**Registration (cohort 1):** https://forms.gle/gRqq7uCp9FVcqgej9
 
 **Course texts:**
 - James, G., Witten, D., Hastie, T., & Tibshirani, R. *An Introduction to
@@ -142,6 +138,4 @@ Instagram: @deepdatascientists
 ## License
 
 This repository is licensed under the GNU General Public License v2
-(GPLv2) -- see `LICENSE`. (Before this merge, Part I's original `Stat4ML`
-repo was MIT-licensed; the combined repository has since been relicensed
-GPLv2 throughout -- see `ABOUT.md` for the full note.)
+(GPLv2) -- see `LICENSE`.
