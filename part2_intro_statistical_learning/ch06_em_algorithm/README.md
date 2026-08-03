@@ -2,18 +2,20 @@
 
 _Part II -- Introduction to Statistical Learning_
 
-**Status:** STUB -- scaffold only, content TODO
+**Status:** slides only -- the original lecture slides are in this folder and
+you can learn from them today; the written-out chapter isn't done yet.
 
-> **Editorial note:** NUMBERING DRIFT: this is course chapter 6 by topic order, but the original file on disk is named 'Chapter_7'.
+> **Note:** the slide deck in this folder is named `Chapter_7` -- that's the
+> original course's numbering, which drifted from the topic order used here.
 
 ## Contents
 
 - `ch06_text.tex` / `ch06_text.pdf` -- the chapter text
 - `figures/` -- chapter figures
-- `source_slides/` -- original course slide PDF, preserved unmodified (if one exists)
-- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- homework exercise,
-  a Rustlings-style **broken** exercise you must fix, and a reference solution,
-  in each of the three languages
+- `source_slides/` -- the original lecture slides, exactly as taught
+- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- the homework
+  exercise, a **broken** copy of it for you to debug, and a reference
+  solution, in each of the three languages
 
 ## Topics
 

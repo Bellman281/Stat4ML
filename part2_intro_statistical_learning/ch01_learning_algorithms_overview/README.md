@@ -2,16 +2,16 @@
 
 _Part II -- Introduction to Statistical Learning_
 
-**Status:** PILOT -- fully authored
+**Status:** complete -- written chapter, plus three exercises in each of
+Python, R, and Rust with a broken copy of each to fix.
 
 ## Contents
 
 - `ch01_text.tex` / `ch01_text.pdf` -- the chapter text
 - `figures/` -- chapter figures
-- `source_slides/` -- original course slide PDF, preserved unmodified (if one exists)
-- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- homework exercise,
-  a Rustlings-style **broken** exercise you must fix, and a reference solution,
-  in each of the three languages
+- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- the homework
+  exercise, a **broken** copy of it for you to debug, and a reference
+  solution, in each of the three languages
 
 ## Topics
 

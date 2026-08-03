@@ -3,16 +3,54 @@
 **Statistics and Mathematics for Machine Learning, Deep Learning, Deep NLP,
 Reinforcement Learning, and LLM Training.**
 
-This repository is Omid Safarzadeh's "trio" of courses -- Statistics
-Foundation for ML, Introduction to Statistical Learning, and Advanced
-Statistical Learning for DL -- combined into one book so the whole
-sequence can be read and exercised together. See `ABOUT.md` for the
-mission.
+A free, self-paced course in the statistics that modern machine learning
+actually runs on -- from probability and moments up through neural
+networks, Transformers, and LLMs. Every idea is worked out in full, then
+handed to you as code you run and fix yourself.
+
+## What's in a chapter
+
+- **The chapter, written out properly.** Not slide bullets -- prose with
+  real definitions, theorems, and worked examples, colour-typeset so you
+  can tell a definition from a theorem from an aside at a glance. PDF,
+  with the LaTeX source next to it.
+- **The original lecture slides**, exactly as taught, when they exist.
+- **Three homework exercises, each in Python, R, and Rust.** Each one
+  covers a different piece of the chapter -- not the same formula three
+  times.
+- **A broken copy of every exercise.** Working code with a few bugs
+  planted in it on purpose, each one breaking a specific formula or
+  theorem from the chapter. Run the tests, watch them fail, fix them one
+  at a time. You meet every idea twice: once building it, once debugging
+  it.
+
+Nothing to install: the Python exercises use only the standard library,
+the R ones only base R, and the Rust ones are single files that compile
+with `rustc` -- no Cargo, no crates, no network.
+
+```bash
+python3 exercise01_buggy.py                                   # Python
+Rscript exercise01_buggy.R                                    # R
+rustc --edition 2021 --test exercise01_buggy.rs -o /tmp/t && /tmp/t   # Rust
+```
+
+## Start here
+
+Four chapters are finished end to end and are the best way in:
+
+| Chapter | Folder |
+|---|---|
+| Matrix Algebra Review | [`part1_statistics_foundations/ch00_matrix_algebra_review/`](part1_statistics_foundations/ch00_matrix_algebra_review/) |
+| Probability Theory Foundations | [`part1_statistics_foundations/ch01_probability_theory_foundations/`](part1_statistics_foundations/ch01_probability_theory_foundations/) |
+| Moments | [`part1_statistics_foundations/ch02_moments/`](part1_statistics_foundations/ch02_moments/) |
+| Learning Algorithms Overview | [`part2_intro_statistical_learning/ch01_learning_algorithms_overview/`](part2_intro_statistical_learning/ch01_learning_algorithms_overview/) |
+
+If you're new to the material, read Part I in order starting at Chapter 0.
+If you already know your probability, jump to Part II.
 
 ## Course map
 
-How the three parts build on each other, and where they connect to the
-deep learning applications you actually care about:
+How the parts build on each other, and where each one lands in practice:
 
 ```mermaid
 flowchart LR
@@ -46,100 +84,82 @@ flowchart LR
     class CV,NLP,RL,GEN app
 ```
 
-## The book
+## How far along each chapter is
 
-```
-part1_statistics_foundations/         Part I:   Statistics Foundation for ML
-part2_intro_statistical_learning/     Part II:  Introduction to Statistical Learning
-part3_advanced_statistical_learning/  Part III: Advanced Statistical Learning for DL
-```
+This is a work in progress, and the chapter lists below say plainly where
+each one stands:
 
-Each chapter is its own folder (O'Reilly-style): a LaTeX/PDF chapter
-text, a `source_slides/` copy of the original lecture slide PDF (when one
-exists), a `homework/` copy of the original homework PDF (when one
-exists), and **at least three homework exercises** in **Python, R, and
-Rust**, each covering a different piece of the chapter's material --
-every exercise, in every language, also gets a **Rustlings-style
-broken-code counterpart**: fully working code with a few deliberate bugs
-planted against the chapter's formulas/theorems, which you fix one at a
-time until the tests pass.
-
-Four chapters are fully authored end to end (text + all three languages'
-exercises + buggy exercises, all verified to compile/run) as a reference
-for the rest:
-- `part1_statistics_foundations/ch00_matrix_algebra_review/`
-- `part1_statistics_foundations/ch01_probability_theory_foundations/`
-- `part1_statistics_foundations/ch02_moments/`
-- `part2_intro_statistical_learning/ch01_learning_algorithms_overview/`
-
-Every other chapter is scaffolded (folder structure, chapter README,
-topic list, exercise stubs) so it has a consistent shape to fill in
-later.
+- **complete** -- written chapter, plus nine exercises (three each in
+  Python, R, and Rust) and a broken copy of each to fix.
+- **slides only** -- the original lecture slides are in the folder and you
+  can learn from them today; the written-out chapter isn't done yet.
+- **not started** -- no slides and no text yet; the folder is a
+  placeholder.
 
 ## Part I: Statistics Foundation for ML
 
 Probability theory and mathematical statistics: sample spaces, random
-variables, moments, the standard discrete/continuous distributions,
-convergence concepts, and estimation (MLE and Bayesian).
+variables, moments, the standard discrete and continuous distributions,
+convergence concepts, and estimation (maximum likelihood and Bayesian).
 
 **Course text:** Casella, G., & Berger, R. (2002). *Statistical
 Inference* (2nd ed.). Cengage Learning.
 
-### Prerequisites
-- **Calculus:** derivatives (chain rule), integrals (techniques of
-  integration, substitution, integration by parts). See
-  `PreReq0_Calculus.pdf` (repository root -- no dedicated calculus
-  chapter exists yet).
-- **Matrix algebra:** matrix operations and multiplication, determinants,
-  inverses, transposes, partitioned matrices, eigenvalues/eigenvectors,
-  matrix decompositions (LU, Cholesky, QR, SVD), matrix differentiation.
-  See `part1_statistics_foundations/ch00_matrix_algebra_review/source_slides/PreReq1_Matrix_Calculus.pdf`,
-  now expanded into Chapter 0 below.
+**You'll need first:** calculus (chain rule, integration by substitution
+and by parts) -- see [`PreReq0_Calculus.pdf`](PreReq0_Calculus.pdf) -- and
+matrix algebra, which Chapter 0 below covers from scratch.
 
-### Chapters
-0. Matrix Algebra Review *(fully authored -- see `part1_statistics_foundations/ch00_matrix_algebra_review/`)*
-1. Probability Theory Foundations *(fully authored -- see `part1_statistics_foundations/ch01_probability_theory_foundations/`)*
-2. Moments *(fully authored -- see `part1_statistics_foundations/ch02_moments/`)*
-3. Distribution Functions
-4. Conditional and Multivariate Distributions
-5. Convergence Concepts
-6. Maximum Likelihood Estimation
-7. Bayesian and Posterior Distribution Estimation
+| # | Chapter | Status |
+|---|---|---|
+| 0 | Matrix Algebra Review | **complete** |
+| 1 | Probability Theory Foundations | **complete** |
+| 2 | Moments | **complete** |
+| 3 | Distribution Functions | slides only |
+| 4 | Conditional and Multivariate Distributions | slides only |
+| 5 | Convergence Concepts | slides only |
+| 6 | Maximum Likelihood Estimation | slides only |
+| 7 | Bayesian and Posterior Distribution Estimation | slides only |
+
+Chapters 1-7 also carry the original homework PDF from the course, in each
+chapter's `homework/` folder.
 
 ## Part II: Introduction to Statistical Learning
 
-Core statistical/machine learning: regression, regularization, resampling,
-unsupervised learning, EM, clustering, and the on-ramp into neural
-networks and Transformers.
+Regression, regularization, resampling, unsupervised learning, EM,
+clustering, and the on-ramp into neural networks and Transformers.
 
 **Course texts:**
 - James, G., Witten, D., Hastie, T., & Tibshirani, R. *An Introduction to
   Statistical Learning*.
 - Murphy, K. *Machine Learning: A Probabilistic Perspective*.
 
-### Chapters
-1. Learning Algorithms Overview *(fully authored -- see `part2_intro_statistical_learning/ch01_learning_algorithms_overview/`)*
-2. Regression, Cross-Validation
-3. Logistic, Ridge, Lasso Regression
-4. Recommendation Systems *(content gap)*
-5. Unsupervised Learning, PCA
-6. EM Algorithm
-7. Clustering
-8. NN, Activation and Loss Functions
-9. Convolutional Neural Networks *(content gap)*
-10. RNN, LSTM *(content gap)*
-11. Language Models and Tokenization *(content gap)*
-12. Transformers
-13. Large Language Models *(content gap)*
+| # | Chapter | Status |
+|---|---|---|
+| 1 | Learning Algorithms Overview | **complete** |
+| 2 | Regression, Cross-Validation | slides only |
+| 3 | Logistic, Ridge, Lasso Regression | slides only |
+| 4 | Recommendation Systems | not started |
+| 5 | Unsupervised Learning, PCA | slides only |
+| 6 | EM Algorithm | slides only |
+| 7 | Clustering | slides only |
+| 8 | NN, Activation and Loss Functions | slides only |
+| 9 | Convolutional Neural Networks | not started |
+| 10 | RNN, LSTM | not started |
+| 11 | Language Models and Tokenization | not started |
+| 12 | Transformers | slides only |
+| 13 | Large Language Models | not started |
 
 ## Part III: Advanced Statistical Learning for DL
 
-Automatic differentiation, AutoML, GANs, multi-armed bandits, neural
-architecture search, famous vision models, advanced language models, NLP
-downstream tasks, speech processing, multi-modal models, Gaussian
-processes, automatic feature extraction. See
-`part3_advanced_statistical_learning/README.md` for the full chapter
-list.
+The deep learning end of the sequence: automatic differentiation, AutoML,
+GANs, multi-armed bandits, neural architecture search, well-known vision
+models, advanced language models, NLP downstream tasks, speech processing,
+multi-modal models, Gaussian processes, and automatic feature extraction.
+
+Chapter 12 (Automatic Feature Extraction) has its original slides; the
+rest of this part is not started yet. See
+[`part3_advanced_statistical_learning/`](part3_advanced_statistical_learning/)
+for the full chapter list.
 
 ## Instructor
 
@@ -149,5 +169,4 @@ Instagram: @deepdatascientists
 
 ## License
 
-This repository is licensed under the GNU General Public License v2
-(GPLv2) -- see `LICENSE`.
+GNU General Public License v2 (GPLv2) -- see [`LICENSE`](LICENSE).

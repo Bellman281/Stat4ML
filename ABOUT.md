@@ -10,9 +10,9 @@ bullets, colorfully typeset so definitions, theorems, examples, and
 editorial asides are easy to tell apart at a glance; at least three
 working homework exercises per chapter in Python, R, and Rust, each
 covering a different piece of the chapter's material; and a
-Rustlings-style broken-code counterpart for every exercise, in every
-language, so you learn each idea twice -- once building it, once
-debugging it. Nothing is assumed to be "obvious" or left as pure
+deliberately broken copy of every exercise, in every language, so you
+learn each idea twice -- once building it, once debugging it. Nothing is
+assumed to be "obvious" or left as pure
 self-study; where a step is non-trivial, it is worked out in full.
 
 ## The trio of courses

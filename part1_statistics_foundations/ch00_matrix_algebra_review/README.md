@@ -2,26 +2,25 @@
 
 _Part I -- Statistics Foundation for ML_
 
-**Status:** PILOT -- fully authored
+**Status:** complete -- written chapter, plus three exercises in each of
+Python, R, and Rust with a broken copy of each to fix.
 
-This chapter did not exist in either source repo as its own chapter --
-it is a new chapter written for this merged book, expanding
-`PreReq1_Matrix_Calculus.pdf` (previously just a prerequisite slide deck
-linked from the README) into a full O'Reilly-style chapter with its own
-homework. Matrix algebra underlies almost everything downstream: the
-partitioned-matrix notation in Chapter 2 (Moments), the normal-equations
-solution in Part II's regression chapter, PCA's eigendecomposition, and
-backpropagation's Jacobians all lean on the material here.
+Matrix algebra was originally handed out as a prerequisite slide deck,
+`PreReq1_Matrix_Calculus.pdf`. It is written out here as a full chapter
+with its own homework, because almost everything downstream leans on it:
+the partitioned-matrix notation in Chapter 2 (Moments), the normal
+equations in Part II's regression chapter, PCA's eigendecomposition, and
+backpropagation's Jacobians.
 
 ## Contents
 
 - `ch00_text.tex` / `ch00_text.pdf` -- the chapter text
 - `figures/` -- chapter figures
-- `source_slides/PreReq1_Matrix_Calculus.pdf` -- original prerequisite
-  slide deck, preserved unmodified
-- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- three
-  homework exercises, each with a Rustlings-style **broken** exercise
-  you must fix, and a reference solution, in each of the three languages
+- `source_slides/PreReq1_Matrix_Calculus.pdf` -- the original prerequisite
+  slide deck, exactly as handed out
+- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- three homework
+  exercises, each with a **broken** copy for you to debug and a reference
+  solution, in each of the three languages
 
 ## Topics
 
@@ -44,7 +43,7 @@ backpropagation's Jacobians all lean on the material here.
 3. **Eigenvalues and eigenvectors** -- the 2x2 characteristic
    polynomial, verified against the trace/determinant identities.
 
-## Editorial notes
+## Corrections to the original slides
 
 Two bugs found in the original `PreReq1_Matrix_Calculus.pdf` slides are
 called out directly in `ch00_text.tex`, with the correct derivation
