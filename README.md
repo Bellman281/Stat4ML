@@ -7,8 +7,44 @@ This repository is Omid Safarzadeh's "trio" of courses -- Statistics
 Foundation for ML, Introduction to Statistical Learning, and Advanced
 Statistical Learning for DL -- combined into one book so the whole
 sequence can be read and exercised together. See `ABOUT.md` for the
-mission, `ROADMAP.md` for what's planned next, and `CONTRIBUTING.md` if
-you want to help write a chapter.
+mission.
+
+## Course map
+
+How the three parts build on each other, and where they connect to the
+deep learning applications you actually care about:
+
+```mermaid
+flowchart LR
+    A["Part I<br/>Statistics Foundations<br/>probability - moments - MLE - Bayesian"]
+    B["Part II<br/>Intro to Statistical Learning<br/>regression - PCA - EM - neural nets"]
+    C["Part III<br/>Advanced Statistical Learning<br/>autodiff - GANs - vision/language models"]
+    D["Part IV (planned)<br/>Reinforcement Learning"]
+    E["Part V (planned)<br/>LLM Training"]
+
+    CV[Computer Vision]
+    NLP[NLP & LLMs]
+    RL[Reinforcement Learning]
+    GEN[Generative AI]
+
+    A --> B --> C
+    C -.-> D
+    C -.-> E
+    B --> CV
+    B --> NLP
+    C --> CV
+    C --> NLP
+    C --> GEN
+    D -.-> RL
+    E -.-> NLP
+
+    classDef part fill:#4C6EF5,color:#fff,stroke:#333,stroke-width:1px
+    classDef planned fill:#adb5bd,color:#fff,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5
+    classDef app fill:#12b886,color:#fff,stroke:#333,stroke-width:1px
+    class A,B,C part
+    class D,E planned
+    class CV,NLP,RL,GEN app
+```
 
 ## The book
 
@@ -26,8 +62,7 @@ Rust**, each covering a different piece of the chapter's material --
 every exercise, in every language, also gets a **Rustlings-style
 broken-code counterpart**: fully working code with a few deliberate bugs
 planted against the chapter's formulas/theorems, which you fix one at a
-time until the tests pass. See `CONTRIBUTING.md` for the exact file
-layout.
+time until the tests pass.
 
 Four chapters are fully authored end to end (text + all three languages'
 exercises + buggy exercises, all verified to compile/run) as a reference
@@ -38,8 +73,8 @@ for the rest:
 - `part2_intro_statistical_learning/ch01_learning_algorithms_overview/`
 
 Every other chapter is scaffolded (folder structure, chapter README,
-topic list, exercise stubs) so contributors have a consistent shape to
-fill in -- see `ROADMAP.md` for the priority order.
+topic list, exercise stubs) so it has a consistent shape to fill in
+later.
 
 ## Part I: Statistics Foundation for ML
 
@@ -99,22 +134,12 @@ networks and Transformers.
 
 ## Part III: Advanced Statistical Learning for DL
 
-Originally announced as "to be announced" -- scaffolded here from the
-topic list already sketched for it (automatic differentiation, AutoML,
-GANs, multi-armed bandits, neural architecture search, famous vision
-models, advanced language models, NLP downstream tasks, speech
-processing, multi-modal models, Gaussian processes, automatic feature
-extraction). See `part3_advanced_statistical_learning/README.md` for
-the full chapter list and `ROADMAP.md` for authoring priority.
-
-## Where this is going
-
-The goal is for this repo to become a complete, spoon-fed source of
-statistics for ML, deep learning, reinforcement learning, and LLM
-training -- not just these three courses. `ROADMAP.md` lays out two new
-proposed parts (Reinforcement Learning; Large Language Model Training)
-plus a shorter capstone part on probabilistic deep learning, in addition
-to closing the content gaps already listed above.
+Automatic differentiation, AutoML, GANs, multi-armed bandits, neural
+architecture search, famous vision models, advanced language models, NLP
+downstream tasks, speech processing, multi-modal models, Gaussian
+processes, automatic feature extraction. See
+`part3_advanced_statistical_learning/README.md` for the full chapter
+list.
 
 ## Instructor
 

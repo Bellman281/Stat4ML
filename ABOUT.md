@@ -33,10 +33,10 @@ self-study; where a step is non-trivial, it is worked out in full.
    -- automatic differentiation, GANs, AutoML, neural architecture
    search, advanced vision and language models, and more.
 
-See `ROADMAP.md` for where the content goes from here -- closing gaps in
-the existing three parts, and new parts (Reinforcement Learning, and
-Large Language Model Training) to complete the "statistics for ML, DL,
-RL, and LLM training" ambition.
+See the course map in `README.md` for where the content is headed --
+closing gaps in the existing three parts, and new parts (Reinforcement
+Learning, and Large Language Model Training) to complete the "statistics
+for ML, DL, RL, and LLM training" ambition.
 
 ## Instructor
 

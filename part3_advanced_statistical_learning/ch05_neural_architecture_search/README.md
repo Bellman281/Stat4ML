@@ -19,4 +19,4 @@ _Part III -- Advanced Statistical Learning for DL (to be announced)_
 
 ## Source
 
-_No original slide deck exists for this chapter -- see the repo-level `ROADMAP.md`._
+_No original slide deck exists for this chapter._
