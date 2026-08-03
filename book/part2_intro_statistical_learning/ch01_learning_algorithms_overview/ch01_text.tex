@@ -1,0 +1,227 @@
+\documentclass[11pt]{article}
+\usepackage{../../stat4ml_style}
+
+\title{Chapter 1: Learning Algorithms Overview \\ \large Part II --- Introduction to Statistical Learning}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Part I gave us the language of probability -- sample spaces, random
+variables, moments. Part II turns that language into \emph{learning
+algorithms}: procedures that look at data and produce a function, a
+partition, or a policy. This opening chapter is a map of the territory: the
+handful of learning paradigms (supervised, unsupervised, semi-supervised,
+online, reinforcement, graph-based, and distillation-based) that every
+later chapter in this part is an instance of. Read it as a table of
+contents with explanations, not as a self-contained technical chapter --
+each paradigm gets its full mathematical treatment later (regression and
+cross-validation in Chapter 2, unsupervised learning and PCA in Chapter 5,
+and so on).
+
+\emph{Acknowledgement: this chapter expands the Introduction to Statistical
+Learning lecture slides by Omid Safarzadeh. Course texts: James, Witten,
+Hastie \& Tibshirani, \emph{An Introduction to Statistical Learning}; Murphy,
+\emph{Machine Learning: A Probabilistic Perspective}.}
+\end{abstract}
+
+\tableofcontents
+
+\section{Supervised Learning}
+
+\begin{definition}
+In supervised learning we observe \emph{labeled} training data
+$\{(x_i, y_i)\}_{i=1}^n$, where $x_i$ is an instance and $y_i$ its label, and
+we assume a generating model
+\[
+  y = f(x) + \epsilon,
+\]
+where $\epsilon$ is unobserved noise. A learning algorithm maps the training
+set to an estimate $\hat f(\cdot)$ of $f$. The goal is that $\hat f(x)$ is
+close to $y$ for \emph{new} $(x,y)$ pairs, not just the ones we trained on --
+this distinction (fit vs.\ generalize) is the entire subject of Chapter 2
+(bias--variance tradeoff, cross-validation).
+\end{definition}
+
+\begin{example}[Advertising]
+$X$ = advertising budget (\$000s), $Y$ = sales (000s of units); each data
+point is one past advertising campaign. Fitting a line to this scatterplot
+by least squares is the simplest possible supervised learning algorithm --
+formalized fully in Chapter 2.
+\end{example}
+
+\begin{example}[Image classification -- CIFAR-10]
+$X$ = a $32\times32$ color image, $Y \in \{0,\dots,9\}$ one of ten object
+classes. The same supervised-learning definition applies; only $f$ (now a
+convolutional network, Part II Chapter 9) and the loss function (cross-
+entropy, not squared error) change. (Krizhevsky \& Hinton, 2009.)
+\end{example}
+
+\section{Unsupervised Learning}
+
+\begin{definition}
+In unsupervised learning we observe \emph{unlabeled} data $x_1,\dots,x_n$
+(no $y_i$) and ask what structure -- clusters, a lower-dimensional
+representation, a density -- the data itself reveals.
+\end{definition}
+
+\begin{example}[Clustering]
+Given unlabeled points, $K$-means with $K=3$ partitions them into three
+groups by proximity to three learned centroids (full treatment: Part II,
+Chapter 7).
+\end{example}
+
+\begin{example}[Learned image compression]
+Image compression represents an image with as few bits as possible.
+Learned, probability-model-based codecs have been shown to beat classical
+codecs (BPG, JPEG, JPEG2000) on perceptual quality at the same bit rate
+(Mentzer et al., 2018) -- an unsupervised (or self-supervised) learning
+problem: there is no external label, only the image itself to reconstruct.
+\end{example}
+
+\begin{example}[Masked language modeling]
+BERT (Devlin et al., 2018) is trained by masking tokens in a sentence and
+predicting them from context -- the ``label'' is manufactured from the
+unlabeled text itself. This blurs the line between unsupervised and
+supervised learning, which is exactly why the next paradigm exists.
+\end{example}
+
+\section{Semi-Supervised Learning}
+
+\begin{definition}
+Semi-supervised learning uses a small labeled dataset together with a much
+larger unlabeled dataset, typically by having a model trained on the
+labeled data generate ``pseudo-labels'' for the unlabeled data, which are
+then used for further training.
+\end{definition}
+
+\begin{example}
+Billion-scale semi-supervised image classification: a teacher model labels
+a huge unlabeled image corpus; a student model trains on the combined
+labeled + pseudo-labeled data (Yalniz et al., 2019).
+\end{example}
+
+\subsection{Further Examples Worth Knowing}
+\begin{itemize}[nosep]
+  \item \textbf{Deep belief networks} for handwritten-digit classification
+        and generation -- an early (pre-2012) example of layerwise
+        unsupervised pretraining feeding into supervised fine-tuning.
+  \item \textbf{Reinforcement learning} milestones: emergent tool-use in
+        multi-agent hide-and-seek, and AlphaGo / AlphaZero learning to play
+        Go (and chess/shogi) purely from self-play.
+\end{itemize}
+
+\section{Online Learning}
+
+Ordinary supervised/unsupervised learning assumes: data arrives as one
+static batch; the model is trained once; the model is then frozen. Three
+problems follow directly from that assumption:
+\begin{itemize}[nosep]
+  \item it is not well-suited to genuinely streaming data;
+  \item retraining from scratch on the full history is wasteful once the
+        history is large;
+  \item the fitted model becomes stale as the data-generating process
+        drifts over time (\emph{concept drift}).
+\end{itemize}
+
+\begin{definition}
+\emph{Online (incremental) learning} algorithms update their parameters one
+new observation (or mini-batch) at a time, without revisiting the full
+history, so the model can track a data stream as it evolves.
+\end{definition}
+
+The simplest possible instance is an incremental (running) mean: given the
+current mean $\bar x_{n-1}$ over $n-1$ points and a new observation $x_n$,
+\[
+  \bar x_n = \bar x_{n-1} + \frac{x_n - \bar x_{n-1}}{n},
+\]
+which is mathematically identical to the batch mean but needs $O(1)$ memory
+and work per new point instead of $O(n)$. Exercise 1 asks you to implement
+exactly this update (Putatunda, 2021).
+
+\section{Reinforcement Learning}
+
+\begin{definition}
+In reinforcement learning an \emph{agent} interacts with an
+\emph{environment} over a sequence of time steps, choosing actions to
+maximize cumulative reward, with no explicit $(x_i, y_i)$ pairs telling it
+the ``correct'' action -- only a reward signal, often delayed. This is
+covered here only as a paradigm; a full treatment (Markov decision
+processes, policy gradients, multi-armed bandits) is planned for Part III
+(see \texttt{ROADMAP.md}).
+\end{definition}
+
+\section{Graph Representation Learning}
+
+\begin{definition}
+When data is naturally a graph (a social network, a molecule, a knowledge
+graph), graph representation learning produces vector embeddings of nodes
+(or whole graphs) that preserve graph structure, so that ordinary
+supervised or unsupervised algorithms can be applied downstream. This
+paradigm is also deferred to a full treatment in Part III.
+\end{definition}
+
+\section{Knowledge Distillation}
+
+\begin{definition}
+In \emph{knowledge distillation} (teacher/student learning), a large
+``teacher'' model's output distribution (not just its hard labels) is used
+as a training target for a smaller ``student'' model, transferring the
+teacher's learned function into a cheaper model to deploy. This is a
+supervised-learning technique whose ``labels'' are themselves the output of
+another learned model -- a nice illustration of how the paradigms in this
+chapter combine rather than partition the field.
+\end{definition}
+
+\section{Summary}
+\begin{summarybox}
+\begin{itemize}[nosep]
+  \item \textbf{Supervised}: learn $\hat f$ from labeled pairs $(x_i, y_i)$.
+  \item \textbf{Unsupervised}: find structure in unlabeled $x_i$ alone.
+  \item \textbf{Semi-supervised}: combine a little labeled data with a lot
+        of unlabeled data via pseudo-labeling.
+  \item \textbf{Online}: update the model incrementally as data streams in,
+        to track concept drift.
+  \item \textbf{Reinforcement}: learn a policy from reward signals, not
+        labels.
+  \item \textbf{Graph representation learning}: embed graph-structured data
+        for downstream use.
+  \item \textbf{Knowledge distillation}: train a small model to imitate a
+        large one's output distribution.
+\end{itemize}
+These are not mutually exclusive categories -- masked language modeling
+(BERT) and knowledge distillation both blend supervised mechanics onto
+unsupervised or model-generated targets. The rest of Part II works through
+each paradigm's core algorithms in full mathematical detail.
+\end{summarybox}
+
+\section{Exercises}
+See \texttt{exercises/python/exercise01.py}, \texttt{exercises/r/exercise01.R},
+and \texttt{exercises/rust/exercise01.rs}: a closed-form ordinary-least-
+-squares fit (supervised), a single $K$-means assignment step
+(unsupervised), and the incremental-mean update (online learning) --
+one small, working example of each of the three paradigms most fully
+developed later in Part II. The Rustlings-style broken counterparts are in
+\texttt{exercise01\_buggy.\{py,R,rs\}}.
+
+\section*{References}
+\begin{itemize}[nosep]
+  \item Devlin, J., Chang, M.-W., Lee, K., \& Toutanova, K. (2018). BERT:
+        Pre-training of deep bidirectional transformers for language
+        understanding. \emph{arXiv:1810.04805}.
+  \item Krizhevsky, A., \& Hinton, G. (2009). Learning multiple layers of
+        features from tiny images.
+  \item Mentzer, F., Agustsson, E., Tschannen, M., Timofte, R., \& Van Gool,
+        L. (2018). Conditional probability models for deep image
+        compression. \emph{CVPR}.
+  \item Putatunda, S. (2021). \emph{Practical Machine Learning for Streaming
+        Data with Python}.
+  \item Yalniz, I.~Z., J\'egou, H., Chen, K., Paluri, M., \& Mahajan, D.
+        (2019). Billion-scale semi-supervised learning for image
+        classification. \emph{arXiv:1905.00546}.
+\end{itemize}
+
+\end{document}

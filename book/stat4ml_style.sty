@@ -1,0 +1,99 @@
+% stat4ml_style.sty
+% Shared visual style for every chapter in this book. Include from a
+% chapter's chNN_text.tex with (path relative to book/partX/chYY/):
+%   \usepackage{../../stat4ml_style}
+%
+% Goal: colorful, clearly-delineated Definition/Theorem/Example boxes and
+% callouts so a chapter reads easily even skimmed -- not a wall of
+% black-and-white theorem text. Environments keep their normal amsthm
+% \begin{definition}...\end{definition} usage; tcolorbox just re-skins
+% them, so existing chapter .tex files need no content changes beyond
+% \usepackage{stat4ml_style} and dropping their own duplicate preamble.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{stat4ml_style}[2026/08/03 Stat4ML book style]
+
+\RequirePackage[a4paper,margin=1in]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm}
+\RequirePackage{mathtools}
+\RequirePackage{xcolor}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{titlesec}
+\RequirePackage{enumitem}
+\RequirePackage{hyperref}
+
+% ---------------------------------------------------------------------
+% Palette
+% ---------------------------------------------------------------------
+\definecolor{s4mlBlue}{HTML}{1F5FA6}     % Definitions
+\definecolor{s4mlBlueBg}{HTML}{EAF1FB}
+\definecolor{s4mlOrange}{HTML}{C1590A}   % Theorems
+\definecolor{s4mlOrangeBg}{HTML}{FCEEE2}
+\definecolor{s4mlGreen}{HTML}{1C7A4D}    % Examples
+\definecolor{s4mlGreenBg}{HTML}{E7F5ED}
+\definecolor{s4mlGray}{HTML}{555555}     % Notes / "try it yourself"
+\definecolor{s4mlGrayBg}{HTML}{F1F1F1}
+\definecolor{s4mlRed}{HTML}{A6231F}      % Editorial / bug callouts
+\definecolor{s4mlRedBg}{HTML}{FBEAEA}
+\definecolor{s4mlHeading}{HTML}{102A54}  % Section headings
+
+% ---------------------------------------------------------------------
+% Colored section headings
+% ---------------------------------------------------------------------
+\titleformat{\section}
+  {\color{s4mlHeading}\Large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}
+  {\color{s4mlBlue}\large\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.4em}{0.8em}
+\titlespacing*{\subsection}{0pt}{1.1em}{0.6em}
+
+% ---------------------------------------------------------------------
+% Theorem-like environments (standard amsthm machinery for numbering)
+% ---------------------------------------------------------------------
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{example}{Example}[section]
+
+% Re-skin them as colored, breakable boxes -- no call-site changes needed.
+\tcolorboxenvironment{definition}{
+  colback=s4mlBlueBg, colframe=s4mlBlue, boxrule=0.8pt, breakable,
+  left=6pt, right=6pt, top=2pt, bottom=2pt,
+  before skip=10pt, after skip=10pt, sharp corners=south}
+\tcolorboxenvironment{theorem}{
+  colback=s4mlOrangeBg, colframe=s4mlOrange, boxrule=0.8pt, breakable,
+  left=6pt, right=6pt, top=2pt, bottom=2pt,
+  before skip=10pt, after skip=10pt, sharp corners=south}
+\tcolorboxenvironment{example}{
+  colback=s4mlGreenBg, colframe=s4mlGreen, boxrule=0.8pt, breakable,
+  left=6pt, right=6pt, top=2pt, bottom=2pt,
+  before skip=10pt, after skip=10pt, sharp corners=south}
+
+% ---------------------------------------------------------------------
+% Unnumbered callout boxes
+% ---------------------------------------------------------------------
+\newtcolorbox{tryit}{colback=s4mlGrayBg,colframe=s4mlGray,
+  fonttitle=\bfseries,breakable,boxrule=0.8pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt,
+  title=Try it yourself}
+
+\newtcolorbox{editorialnote}{colback=s4mlRedBg,colframe=s4mlRed,
+  fonttitle=\bfseries,breakable,boxrule=0.8pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt,
+  title=Editorial note}
+
+\newtcolorbox{summarybox}{colback=s4mlGrayBg,colframe=s4mlHeading,
+  fonttitle=\bfseries,breakable,boxrule=0.8pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt,
+  title=Summary}
+
+% Convenience: colored inline key-term
+\newcommand{\keyterm}[1]{\textcolor{s4mlBlue}{\textbf{#1}}}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=s4mlBlue,
+  citecolor=s4mlGreen,
+  urlcolor=s4mlOrange,
+}
+
+\endinput

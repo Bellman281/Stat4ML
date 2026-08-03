@@ -1,127 +1,137 @@
 # Stat4ML
-**Statistics and Mathematics for Machine Learning, Deep Learning , Deep NLP**
 
-This is the first course from our trio courses:
+**Statistics and Mathematics for Machine Learning, Deep Learning, Deep NLP,
+Reinforcement Learning, and LLM Training.**
 
-1. Statistics Foundation for ML
+This repository is the merged home of Omid Safarzadeh's "trio" of
+courses -- previously split across two repos, now combined into one book
+so the whole sequence can be read, exercised, and audited together. See
+`ABOUT.md` for the full mission and background, `ROADMAP.md` for what's
+planned next, `AUDIT.md` for a list of typos/bugs found in the original
+material, and `CONTRIBUTING.md` if you want to help write a chapter.
 
-https://github.com/Bellman281/Stat4ML/
+> **Note on this reorganization:** nothing at the repository root (slide
+> PDFs, homework PDFs, prerequisite PDFs, `distributions.ipynb`, `LICENSE`)
+> was moved, renamed, or deleted. Everything below is new, and lives
+> entirely under `book/`.
 
-2. Introduction to Statistical Learning 
-https://github.com/Bellman281/Intro_Statistical_Learning
+## The book
 
-3. Advanced Statistical Learning for DL  ( to be anounced)
+```
+book/
+  part1_statistics_foundations/         Part I:   Statistics Foundation for ML
+  part2_intro_statistical_learning/     Part II:  Introduction to Statistical Learning
+  part3_advanced_statistical_learning/  Part III: Advanced Statistical Learning for DL
+```
 
-## Registration Form for cohort 2 of STAT4ML:
-https://forms.gle/ZqLJLmv1K5nGVx3m7
+Each chapter is its own folder (O'Reilly-style): a LaTeX/PDF chapter
+text, a `source_slides/` copy of the original lecture PDF (when one
+exists), and **at least three homework exercises** in **Python, R, and
+Rust**, each covering a different piece of the chapter's material --
+every exercise, in every language, also gets a **Rustlings-style
+broken-code counterpart**: fully working code with a few deliberate bugs
+planted against the chapter's formulas/theorems, which you fix one at a
+time until the tests pass. See `CONTRIBUTING.md` for the exact file
+layout.
 
-Notes about the course: 
+Four chapters are fully authored end to end (text + all three languages'
+exercises + buggy exercises, all verified to compile/run) as a reference
+for the rest:
+- `book/part1_statistics_foundations/ch00_matrix_algebra_review/`
+- `book/part1_statistics_foundations/ch01_probability_theory_foundations/`
+- `book/part1_statistics_foundations/ch02_moments/`
+- `book/part2_intro_statistical_learning/ch01_learning_algorithms_overview/`
 
-Instructor :
-Omid Safarzadeh, 
+Every other chapter is scaffolded (folder structure, chapter README,
+topic list, exercise stubs) so contributors have a consistent shape to
+fill in -- see `ROADMAP.md` for the priority order.
 
-LinkedIn:
-https://www.linkedin.com/in/omidsafarzadeh/
+## Part I: Statistics Foundation for ML
 
-IG : @deepdatascientists
+Probability theory and mathematical statistics: sample spaces, random
+variables, moments, the standard discrete/continuous distributions,
+convergence concepts, and estimation (MLE and Bayesian).
 
-Course Text Book:
- Statistical Inference 2nd Edition
-by George Casella  (Author), Roger L. Berger  (Author) :
+**Registration (cohort 2):** https://forms.gle/ZqLJLmv1K5nGVx3m7
 
-https://www.amazon.com/Statistical-Inference-George-Casella-dp-0534243126/dp/0534243126/ref=mt_other?_encoding=UTF8&me=&qid=
+**Course text:** Casella, G., & Berger, R. (2002). *Statistical
+Inference* (2nd ed.). Cengage Learning.
 
-## Pre Requisitives 
-### Recall from Calculus:
-        Derivative
-              Chain rule
-        Integral
-              Techniques of Integration
-              Substitution
-        Integration by parts
-        
-### Matrix Algebra Review:
+### Prerequisites
+- **Calculus:** derivatives (chain rule), integrals (techniques of
+  integration, substitution, integration by parts). See
+  `PreReq0_Calculus.pdf`.
+- **Matrix algebra:** matrix operations and multiplication, determinants,
+  inverses, transposes, partitioned matrices, eigenvalues/eigenvectors,
+  matrix decompositions (LU, Cholesky, QR, SVD), matrix differentiation.
+  See `PreReq1_Matrix_Calculus.pdf`.
 
-        Matrix operations
-        Matrix Multiplication
-           Properties of determinants
-           Inverse Matrix
-           Matrix Transpose
-           Properties of transpose
-        Partioned Matrices
-        Eigenvalues and Eigenvectors
-        Matrix decomposition
-           LU decomposition
-           Cholesky decomposition
-           QR decomposition
-           SVD
-        Matrix Differentiation
+### Chapters
+0. Matrix Algebra Review *(fully authored -- see `book/part1_statistics_foundations/ch00_matrix_algebra_review/`)*
+1. Probability Theory Foundations *(fully authored -- see `book/part1_statistics_foundations/ch01_probability_theory_foundations/`)*
+2. Moments *(fully authored -- see `book/part1_statistics_foundations/ch02_moments/`)*
+3. Distribution Functions
+4. Conditional and Multivariate Distributions
+5. Convergence Concepts
+6. Maximum Likelihood Estimation
+7. Bayesian and Posterior Distribution Estimation
 
-### Course 1 :
-### Slide 1 : Probability Theory Foundation
-     Sample Space
-     Probability Theory Foundation
-        Axiomatic Foundations
-        The Calculus of Probabilities
-     Independence
-     Conditional Probability
-        Bayes Theorem
-     Random Variables
-     Probability Function
-        Distribution Functions
-        Density function
+## Part II: Introduction to Statistical Learning
 
-### Slide 2: Moments
-       Moments
-           Expected Value
-           Variance
-           Covariance and Correlation
-       Moment Generating Functions
-           Normal mgf
-       Matrix Notation for Moments
-       
-### Slide 3: Distribution Functions
-       Distributions
-         Discrete Distribution
-           Discrete Uniform Distribution
-           Binomial Distribution
-           Poisson Distribution
-         Continuous Distribution
-           Uniform Distribution
-           Exponential Distribution
-           Normal Distribution
-           Lognormal Distribution
-           Laplace Distribution
-           Beta Distribution
+Core statistical/machine learning: regression, regularization, resampling,
+unsupervised learning, EM, clustering, and the on-ramp into neural
+networks and Transformers.
 
-    
-### Slide 4: Conditional and Multivariate Distributions
-    Joint and Marginal Distribution
-    Conditional Distributions and Independence
-    Bivariate Transformations
-    Hierarchical Models and Mixture Distribution
-    Bivariate Normal Distribution
-    Multivariate Distribution
-    
-### Slide 5:   Convergence Concepts
-    Random Samples
-       Sums of Random Variable from a Random Sample
-    Inequalities
-    Convergence Concepts:
-       Almost Sure Convergence
-       Convergence in Probability
-       Convergence in Distribution
-    The Delta Method
+**Registration (cohort 1):** https://forms.gle/gRqq7uCp9FVcqgej9
 
-### Slide 6: Maximum Likelihood Estimation
-    Maximum Likelihood Estimation
-      Motivation and the Main Ideas
-      Properties of the Maximum Likelihood Estimator
+**Course texts:**
+- James, G., Witten, D., Hastie, T., & Tibshirani, R. *An Introduction to
+  Statistical Learning*.
+- Murphy, K. *Machine Learning: A Probabilistic Perspective*.
 
-### Slide 7: Bayesian and posterior distribution Estimation
-       Computing the posterior
-       Maximum likelihood estimation (MLE)
-    Maximum a posteriori (MAP) estimation
-       Posterior mean
-       MAP properties
-    Bayesian linear regression
+### Chapters
+1. Learning Algorithms Overview *(fully authored -- see `book/part2_intro_statistical_learning/ch01_learning_algorithms_overview/`)*
+2. Regression, Cross-Validation
+3. Logistic, Ridge, Lasso Regression
+4. Recommendation Systems *(content gap -- see `AUDIT.md`)*
+5. Unsupervised Learning, PCA
+6. EM Algorithm
+7. Clustering
+8. NN, Activation and Loss Functions
+9. Convolutional Neural Networks *(content gap)*
+10. RNN, LSTM *(content gap)*
+11. Language Models and Tokenization *(content gap)*
+12. Transformers
+13. Large Language Models *(content gap)*
+
+## Part III: Advanced Statistical Learning for DL
+
+Originally announced as "to be announced" -- scaffolded here from the
+topic list already sketched for it (automatic differentiation, AutoML,
+GANs, multi-armed bandits, neural architecture search, famous vision
+models, advanced language models, NLP downstream tasks, speech
+processing, multi-modal models, Gaussian processes, automatic feature
+extraction). See `book/part3_advanced_statistical_learning/README.md` for
+the full chapter list and `ROADMAP.md` for authoring priority.
+
+## Where this is going
+
+The goal is for this repo to become a complete, spoon-fed source of
+statistics for ML, deep learning, reinforcement learning, and LLM
+training -- not just these three courses. `ROADMAP.md` lays out two new
+proposed parts (Reinforcement Learning; Large Language Model Training)
+plus a shorter capstone part on probabilistic deep learning, in addition
+to closing the content gaps already listed above.
+
+## Instructor
+
+**Omid Safarzadeh**
+LinkedIn: https://www.linkedin.com/in/omidsafarzadeh/
+Instagram: @deepdatascientists
+
+## License
+
+This repository is licensed under the GNU General Public License v2
+(GPLv2) -- see `LICENSE`. (Before this merge, Part I's original `Stat4ML`
+repo was MIT-licensed; the combined repository has since been relicensed
+GPLv2 throughout -- see `ABOUT.md` for the full note.)

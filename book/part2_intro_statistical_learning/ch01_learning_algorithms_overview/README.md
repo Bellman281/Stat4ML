@@ -1,0 +1,28 @@
+# Chapter 01: Learning Algorithms Overview
+
+_Part II -- Introduction to Statistical Learning_
+
+**Status:** PILOT -- fully authored
+
+## Contents
+
+- `ch01_text.tex` / `ch01_text.pdf` -- the chapter text
+- `figures/` -- chapter figures
+- `source_slides/` -- original course slide PDF, preserved unmodified (if one exists)
+- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- homework exercise,
+  a Rustlings-style **broken** exercise you must fix, and a reference solution,
+  in each of the three languages
+
+## Topics
+
+- Supervised learning
+- Unsupervised learning
+- Semi-supervised learning
+- Online learning
+- Reinforcement learning
+- Graph representation learning
+- Knowledge distillation (teacher/student learning)
+
+## Source
+
+Original slide deck preserved at `source_slides/Chapter_1__Learning_Algorithms.pdf`.

@@ -1,0 +1,338 @@
+\documentclass[11pt]{article}
+\usepackage{../../stat4ml_style}
+
+\title{Chapter 0: Matrix Algebra Review \\ \large Part I --- Statistics Foundation for ML}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+This is chapter zero on purpose: everything from Chapter 2 onward (moment
+matrices, covariance matrices, multivariate distributions, and eventually
+regression coefficients and neural-network weight matrices) is written in
+matrix notation, and none of it is readable without this chapter first.
+This chapter reviews matrix multiplication, determinants, inverses,
+transposes, partitioned matrices, eigenvalues/eigenvectors, the four
+standard matrix decompositions (LU, Cholesky, QR, SVD), and matrix
+differentiation -- the exact toolkit \S4 (Matrix Notation for Moments) of
+Chapter 2 assumes you already have.
+
+\emph{Acknowledgement: this chapter expands the STAT4ML prerequisite
+slides (``Matrix Calculus''), which drew on Barnes (2009) and Wikipedia's
+matrix decomposition article; see the reference list at the end.}
+\end{abstract}
+
+\tableofcontents
+
+\section{Matrix Multiplication}
+
+\begin{definition}[Matrix product]
+Let $A$ be $m \times n$ and $B$ be $n \times p$. The product $C = AB$ is
+the $m \times p$ matrix with entries
+\[
+  c_{ij} = \sum_{k=1}^n a_{ik} b_{kj}, \qquad i = 1,\dots,m,\ j = 1,\dots,p.
+\]
+\end{definition}
+
+Matrix multiplication is only defined when the inner dimensions match ($A$
+has as many columns as $B$ has rows); the result takes the outer
+dimensions. This single rule is why a weight matrix in a neural network
+must have shape (output features $\times$ input features) -- so it can
+left-multiply an input vector of the right length.
+
+\section{Determinants}
+
+For a $2\times 2$ matrix $A = \begin{psmallmatrix} a & b \\ c & d
+\end{psmallmatrix}$, $\det A = ad - bc$.
+
+\begin{theorem}[Properties of determinants]
+For square matrices $A, B$ of the same size:
+\begin{enumerate}
+  \item $\det I = 1$.
+  \item Exchanging two rows of a matrix flips the sign of its determinant.
+  \item The determinant is a linear function of each row separately: for
+        $2\times 2$, $\begin{vmatrix} ta+a' & tb+b' \\ c & d\end{vmatrix}
+        = t\begin{vmatrix}a&b\\c&d\end{vmatrix} +
+        \begin{vmatrix}a'&b'\\c&d\end{vmatrix}$.
+  \item If two rows of $A$ are equal, $\det A = 0$.
+  \item Subtracting $t$ times row $i$ from row $j$ ($i \ne j$) does not
+        change the determinant.
+  \item If $A$ has an all-zero row, $\det A = 0$.
+  \item The determinant of a triangular matrix is the product of its
+        diagonal entries.
+  \item $\det(AB) = (\det A)(\det B)$.
+  \item $\det(A^\top) = \det A$.
+\end{enumerate}
+\end{theorem}
+
+\begin{tryit}
+Property 2 above is exactly why Gaussian elimination with row swaps has
+to track a sign flip when computing a determinant via row reduction --
+implement \texttt{det2x2} in this chapter's exercises and confirm
+property 8 numerically on two random $2\times 2$ matrices.
+\end{tryit}
+
+\section{The Inverse Matrix}
+
+\begin{definition}[Invertible matrix]
+An $n\times n$ matrix $A$ is \emph{invertible} if there exists an $n
+\times n$ matrix $B$ with $AB = BA = I_n$. When it exists, $B$ is unique,
+called the \emph{inverse} of $A$, and denoted $A^{-1}$.
+\end{definition}
+
+For a $2\times 2$ matrix, $A^{-1} = \dfrac{1}{\det A}
+\begin{psmallmatrix} d & -b \\ -c & a \end{psmallmatrix}$, which only
+exists when $\det A \ne 0$ -- a matrix with zero determinant is called
+\emph{singular} and has no inverse. This is the same condition that shows
+up later as ``$X^\top X$ must be invertible'' for ordinary least squares
+to have a unique closed-form solution (Part II, Chapter 2).
+
+\section{Matrix Transpose}
+
+\begin{definition}[Transpose]
+The transpose of $A$, written $A^\top$, swaps $A$'s row and column
+indices: $(A^\top)_{ij} = A_{ji}$.
+\end{definition}
+
+\begin{example}
+For $A = \begin{psmallmatrix}1&2\\3&4\\5&6\end{psmallmatrix}$,
+$A^\top = \begin{psmallmatrix}1&3&5\\2&4&6\end{psmallmatrix}$.
+\end{example}
+
+\begin{theorem}[Properties of transpose and inverse]
+\begin{enumerate}
+  \item $(A^\top)^\top = A$.
+  \item $(A \pm B)^\top = A^\top \pm B^\top$.
+  \item $(\kappa A)^\top = \kappa A^\top$ for a scalar $\kappa$.
+  \item $(AB)^\top = B^\top A^\top$ (order reverses!).
+  \item If $C = AB$ with $A, B$ both invertible, $C^{-1} = B^{-1}A^{-1}$
+        (order reverses here too).
+\end{enumerate}
+\end{theorem}
+
+\section{Partitioned Matrices}
+
+\begin{definition}
+Write $A$ ($m\times n$) in block form
+$A = \begin{psmallmatrix} B & C \\ D & E \end{psmallmatrix}$,
+where $B$ is $m_1\times n_1$, $E$ is $m_2\times n_2$, $C$ is $m_1\times
+n_2$, $D$ is $m_2\times n_1$, $m_1+m_2=m$, $n_1+n_2=n$. This is a
+\emph{partition} of $A$.
+\end{definition}
+
+Partitioned matrices are exactly the shape of the block covariance matrix
+$\mathrm{Cov}\begin{psmallmatrix}Y\\Z\end{psmallmatrix} =
+\begin{psmallmatrix}\mathrm{Cov}(Y) & \mathrm{Cov}(Y,Z) \\
+\mathrm{Cov}(Z,Y) & \mathrm{Cov}(Z)\end{psmallmatrix}$ from Chapter 2,
+\S4 -- this chapter's block-matrix notation and that chapter's block
+covariance notation are literally the same object.
+
+\section{Eigenvalues and Eigenvectors}
+
+Almost every vector changes direction when multiplied by a matrix $A$.
+The exceptional vectors that do not -- that come back out parallel to
+themselves -- are \keyterm{eigenvectors}.
+
+\begin{definition}[Eigenvalue, eigenvector]
+For a square matrix $A$, a nonzero vector $x$ is an \emph{eigenvector} of
+$A$ with \emph{eigenvalue} $\lambda$ if
+\[
+  Ax = \lambda x.
+\]
+$\lambda$ tells you whether $x$ is stretched, shrunk, reversed, or left
+unchanged by $A$.
+\end{definition}
+
+\begin{example}
+Let $A = \begin{psmallmatrix}0.8 & 0.3 \\ 0.2 & 0.7\end{psmallmatrix}$.
+Solving $\det(A - \lambda I) = 0$:
+\[
+  \det\begin{psmallmatrix}0.8-\lambda & 0.3 \\ 0.2 & 0.7-\lambda
+  \end{psmallmatrix} = \lambda^2 - \tfrac{3}{2}\lambda + \tfrac{1}{2}
+  = (\lambda - 1)(\lambda - \tfrac{1}{2}) = 0,
+\]
+so $\lambda_1 = 1$, $\lambda_2 = 1/2$.
+\end{example}
+
+\begin{theorem}[Trace and determinant, $2\times 2$]
+For a $2\times 2$ matrix $A$ with eigenvalues $\lambda_1, \lambda_2$
+(possibly complex, possibly repeated):
+\[
+  \lambda_1 + \lambda_2 = \operatorname{trace}(A) = a_{11}+a_{22},
+  \qquad
+  \lambda_1 \lambda_2 = \det A.
+\]
+\end{theorem}
+This gives a fast sanity check for any eigenvalue computation you write:
+the eigenvalues must sum to the trace and multiply to the determinant --
+Exercise 3 in this chapter builds exactly this check into its test suite.
+
+\section{Matrix Decompositions}
+
+A \keyterm{matrix decomposition} factors a matrix into a product of
+(usually simpler, structured) matrices. Decompositions related to solving
+linear systems: LU, Cholesky, QR. A decomposition based on eigenvalues:
+SVD.
+
+\subsection{LU Decomposition}
+
+\begin{definition}
+The \emph{LU decomposition} writes a square matrix as $A = LU$, with $L$
+lower triangular and $U$ upper triangular.
+\end{definition}
+
+\begin{example}
+For $A = \begin{psmallmatrix}4&3\\6&3\end{psmallmatrix}$, write $A = LU$
+with $L = \begin{psmallmatrix}\ell_{11}&0\\\ell_{21}&\ell_{22}
+\end{psmallmatrix}$, $U = \begin{psmallmatrix}u_{11}&u_{12}\\0&u_{22}
+\end{psmallmatrix}$. Fixing $\ell_{11}=\ell_{22}=1$ (Doolittle's
+convention) and expanding $LU$ entrywise gives four equations:
+\[
+  \ell_{11}u_{11} = 4,\quad \ell_{11}u_{12} = 3,\quad
+  \ell_{21}u_{11} = 6,\quad \ell_{21}u_{12} + \ell_{22}u_{22} = 3.
+\]
+Solving in order: $u_{11} = 4$, $u_{12} = 3$, $\ell_{21} = 6/4 = 1.5$, and
+$\ell_{22}u_{22} = 3 - 1.5(3) = -1.5 \Rightarrow u_{22} = -1.5$. So
+\[
+  \begin{psmallmatrix}4&3\\6&3\end{psmallmatrix} =
+  \begin{psmallmatrix}1&0\\1.5&1\end{psmallmatrix}
+  \begin{psmallmatrix}4&3\\0&-1.5\end{psmallmatrix}.
+\]
+\end{example}
+
+\begin{editorialnote}
+The original prerequisite slide this example is drawn from has a digit
+typo at exactly this step -- it states ``$u_{11} = 14$'' where it means
+$u_{11} = 4$ (everything downstream in the original slide is computed
+correctly using $u_{11}=4$, so it is an isolated typo, not a repeated
+error). See \texttt{AUDIT.md} at the repo root.
+\end{editorialnote}
+
+\subsection{Cholesky Decomposition}
+For a Hermitian positive-definite matrix $A$, the \emph{Cholesky
+decomposition} is $A = LL^\top$ with $L$ lower triangular and positive
+diagonal entries:
+\[
+  L_{jj} = \sqrt{A_{jj} - \sum_{k=1}^{j-1} L_{jk}^2}, \qquad
+  L_{ij} = \frac{1}{L_{jj}}\Big(A_{ij} - \sum_{k=1}^{j-1} L_{ik}L_{jk}\Big)
+  \ \text{for } i > j.
+\]
+Because it needs only one triangular factor (not two), Cholesky is the
+standard way to solve $\Sigma x = b$ when $\Sigma$ is a covariance matrix
+(always symmetric positive-(semi)definite) -- about twice as fast as a
+generic LU solve.
+
+\subsection{QR Decomposition}
+$A = QR$, with $Q$ orthogonal ($Q^\top Q = I$) and $R$ upper triangular.
+One construction method is Gram-Schmidt: given columns $a_1,\dots,a_n$ of
+$A$, set $u_1 = a_1$, $e_1 = u_1/\lVert u_1\rVert$, and iteratively
+\[
+  u_{k+1} = a_{k+1} - \sum_{j=1}^{k}(a_{k+1}\cdot e_j)e_j, \qquad
+  e_{k+1} = \frac{u_{k+1}}{\lVert u_{k+1}\rVert}.
+\]
+Then $Q = [e_1|\cdots|e_n]$ and $R_{ij} = a_j \cdot e_i$ for $i \le j$
+(0 below the diagonal).
+
+\subsection{Singular Value Decomposition (SVD)}
+The SVD generalizes eigendecomposition to \emph{any} $n\times p$ matrix
+(not just square ones):
+\[
+  A_{n\times p} = U_{n\times n}\, S_{n\times p}\, V_{p\times p}^\top,
+\]
+with $U^\top U = I_n$, $V^\top V = I_p$ (both orthogonal). The columns of
+$V$ are the eigenvectors of $A^\top A$; the columns of $U$ are the
+eigenvectors of $AA^\top$; the singular values in $S$ are the square
+roots of the (shared, nonnegative) eigenvalues of $A^\top A$ or $AA^\top$.
+SVD is what PCA (Part II, Chapter 5) actually computes under the hood.
+
+\section{Matrix Differentiation}
+
+\begin{definition}[Jacobian]
+Let $y = \psi(x)$ with $y$ an $m$-vector and $x$ an $n$-vector. The
+\emph{Jacobian} $\dfrac{\partial y}{\partial x}$ is the $m\times n$ matrix
+with $(i,j)$ entry $\dfrac{\partial y_i}{\partial x_j}$.
+\end{definition}
+
+A handful of identities cover almost every derivative you need in this
+course (all assuming $A$ does not depend on the variable being
+differentiated with respect to, unless stated otherwise):
+\begin{align*}
+  y = Ax &\ \Rightarrow\ \frac{\partial y}{\partial x} = A. \\
+  \alpha = y^\top A x &\ \Rightarrow\ \frac{\partial \alpha}{\partial x}
+    = y^\top A, \qquad \frac{\partial \alpha}{\partial y} = x^\top A^\top. \\
+  \alpha = x^\top A x \ (A\text{ not symmetric}) &\ \Rightarrow\
+    \frac{\partial \alpha}{\partial x} = x^\top (A + A^\top). \\
+  \alpha = x^\top A x \ (A\text{ symmetric}) &\ \Rightarrow\
+    \frac{\partial \alpha}{\partial x} = 2x^\top A. \\
+  \alpha = x^\top x &\ \Rightarrow\ \frac{\partial \alpha}{\partial x} = 2x^\top.
+\end{align*}
+The symmetric quadratic-form identity, $\partial(x^\top A x)/\partial x =
+2x^\top A$, is the one you will use over and over: it is exactly the
+gradient of the ridge-regression penalty $\lambda \beta^\top \beta$ (Part
+II, Chapter 3) and of the Gaussian log-density's quadratic term.
+
+\begin{theorem}[Derivative of a matrix inverse]
+Let $A(\alpha)$ be a nonsingular $m\times m$ matrix whose entries are
+differentiable functions of a scalar $\alpha$. Then
+\[
+  \frac{\partial A^{-1}}{\partial \alpha}
+  = -A^{-1} \frac{\partial A}{\partial \alpha} A^{-1}.
+\]
+\end{theorem}
+
+\begin{editorialnote}
+The original prerequisite slide states this identity \emph{without} the
+leading minus sign (as $A^{-1}\frac{\partial A}{\partial\alpha}A^{-1}$).
+That is incorrect -- differentiate $AA^{-1}=I$ with respect to $\alpha$
+using the product rule to see why the minus sign is required:
+$\frac{\partial A}{\partial\alpha}A^{-1} + A\frac{\partial
+A^{-1}}{\partial\alpha} = 0 \Rightarrow \frac{\partial
+A^{-1}}{\partial\alpha} = -A^{-1}\frac{\partial A}{\partial\alpha}A^{-1}$.
+See \texttt{AUDIT.md}.
+\end{editorialnote}
+
+\section{Summary}
+\begin{summarybox}
+\begin{itemize}[nosep]
+  \item Matrix multiplication requires matching inner dimensions; $(AB)^\top
+        = B^\top A^\top$ and $(AB)^{-1} = B^{-1}A^{-1}$ both reverse order.
+  \item A matrix is invertible iff its determinant is nonzero; for $2\times2$,
+        $A^{-1} = \frac{1}{\det A}\begin{psmallmatrix}d&-b\\-c&a\end{psmallmatrix}$.
+  \item Eigenvalues/eigenvectors satisfy $Ax=\lambda x$; for $2\times2$,
+        eigenvalues sum to the trace and multiply to the determinant --
+        a fast correctness check for eigenvalue code.
+  \item LU, Cholesky, and QR decompose a matrix for solving linear systems;
+        SVD generalizes eigendecomposition to non-square matrices and
+        underlies PCA.
+  \item $\partial(x^\top A x)/\partial x = 2x^\top A$ for symmetric $A$ is
+        the single most-reused matrix-calculus identity in this course.
+\end{itemize}
+\end{summarybox}
+
+\section{Exercises}
+Three exercises per language (\texttt{exercises/\{python,r,rust\}/}):
+\begin{enumerate}
+  \item \textbf{Exercise 1 -- Core operations:} matrix multiply, transpose,
+        $2\times2$ determinant and inverse, verifying $(AB)^\top=B^\top A^\top$
+        and $\det(AB)=\det(A)\det(B)$.
+  \item \textbf{Exercise 2 -- LU decomposition:} Doolittle's method for a
+        $2\times2$ matrix, verified by reconstructing $A$ from $L$ and $U$.
+  \item \textbf{Exercise 3 -- Eigenvalues/eigenvectors:} the $2\times2$
+        characteristic-polynomial formula, verified against the
+        trace/determinant identities above.
+\end{enumerate}
+Each has a Rustlings-style broken counterpart in
+\texttt{exerciseNN\_buggy.\{py,R,rs\}}.
+
+\section*{References}
+\begin{itemize}[nosep]
+  \item Barnes, R. J. (2009). \emph{Matrix Differentiation (and some
+        other stuff)}.
+  \item Wikipedia contributors. \emph{Matrix decomposition}. Wikipedia,
+        The Free Encyclopedia.
+\end{itemize}
+
+\end{document}

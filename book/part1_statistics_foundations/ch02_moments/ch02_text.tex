@@ -1,0 +1,311 @@
+\documentclass[11pt]{article}
+\usepackage{../../stat4ml_style}
+
+\title{Chapter 2: Moments \\ \large Part I --- Statistics Foundation for ML}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+A distribution is an infinite-dimensional object; moments are the finite,
+computable summaries we actually work with -- the mean, the variance, the
+covariance between two variables, and, packaged together, the moment
+generating function. Every loss function you will minimize later in this
+course (mean squared error, the Gaussian log-likelihood, the bias--variance
+decomposition) is a statement about moments. This chapter builds them
+carefully, in scalar and then matrix form, because the matrix form is
+exactly the shape you will need for multivariate regression and for the
+covariance matrices behind PCA (Part II, Chapter 5).
+
+\emph{Acknowledgement: this chapter expands the STAT4ML lecture slides
+(``Slide 2 -- Moments''), following Casella \& Berger, \emph{Statistical
+Inference}, 2nd ed. (2002).}
+\end{abstract}
+
+\tableofcontents
+
+\section{Moments}
+
+\begin{definition}
+For integer $n$, the \emph{$n$th moment} of $X$ is $\mu_n' = E[X^n]$. The
+\emph{$n$th central moment} of $X$ is $\mu_n = E[(X-\mu)^n]$, where
+$\mu = \mu_1' = E[X]$.
+\end{definition}
+
+\subsection{Expected Value}
+
+An everyday ``average'' weights every observed data point equally. The
+\emph{expected value} instead weights every \emph{possible} value a random
+variable can take by how probable that value is. It answers: on average,
+which value do we expect $X$ to take?
+
+\begin{definition}
+The expected value of $g(X)$ is
+\[
+  E[g(X)] =
+  \begin{cases}
+    \displaystyle\int_{-\infty}^{\infty} g(x)\, f_X(x)\, dx & X \text{ continuous} \\[1em]
+    \displaystyle\sum_{x \in \mathcal{X}} g(x)\, f_X(x) & X \text{ discrete,}
+  \end{cases}
+\]
+provided the sum/integral converges absolutely; if $E[|g(X)|] = \infty$ we
+say $E[g(X)]$ does not exist.
+\end{definition}
+
+\begin{example}[Exponential mean]
+Let $X \sim \mathrm{Exponential}(\lambda)$, $f_X(x) = \frac{1}{\lambda}
+e^{-x/\lambda}$ for $x \ge 0$. Integrating by parts ($\int u\,dv = uv - \int
+v\,du$, with $u = x$, $dv = \frac{1}{\lambda}e^{-x/\lambda}dx$),
+\[
+  E[X] = \int_0^\infty x \cdot \frac{1}{\lambda} e^{-x/\lambda}\,dx
+       = \big[-xe^{-x/\lambda}\big]_0^\infty + \int_0^\infty e^{-x/\lambda}\,dx
+       = \lambda.
+\]
+\end{example}
+
+Expectation is a \emph{linear} operator: for constants $a, b$,
+\[
+  E[a + bX] = a + b\,E[X] = a + b\mu.
+\]
+
+\begin{theorem}
+Let $a, b, c$ be constants and $g_1, g_2$ functions whose expectations exist.
+\begin{enumerate}
+  \item $E[a\,g_1(X) + b\,g_2(X) + c] = a\,E[g_1(X)] + b\,E[g_2(X)] + c$.
+  \item If $g_1(x) \ge 0$ for all $x$, then $E[g_1(X)] \ge 0$.
+  \item If $g_1(x) \ge g_2(x)$ for all $x$, then $E[g_1(X)] \ge E[g_2(X)]$.
+  \item If $a \le g_1(x) \le b$ for all $x$, then $a \le E[g_1(X)] \le b$.
+\end{enumerate}
+\end{theorem}
+
+\begin{example}
+Let $X \sim \mathrm{Uniform}(0,1)$ and $g(X) = -\log X$. Then, using
+integration by parts,
+\[
+  E[-\log X] = \int_0^1 -\log x\,dx = \big[-x\log x + x\big]_0^1 = 1.
+\]
+\end{example}
+
+\subsection{Variance}
+
+Variance measures the spread of $X$ around its mean. While the mean is
+usually written $\mu$, variance is written $\sigma^2$; it is a second-order
+moment.
+
+\begin{definition}
+The variance of $X$ is its second central moment,
+\[
+  \mathrm{Var}(X) = E[(X-\mu)^2], \qquad
+  \sqrt{\mathrm{Var}(X)} = \text{standard deviation of } X.
+\]
+Equivalently, expanding the square and using linearity of expectation,
+\[
+  \mathrm{Var}(X) = E[X^2] - \mu^2.
+\]
+\end{definition}
+
+This second form, $E[X^2] - (E[X])^2$, is the one you will actually compute
+in code -- it needs only two running sums (of $x$ and of $x^2$) instead of a
+second pass over the data. It is also the single most common source of bugs
+in hand-written variance code: forgetting the $-\mu^2$ term always returns a
+number too large, and never negative, which makes the bug easy to miss on
+a quick sanity check. (This exact bug is planted in
+\texttt{exercise02\_buggy.py} -- watch for it.)
+
+\section{Covariance and Correlation}
+
+\begin{definition}
+For random variables $X, Y$ with $E[X] = \mu_X$, $E[Y] = \mu_Y$,
+$\mathrm{Var}(X) = \sigma_X^2$, $\mathrm{Var}(Y) = \sigma_Y^2$, the
+\emph{covariance} is
+\[
+  \mathrm{Cov}(X,Y) = E\big[(X-\mu_X)(Y-\mu_Y)\big],
+\]
+and the \emph{correlation} (correlation coefficient) is
+\[
+  \rho_{XY} = \frac{\mathrm{Cov}(X,Y)}{\sigma_X \sigma_Y}.
+\]
+\end{definition}
+
+If large values of $X$ tend to co-occur with large values of $Y$ (and small
+with small), $\mathrm{Cov}(X,Y) > 0$: when $X > \mu_X$, $Y > \mu_Y$ is also
+likely, so $(X-\mu_X)(Y-\mu_Y) > 0$ on average. Symmetrically, if large
+values of $X$ tend to pair with \emph{small} values of $Y$,
+$\mathrm{Cov}(X,Y) < 0$. Correlation just rescales covariance by both
+standard deviations so that it is unitless and bounded in $[-1, 1]$ --
+which is what makes it comparable across different pairs of variables.
+
+\begin{theorem}
+$\mathrm{Cov}(X,Y) = E[XY] - \mu_X \mu_Y$.
+\end{theorem}
+
+\begin{theorem}
+If $X \perp\!\!\!\perp Y$ (independent), then $\mathrm{Cov}(X,Y) =
+\rho_{XY} = 0$. The converse is \textbf{false} in general: zero correlation
+does not imply independence (a standard counterexample: $X \sim
+\mathrm{Uniform}(-1,1)$, $Y = X^2$; then $\mathrm{Cov}(X,Y) = 0$ but $Y$ is a
+deterministic function of $X$).
+\end{theorem}
+
+\begin{theorem}
+For random variables $X, Y$ and constants $a, b$,
+\[
+  \mathrm{Var}(aX + bY) = a^2 \mathrm{Var}(X) + b^2 \mathrm{Var}(Y) +
+  2ab\,\mathrm{Cov}(X,Y),
+\]
+which reduces to $a^2\mathrm{Var}(X) + b^2\mathrm{Var}(Y)$ when $X, Y$ are
+independent (since $\mathrm{Cov}(X,Y)=0$).
+\end{theorem}
+
+If $X, Y$ are positively correlated, $\mathrm{Var}(X+Y) >
+\mathrm{Var}(X)+\mathrm{Var}(Y)$ (the variances reinforce each other); if
+negatively correlated, $\mathrm{Var}(X+Y) < \mathrm{Var}(X)+\mathrm{Var}(Y)$
+(they partially cancel).
+
+\subsection{Variance of Sums of Random Variables}
+For constants $a_i$ and random variables $X_i$, $i=1,\dots,n$,
+\[
+  \mathrm{Var}\Big(\sum_{i=1}^n a_i X_i\Big)
+  = \sum_{i=1}^n a_i^2 \mathrm{Var}(X_i) + \sum_{i \ne j} a_i a_j
+  \mathrm{Cov}(X_i, X_j).
+\]
+
+\subsection{Higher Moments}
+The third and fourth (central, standardized) moments -- skewness and
+kurtosis -- describe how asymmetric and how fat-tailed a distribution is,
+respectively. They matter in ML whenever a model's error distribution is
+assumed Gaussian but the real residuals are heavy-tailed (e.g.\ financial
+returns, or gradient noise in SGD with a small batch size).
+
+\section{Moment Generating Functions}
+
+\begin{definition}
+The \emph{moment generating function} (MGF) of $X$ is
+\[
+  M_X(t) = E[e^{tX}],
+\]
+provided this expectation is finite for $t$ in some open interval containing
+0 (i.e.\ there is $h>0$ such that $E[e^{tX}]$ exists for all $-h<t<h$). If no
+such neighborhood exists, the MGF does not exist.
+\end{definition}
+
+\begin{theorem}
+If $X$ has MGF $M_X(t)$, then $E[X^n] = M_X^{(n)}(0)$, the $n$th derivative
+of $M_X$ evaluated at $t=0$. This is exactly what ``moment generating''
+means: differentiate the MGF $n$ times at zero and you get the $n$th raw
+moment, all at once.
+\end{theorem}
+
+\subsection{The Normal MGF}
+For $X \sim N(\mu, \sigma^2)$ with $f(x) = \frac{1}{\sqrt{2\pi\sigma^2}}
+\exp\big[-\tfrac{1}{2}\big(\tfrac{x-\mu}{\sigma}\big)^2\big]$, completing the
+square in the exponent of $E[e^{tX}]$ gives
+\[
+  M_X(t) = \exp\Big(\mu t + \frac{\sigma^2 t^2}{2}\Big).
+\]
+Differentiating,
+\[
+  E[X] = M_X'(0) = \mu, \qquad
+  E[X^2] = M_X''(0) = \sigma^2 + \mu^2, \qquad
+  \mathrm{Var}(X) = E[X^2] - (E[X])^2 = \sigma^2.
+\]
+This is a good closed-form to numerically double-check: Exercise 2 asks you
+to estimate the Normal MGF by direct simulation (average $e^{tX}$ over many
+samples) and compare against the formula above.
+
+\section{Matrix Notation for Moments}
+
+Let $X$ be $(r \times 1)$ and $Y$ be $(c \times 1)$ random vectors. The
+\emph{cross-covariance matrix} is
+\[
+  \mathrm{Cov}(X,Y) =
+  \begin{pmatrix}
+    \mathrm{Cov}(X_1,Y_1) & \cdots & \mathrm{Cov}(X_1,Y_c) \\
+    \vdots & \ddots & \vdots \\
+    \mathrm{Cov}(X_r,Y_1) & \cdots & \mathrm{Cov}(X_r,Y_c)
+  \end{pmatrix}
+  = E\big[(X - E[X])(Y-E[Y])^\top\big].
+\]
+
+For a single $(c\times 1)$ vector $X$, write $\mathrm{Cov}(X)$ for
+$\mathrm{Cov}(X,X)$:
+\[
+  \mathrm{Cov}(X) =
+  \begin{pmatrix}
+    \mathrm{Var}(X_1) & \cdots & \mathrm{Cov}(X_1,X_c) \\
+    \vdots & \ddots & \vdots \\
+    \mathrm{Cov}(X_1,X_c) & \cdots & \mathrm{Var}(X_c)
+  \end{pmatrix},
+\]
+a symmetric $(c \times c)$ matrix -- \emph{the} object PCA diagonalizes in
+Part II, Chapter 5.
+
+For a block vector $X = \binom{Y}{Z}$ with $Y$ $(p\times 1)$ and $Z$
+$(q\times 1)$,
+\[
+  \mathrm{Cov}(X) =
+  \begin{pmatrix}
+    \mathrm{Cov}(Y) & \mathrm{Cov}(Y,Z) \\
+    \mathrm{Cov}(Z,Y) & \mathrm{Cov}(Z)
+  \end{pmatrix}.
+\]
+
+For non-stochastic vectors $a$ $(r\times1)$, $b$ $(c\times1)$, and
+$\Sigma_{XY} = \mathrm{Cov}(X,Y)$,
+\[
+  \mathrm{Cov}(a^\top X, b^\top Y) = a^\top \Sigma_{XY} b.
+\]
+In particular, with $\Sigma = \mathrm{Var}(X)$,
+\[
+  \mathrm{Var}(a^\top X) = a^\top \Sigma a,
+\]
+and for two random vectors of the same dimension,
+\[
+  \mathrm{Var}(X+Y) = \Sigma_{XX} + \Sigma_{XY} + \Sigma_{YX} + \Sigma_{YY},
+  \qquad
+  \mathrm{Var}(a^\top(X+Y)) = a^\top\Sigma_{XX}a + 2a^\top\Sigma_{XY}a +
+  a^\top\Sigma_{YY}a
+\]
+(using $a^\top \Sigma_{XY} a = a^\top \Sigma_{YX} a$, since both equal the
+scalar $\mathrm{Cov}(a^\top X, a^\top Y)$).
+
+Finally, these results extend from vectors to matrices: for a
+non-stochastic matrix $R$,
+\[
+  E[RX] = R\,E[X], \qquad
+  \mathrm{Var}(RX) = R\,\mathrm{Var}(X)\,R^\top = R\,\Sigma_{XX}\,R^\top.
+\]
+This is the identity that tells you how a linear layer $z = Wx$ transforms
+the covariance of its input -- the starting point for reasoning about
+activation statistics in a deep network.
+
+\section{Summary}
+\begin{summarybox}
+\begin{itemize}[nosep]
+  \item Moments ($E[X^n]$, central moments $E[(X-\mu)^n]$) are finite
+        numerical summaries of a distribution.
+  \item Variance and covariance are the second-moment objects that drive
+        the bias--variance tradeoff (Part II, Chapter 2) and PCA (Part II,
+        Chapter 5).
+  \item The MGF packages every moment into one function via
+        $E[X^n] = M_X^{(n)}(0)$.
+  \item In matrix form, $\mathrm{Var}(RX) = R\Sigma R^\top$ is the identity
+        you will use repeatedly once random vectors, not just random
+        scalars, are on the table.
+\end{itemize}
+\end{summarybox}
+
+\section{Exercises}
+See \texttt{exercises/python/exercise02.py}, \texttt{exercises/r/exercise02.R},
+and \texttt{exercises/rust/exercise02.rs} (expected value, variance,
+covariance, correlation, and a Monte-Carlo check of the Normal MGF), plus the
+Rustlings-style broken counterparts in \texttt{exercise02\_buggy.\{py,R,rs\}}.
+
+\section*{Reference}
+Casella, G., \& Berger, R. (2002). \emph{Statistical Inference} (2nd ed.).
+Cengage Learning.
+
+\end{document}

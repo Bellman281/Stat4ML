@@ -1,0 +1,468 @@
+\documentclass[11pt]{article}
+\usepackage{../../stat4ml_style}
+
+\title{Chapter 1: Probability Theory Foundations \\ \large Part I --- Statistics Foundation for ML}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Before a single model gets fit, every statistical and machine-learning method
+rests on the same small set of ideas: a sample space, an assignment of
+probabilities to events, and the machinery -- random variables, distribution
+functions, densities -- that lets us reason about randomness in a form we can
+compute with. This chapter builds that foundation from first principles and
+ties each idea back to a machine-learning example, so that later chapters
+(regression, classification, EM, attention weights as probability
+distributions, and so on) can simply say ``recall Chapter 1'' instead of
+re-deriving the axioms of probability from scratch.
+
+\emph{Acknowledgement: this chapter expands the STAT4ML lecture slides
+(``Slide 1 -- Probability Theory Foundation''), which were themselves prepared
+following Casella \& Berger, \emph{Statistical Inference}, 2nd ed. (2002).}
+\end{abstract}
+
+\tableofcontents
+
+\section{Sample Space}
+
+\begin{definition}[Sample space]
+The set of all possible outcomes of a particular experiment is called the
+\emph{sample space} of the experiment, generally denoted $\Omega$.
+\end{definition}
+
+\begin{example}[Two coins]
+Tossing two fair coins has sample space
+\[
+  \Omega = \{HH, HT, TH, TT\}.
+\]
+\end{example}
+
+The notion of ``experiment'' is deliberately abstract: it can be a physical
+coin toss, but it can just as well be ``a user visits a web page'' or ``a
+model receives one input and produces one output.'' Making the sample space
+explicit is the first step in turning an ML problem into a probability
+problem.
+
+\begin{tryit}
+\begin{itemize}[nosep]
+  \item What is the sample space of rolling a fair six-sided die?
+  \item What is the sample space of a credit-risk decision (default / no
+        default within 12 months)?
+  \item What is the sample space of a binary classification problem with
+        labels $\{0, 1\}$?
+  \item Define the sample space of a single visit to a specific web page
+        (think of every clickable element as a possible outcome).
+  \item Define the sample space of one turn of a chatbot conversation.
+\end{itemize}
+\end{tryit}
+
+\subsection{Events}
+
+\begin{definition}[Event space]
+The \emph{event space} $\mathcal{A}$ is the collection of potential results of
+the experiment we are willing to assign a probability to. In the discrete
+case, $\mathcal{A}$ is the power set of $\Omega$.
+\end{definition}
+
+\begin{definition}[Event]
+An \emph{event} is any collection of possible outcomes of an experiment --
+that is, any subset of $\Omega$. The triple $(\Omega, \mathcal{A}, P)$ is
+called a \emph{probability space}.
+\end{definition}
+
+\begin{example}
+On an Amazon product page, the whole page is the sample space and every
+clickable item -- ``Add to Cart'', ``See Similar Items'', etc. -- is an event.
+\end{example}
+
+\section{Probability Theory Foundations}
+
+\subsection{Axiomatic Foundations}
+
+\begin{definition}[$\sigma$-algebra]
+A collection $\mathcal{B}$ of subsets of $\Omega$ is a \emph{sigma algebra}
+($\sigma$-algebra) if it satisfies:
+\begin{enumerate}
+  \item $\emptyset \in \mathcal{B}$.
+  \item If $A \in \mathcal{B}$, then $A^c \in \mathcal{B}$ ($\mathcal{B}$ is
+        closed under complement).
+  \item If $A_1, A_2, \dots \in \mathcal{B}$, then $\bigcup_{i=1}^\infty A_i
+        \in \mathcal{B}$ ($\mathcal{B}$ is closed under countable unions).
+\end{enumerate}
+The pair $(\Omega, \mathcal{B})$ is called a \emph{measurable space} (or
+Borel space). Interpretation: a $\sigma$-algebra is exactly the collection
+of events we are allowed to assign probabilities to.
+\end{definition}
+
+A short derivation worth doing once by hand: closure under countable
+\emph{intersections} follows from properties (2) and (3) together with De
+Morgan's law. If $A_1, A_2, \dots \in \mathcal{B}$ then $A_1^c, A_2^c, \dots
+\in \mathcal{B}$ by (2); by (3), $\bigcup_{i=1}^\infty A_i^c \in \mathcal{B}$;
+and De Morgan's law gives
+\[
+  \Big(\bigcup_{i=1}^\infty A_i^c\Big)^c = \bigcap_{i=1}^\infty A_i,
+\]
+which is in $\mathcal{B}$ by (2) again. So a $\sigma$-algebra is closed under
+countable intersections as well as countable unions.
+
+\begin{example}
+If $\Omega$ is finite or countable, the simplest choice is
+$\mathcal{B} = $ (all subsets of $\Omega$, including $\Omega$ itself), i.e.\
+the power set of $\Omega$. For $\Omega = \{A, B, \dots, Z\}$, $\mathcal{B}$ is
+the power set of $\Omega$, with $2^{26}$ elements.
+\end{example}
+
+\begin{tryit}
+\begin{itemize}[nosep]
+  \item Is the power set of $\Omega$ itself countable, when $\Omega$ is
+        countably infinite? (No -- this is Cantor's theorem.)
+  \item Define an event space for a single web page. Check that it satisfies
+        all three $\sigma$-algebra properties.
+\end{itemize}
+\end{tryit}
+
+\subsection{Kolmogorov's Axioms}
+
+\begin{definition}[Probability function]
+Given a sample space $\Omega$ and an associated $\sigma$-algebra
+$\mathcal{B}$, a \emph{probability function} is a function $P$ with domain
+$\mathcal{B}$ satisfying:
+\begin{enumerate}
+  \item $P(A) \ge 0$ for all $A \in \mathcal{B}$.
+  \item $P(\Omega) = 1$.
+  \item If $A_1, A_2, \dots \in \mathcal{B}$ are pairwise disjoint, then
+        $P\big(\bigcup_{i=1}^\infty A_i\big) = \sum_{i=1}^\infty P(A_i)$
+        (countable additivity).
+\end{enumerate}
+These are the \emph{axioms of probability}, also known as \emph{Kolmogorov's
+axioms}. Any function $P(\cdot)$ satisfying them is a valid probability
+function -- there is no other requirement.
+\end{definition}
+
+\begin{example}[Fair coin]
+Toss a fair coin once: $\Omega = \{H, T\}$. Since $\Omega = \{H\} \cup \{T\}$
+and the two outcomes are disjoint, Axiom 3 gives
+$P(\{H\} \cup \{T\}) = P(\{H\}) + P(\{T\})$, and Axiom 2 gives
+$P(\{H\} \cup \{T\}) = 1$. So $P(\{H\}) + P(\{T\}) = 1$. The axioms alone do
+\emph{not} force $P(\{H\}) = P(\{T\}) = 1/2$ -- any nonnegative pair summing
+to 1 (e.g.\ $P(\{H\}) = 1/4$, $P(\{T\}) = 3/4$) is axiomatically valid. We
+choose $1/2$ each because we additionally know, empirically, that the coin is
+fair. \emph{The axioms tell you what a probability function is allowed to be;
+they never tell you which one describes your data. That second step is
+statistics.}
+\end{example}
+
+\begin{theorem}[Elementary consequences]
+If $P$ is a probability function and $A, B \in \mathcal{B}$, then
+\begin{enumerate}
+  \item $P(\emptyset) = 0$.
+  \item $P(A) \le 1$.
+  \item $P(A^c) = 1 - P(A)$.
+  \item $P(B \cap A^c) = P(B) - P(A \cap B)$.
+  \item $P(A \cup B) = P(A) + P(B) - P(A \cap B)$ \quad
+        (\emph{inclusion--exclusion}).
+  \item If $A \subset B$, then $P(A) \le P(B)$.
+\end{enumerate}
+\end{theorem}
+
+Property 5 above is the one most often mis-remembered as
+$P(A \cup B) = P(A) + P(B)$ -- correct only when $A$ and $B$ are disjoint.
+It reappears, unfixed, as a classic bug in the Python/R/Rust exercises for
+this chapter.
+
+\section{Independence}
+
+\begin{definition}
+Two events $A$ and $B$ are \emph{statistically independent} if
+\[
+  P(A \cap B) = P(A) \, P(B).
+\]
+\end{definition}
+
+\begin{theorem}
+If $A$ and $B$ are independent, then so are each of the pairs
+$(A, B^c)$, $(A^c, B)$, and $(A^c, B^c)$.
+\end{theorem}
+
+\section{Conditional Probability}
+
+\begin{definition}
+If $A$ and $B$ are events with $P(B) > 0$, the \emph{conditional probability}
+of $A$ given $B$ is
+\begin{equation}
+  P(A \mid B) = \frac{P(A \cap B)}{P(B)}.
+  \label{eq:conditional}
+\end{equation}
+In words: given that $B$ has occurred, what is the probability that $A$ also
+occurred? By definition $P(B \mid B) = 1$, and if $A, B$ are disjoint then
+$P(A \mid B) = P(B \mid A) = 0$. Conditioning on $B$ effectively shrinks the
+sample space to $B$; it is a short exercise to check that $P(\cdot \mid B)$
+again satisfies Kolmogorov's axioms for any fixed $B$ with $P(B) > 0$.
+\end{definition}
+
+\subsection{An NLP Illustration}
+A famous distributional-semantics slogan is: ``you shall know a word by the
+company it keeps'' (Firth, 1957). Word2Vec-style models turn this into a
+conditional-probability estimation problem: for a center word $w_t$ at
+position $t$, and a context window of size $m$, estimate
+\[
+  P(w_{t+i} \mid w_t), \qquad i \in \{-m, \dots, -1, 1, \dots, m\}.
+\]
+This is exactly Equation~\eqref{eq:conditional} applied at corpus scale: every
+skip-gram training pair is one empirical conditional-probability query.
+
+\subsection{Bayes' Rule and Bayes' Theorem}
+
+Since $P(A \mid B) = P(A \cap B)/P(B)$ and $P(B \mid A) = P(A \cap B)/P(A)$,
+\[
+  P(A \mid B)\, P(B) = P(A \cap B) = P(B \mid A) \, P(A)
+  \quad\Longrightarrow\quad
+  P(A \mid B) = P(B \mid A)\, \frac{P(A)}{P(B)}.
+\]
+This is \emph{Bayes' rule}.
+
+\begin{theorem}[Bayes' theorem]
+Let $A_1, A_2, \dots$ be a partition of the sample space, and let $B$ be any
+event. Then for each $i = 1, 2, \dots$
+\[
+  P(A_i \mid B) = \frac{P(B \mid A_i) \, P(A_i)}{\sum_{j=1}^\infty P(B \mid
+  A_j) \, P(A_j)}.
+\]
+\end{theorem}
+
+The denominator is just $P(B)$ rewritten via the law of total probability:
+$\sum_j P(B \mid A_j) P(A_j) = \sum_j P(A_j \cap B) = P(B)$, using the fact
+that $A_1, A_2, \dots$ partition $\Omega$.
+
+\section{Random Variables}
+
+\begin{definition}
+A \emph{random variable} is a function from the sample space $\Omega$ into
+the real numbers $\mathbb{R}$.
+\end{definition}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+Experiment & Random variable \\
+\hline
+Click on an Amazon product page & $X = \mathbb{1}[\text{clicked BUY button}]$ \\
+Product-page visit & $X = $ total GET-API calls to the page \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{example}
+Toss a fair coin three times and let $X$ be the number of heads:
+\[
+\begin{array}{c|cccccccc}
+\omega & HHH & HHT & HTH & THH & TTH & THT & HTT & TTT \\
+\hline
+X(\omega) & 3 & 2 & 2 & 2 & 1 & 1 & 1 & 0
+\end{array}
+\]
+\end{example}
+
+Formally, if $X : \Omega \to \mathcal{X}$ maps into an induced sample space
+$\mathcal{X} = \{x_1, \dots, x_m\}$, the \emph{induced probability function}
+$P_X$ is defined by
+\[
+  P_X(X = x_i) = P(\{\omega \in \Omega : X(\omega) = x_i\}),
+\]
+and for uncountable $\mathcal{X}$, by $P_X(X \in A) = P(\{\omega : X(\omega)
+\in A\})$ for $A \subset \mathcal{X}$. $P_X$ satisfies Kolmogorov's axioms
+because $P$ does -- this is worth checking directly at least once.
+
+\emph{Convention:} capital letters ($X$) denote random variables, lower-case
+letters ($x$) denote the particular value they take.
+
+\section{Probability Function}
+
+\subsection{Distribution Functions}
+
+\begin{definition}[CDF]
+The \emph{cumulative distribution function} of a random variable $X$,
+$F_X(x)$, is
+\[
+  F_X(x) = P_X(X \le x), \qquad \text{for all } x \in \mathbb{R}.
+\]
+\end{definition}
+
+\begin{example}
+Toss three fair coins and let $X$ be the number of heads. Then
+\[
+F_X(x) =
+\begin{cases}
+0 & -\infty < x < 0 \\
+1/8 & 0 \le x < 1 \\
+1/2 & 1 \le x < 2 \\
+7/8 & 2 \le x < 3 \\
+1 & 3 \le x < \infty
+\end{cases}
+\]
+so, for instance, $P(X \le 2.5) = P(X \in \{0,1,2\}) = 7/8$.
+\end{example}
+
+\begin{theorem}
+$F_X$ is a CDF if and only if
+\begin{enumerate}
+  \item $\lim_{x \to -\infty} F_X(x) = 0$ and $\lim_{x \to +\infty} F_X(x) =
+        1$,
+  \item $F_X$ is non-decreasing,
+  \item $F_X$ is right-continuous: for every $x_0$,
+        $\lim_{x \downarrow x_0} F_X(x) = F_X(x_0)$.
+\end{enumerate}
+$X$ is \emph{continuous} (resp.\ \emph{discrete}) if $F_X$ is a continuous
+(resp.\ step) function of $x$.
+\end{theorem}
+
+\begin{example}[The logistic sigmoid as a CDF]
+Take $F_X(x) = \dfrac{1}{1+e^{-x}}$, the logistic sigmoid familiar from every
+neural-network output layer. Then $\lim_{x\to-\infty}F_X(x)=0$,
+$\lim_{x\to\infty}F_X(x)=1$, and
+\[
+  \frac{d}{dx}F_X(x) = \frac{e^{-x}}{(1+e^{-x})^2} > 0,
+\]
+so $F_X$ is non-decreasing and continuous everywhere -- it \emph{is} a valid
+CDF (of the standard logistic distribution), which is exactly why it is a
+sensible choice of squashing function for turning a real-valued logit into
+something we can read off as a probability.
+\end{example}
+
+\begin{theorem}
+$X$ and $Y$ are identically distributed if and only if $F_X(x) = F_Y(x)$ for
+every $x$.
+\end{theorem}
+
+\subsection{Density Function}
+
+\begin{definition}[pmf]
+For a discrete random variable, the \emph{probability mass function} is
+$f_X(x) = P(X = x)$ for all $x$.
+\end{definition}
+
+\begin{definition}[pdf]
+For a continuous random variable, the \emph{probability density function} is
+the function $f_X(x)$ satisfying
+\[
+  F_X(x) = \int_{-\infty}^x f_X(t)\, dt.
+\]
+\end{definition}
+
+We write ``$X \sim F_X$'' or ``$X \sim f_X$'' to mean ``$X$ has distribution
+$F_X$ (or density $f_X$)''; if $X$ and $Y$ share a distribution we write
+$X \sim Y$.
+
+\begin{example}
+For the logistic CDF above, $f_X(x) = \dfrac{e^{-x}}{(1+e^{-x})^2}$, and for
+continuous $X$ in general,
+\[
+  P(a < X < b) = F_X(b) - F_X(a) = \int_a^b f_X(x)\,dx.
+\]
+\end{example}
+
+\begin{theorem}
+$f_X$ is a valid pdf/pmf of some random variable $X$ if and only if
+$f_X(x) \ge 0$ for all $x$, and $\sum_x f_X(x) = 1$ (discrete) or
+$\int_{-\infty}^\infty f_X(x)\,dx = 1$ (continuous).
+\end{theorem}
+
+This gives a useful recipe for \emph{simulation}: if $h(x) \ge 0$ on some set
+$A$ and $0 \le \int_A h(x)\,dx = K < \infty$, then $f_X(x) = h(x)/K$ is a
+valid density on $A$. (Note that a CDF can exist and be continuous without
+being differentiable everywhere, in which case $f_X$ does not exist and
+analysis has to proceed via $F_X$ directly.)
+
+\section{Distributions of Functions of a Random Variable}
+
+If $X$ has CDF $F_X$ and $Y = g(X)$, then $Y$ is also a random variable, and
+for any set $A$,
+\[
+  P(Y \in A) = P(g(X) \in A) = P(X \in g^{-1}(A)),
+  \qquad g^{-1}(A) = \{x \in \mathcal{X} : g(x) \in A\}.
+\]
+Consequently the CDF of $Y$ is
+\[
+  F_Y(y) = P(g(X) \le y) = \int_{x : g(x) \le y} f_X(x)\, dx.
+\]
+
+\begin{theorem}
+Let $X$ have CDF $F_X$, $Y = g(X)$, $\mathcal{X} = \{x : f_X(x) > 0\}$,
+$\mathcal{Y} = \{y : y = g(x), x \in \mathcal{X}\}$.
+\begin{enumerate}
+  \item If $g$ is increasing on $\mathcal{X}$, then
+        $F_Y(y) = F_X(g^{-1}(y))$ for $y \in \mathcal{Y}$.
+  \item If $g$ is decreasing on $\mathcal{X}$ and $X$ is continuous, then
+        $F_Y(y) = 1 - F_X(g^{-1}(y))$ for $y \in \mathcal{Y}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Change of variables for densities]
+Let $X$ have pdf $f_X$, $Y = g(X)$ with $g$ monotone, $f_X$ continuous on
+$\mathcal{X}$, and $g^{-1}$ continuously differentiable on $\mathcal{Y}$.
+Then
+\[
+  f_Y(y) =
+  \begin{cases}
+    f_X(g^{-1}(y)) \left| \dfrac{d}{dy} g^{-1}(y) \right| & y \in \mathcal{Y} \\
+    0 & \text{otherwise.}
+  \end{cases}
+\]
+\end{theorem}
+
+\begin{example}
+Let $X \sim \mathrm{Uniform}(0,1)$, so $f_X(x) = 1$ on $(0,1)$ and
+$F_X(x) = x$. Let $Y = g(X) = -\log X$. Then $g'(x) = -1/x < 0$ on $(0,1)$,
+so $g$ is monotone with a continuous derivative, $\mathcal{Y} = (0,\infty)$,
+and $g^{-1}(y) = e^{-y}$. By the change-of-variables theorem,
+\[
+  f_Y(y) = 1 \cdot |{-e^{-y}}| = e^{-y}, \qquad y > 0,
+\]
+i.e.\ $Y \sim \mathrm{Exponential}(1)$. This is the standard trick behind
+\emph{inverse-transform sampling}.
+\end{example}
+
+\begin{theorem}[Probability integral transform]
+Let $X$ have continuous CDF $F_X$ and define $Y = F_X(X)$. Then
+$Y \sim \mathrm{Uniform}(0,1)$.
+\end{theorem}
+
+This result is the workhorse of Monte Carlo simulation: to sample from any
+distribution with CDF $F_X$, sample $Y \sim \mathrm{Uniform}(0,1)$ and solve
+$F_X(x) = y$ for $x$, i.e.\ return $x = F_X^{-1}(y)$.
+
+\section{Summary}
+\begin{summarybox}
+\begin{itemize}[nosep]
+  \item A sample space $\Omega$, a $\sigma$-algebra $\mathcal{B}$ of events,
+        and a probability function $P$ satisfying Kolmogorov's axioms
+        together define a \emph{probability space}.
+  \item Conditional probability and Bayes' theorem let us update
+        probabilities in light of evidence -- the mathematical basis of
+        every Bayesian model in this course, and of skip-gram word
+        embeddings.
+  \item A random variable maps outcomes to real numbers; its CDF and
+        pdf/pmf fully describe its randomness.
+  \item The change-of-variables formula and the probability integral
+        transform connect arbitrary distributions to the uniform
+        distribution -- the basis of random-number generation.
+\end{itemize}
+\end{summarybox}
+
+\section{Exercises}
+See \texttt{exercises/python/exercise01.py}, \texttt{exercises/r/exercise01.R},
+and \texttt{exercises/rust/exercise01.rs} for a working implementation of a
+small ``probability toolkit'' (axiom checking, inclusion--exclusion, Bayes'
+theorem, and a Monte-Carlo law-of-large-numbers check), plus
+\texttt{exercise01\_buggy.\{py,R,rs\}}, a Rustlings-style broken version of
+the same toolkit that you must repair function by function.
+
+\section*{Reference}
+Casella, G., \& Berger, R. (2002). \emph{Statistical Inference} (2nd ed.).
+Cengage Learning.
+
+\end{document}
