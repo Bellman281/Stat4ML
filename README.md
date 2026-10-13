@@ -132,7 +132,7 @@ matrix algebra, which Chapter 0 below covers from scratch.
 | 0 | Matrix Algebra Review | **complete** |
 | 1 | Probability Theory Foundations | **complete** |
 | 2 | Moments | **complete** |
-| 3 | Distribution Functions | slides only |
+| 3 | Distribution Functions | **complete** |
 | 4 | Conditional and Multivariate Distributions | slides only |
 | 5 | Convergence Concepts | **complete** |
 | 6 | Maximum Likelihood Estimation | **complete** |

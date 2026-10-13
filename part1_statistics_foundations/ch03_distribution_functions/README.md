@@ -2,23 +2,32 @@
 
 _Part I -- Statistics Foundation for ML_
 
-**Status:** slides only -- the original lecture slides are in this folder and
-you can learn from them today; the written-out chapter isn't done yet.
+**Status:** complete -- a written chapter, plus three exercises in each of
+Python and R, with a broken copy of each to fix.
 
 ## Contents
 
-- `ch03_text.tex` / `ch03_text.pdf` -- the chapter text
-- `figures/` -- chapter figures
+- `ch03_text.tex` / `ch03_text.pdf` -- the chapter: the cdf and density; the
+  probability integral transform and inverse-transform sampling; the monotone
+  change-of-variables formula; and non-monotone transforms and the Jacobian.
+  Includes a worked Python snippet (sampling three distributions from
+  uniforms) and `figures/pit_panel.png`.
 - `source_slides/` -- the original lecture slides, exactly as taught
 - `homework/` -- the original homework PDF from the course
-- `exercises/python/`, `exercises/r/` -- the homework
-  exercise, a **broken** copy of it for you to debug, and a reference
-  solution, in each of the two languages
+- `exercises/python/`, `exercises/r/` -- three exercises, a **broken** copy
+  of each for you to debug, and a reference solution, in each language
 
-## Topics
+## Drilling by level
 
-- Discrete distributions: uniform, binomial, Poisson
-- Continuous distributions: uniform, exponential, normal, lognormal, Laplace, beta
+- `exercise03` -- **core**: the exponential cdf/pdf and inverse-transform sampling
+- `exercise04` -- **proof**: density as F', the monotone change-of-variables formula
+- `exercise05` -- **research**: non-monotone transforms and the 2-D Jacobian
+
+```bash
+python3 drill.py --level bachelor   # core only
+python3 drill.py --level master     # core + proof
+python3 drill.py --level phd        # all three
+```
 
 ## Source
 

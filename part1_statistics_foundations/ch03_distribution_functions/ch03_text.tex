@@ -1,27 +1,180 @@
 \documentclass[11pt]{article}
 \usepackage{../../latex/stat4ml_style}
 
-\title{Distribution Functions \\ \large Part I -- Statistics Foundation for ML}
+\title{Chapter 3: Distribution Functions \\ \large Part I --- Statistics Foundation for ML}
 \author{Omid Safarzadeh}
 \date{}
 
 \begin{document}
 \maketitle
 
-\section*{This chapter isn't written yet}
-The written-out chapter is still to come. In the meantime the original
-lecture slides are in the \texttt{source\_slides/} folder next to this
-file, and you can work from them today. The topics they cover are listed
-below.
+\begin{abstract}
+\noindent
+A distribution is described by a function. This chapter is about those
+functions: the cumulative distribution function that every random variable
+has, the mass or density function that most have, and the rules for turning
+one random variable into another. The payoff is concrete. The
+\emph{probability integral transform} lets you manufacture a sample from any
+distribution out of nothing but uniform random numbers --- which is how a
+computer draws from an exponential, a Cauchy, or a logistic --- and the
+\emph{change-of-variables formula} gives the density of any smooth transform
+of a variable you already understand.
+\end{abstract}
 
-\textit{Slides: \texttt{source\_slides/STAT4ML\_Slide\_3\_\_Distributions.pdf}, exactly as taught.}
+\tableofcontents
 
+% ======================================================================
+\section{The distribution function and the density}
+% ======================================================================
 
+Every random variable, discrete or continuous, is pinned down by one
+function.
 
-\section*{Planned topics}
-\begin{itemize}
-  \item Discrete distributions: uniform, binomial, Poisson
-  \item Continuous distributions: uniform, exponential, normal, lognormal, Laplace, beta
-\end{itemize}
+\begin{definition}[Cumulative distribution function]
+The \keyterm{cdf} of $X$ is $F(x) = P(X \le x)$. It is non-decreasing,
+right-continuous, and satisfies $\lim_{x\to-\infty}F(x)=0$ and
+$\lim_{x\to\infty}F(x)=1$.
+\end{definition}
+
+A \keyterm{discrete} variable is described by its \keyterm{probability mass
+function} $f(x)=P(X=x)$, and $F$ is a sum of jumps. A \keyterm{continuous}
+variable is described by a \keyterm{probability density function} $f$ with
+\[
+  F(x) = \int_{-\infty}^{x} f(t)\,dt, \qquad f(x) = F'(x).
+\]
+The density is not a probability --- it can exceed $1$ --- but integrates to
+probability over any interval: $P(a \le X \le b) = \int_a^b f$.
+
+\begin{example}[Exponential]
+For $X \sim \mathrm{Exponential}(\lambda)$, $F(x) = 1 - e^{-\lambda x}$ and
+$f(x) = \lambda e^{-\lambda x}$ for $x \ge 0$. Differentiating $F$ returns
+$f$, as it must.
+\end{example}
+
+The cdf has one property that looks like a curiosity and turns out to be a
+workhorse: feed a continuous random variable through its own cdf and you get
+a uniform.
+
+\begin{theorem}[Probability integral transform]
+If $X$ is continuous with cdf $F$, then $U = F(X) \sim \mathrm{Uniform}(0,1)$.
+Conversely, if $U \sim \mathrm{Uniform}(0,1)$ then $X = F^{-1}(U)$ has cdf
+$F$.
+\end{theorem}
+
+The converse is how a computer samples from \emph{any} distribution: draw a
+uniform and push it through the inverse cdf. One stream of uniforms becomes
+whatever you like, depending only on the $F^{-1}$ you apply:
+
+\begin{lstlisting}[language=Python]
+import random, math
+
+def inverse_transform(Finv, rng, n):
+    return [Finv(rng.random()) for _ in range(n)]       # F^{-1}(U) ~ target
+
+exp_inv      = lambda u: -math.log(1 - u)               # Exponential(1)
+cauchy_inv   = lambda u: math.tan(math.pi * (u - 0.5))  # standard Cauchy
+logistic_inv = lambda u: math.log(u / (1 - u))          # standard Logistic
+
+rng = random.Random(0)
+for name, Finv in [("Exponential", exp_inv), ("Cauchy", cauchy_inv),
+                   ("Logistic", logistic_inv)]:
+    s = sorted(inverse_transform(Finv, rng, 100000))
+    print(f"{name:12s} sample median = {s[len(s)//2]:+.3f}")   # 0.69, 0, 0
+\end{lstlisting}
+
+\noindent The same uniform stream, three inverse cdfs, three different
+distributions. The two directions --- data into a uniform, uniforms into
+data --- are shown below for the exponential.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{figures/pit_panel.png}
+\end{figure}
+
+% ======================================================================
+\section{Transforming a random variable}
+% ======================================================================
+
+When $Y = g(X)$ for a strictly monotone, differentiable $g$, the density of
+$Y$ follows from the cdf by one differentiation.
+
+\begin{theorem}[Change of variables, monotone case]
+If $g$ is strictly increasing and differentiable with inverse $h = g^{-1}$,
+then
+\[
+  f_Y(y) = f_X\!\big(h(y)\big)\,\big|h'(y)\big|.
+\]
+\end{theorem}
+\begin{proof}
+For increasing $g$, the event $g(X) \le y$ is the event $X \le h(y)$, so
+\[
+  F_Y(y) = P\big(g(X) \le y\big) = P\big(X \le h(y)\big) = F_X\!\big(h(y)\big).
+\]
+Differentiating with the chain rule gives
+$f_Y(y) = f_X(h(y))\,h'(y)$. For a decreasing $g$ the inequality flips and
+the same calculation produces $-h'(y)$; the absolute value covers both cases.
+\end{proof}
+
+The probability integral transform is now a one-line corollary, taking
+$g = F$ itself.
+
+\begin{theorem}[Proof of the probability integral transform]
+For continuous $X$ with cdf $F$ and any $u \in (0,1)$,
+\[
+  P\big(F(X) \le u\big) = P\big(X \le F^{-1}(u)\big) = F\!\big(F^{-1}(u)\big) = u,
+\]
+which is the cdf of $\mathrm{Uniform}(0,1)$. Hence $F(X)\sim\mathrm{Uniform}(0,1)$.
+\end{theorem}
+
+% ======================================================================
+\section{Non-monotone transforms and higher dimensions}
+% ======================================================================
+
+When $g$ is not one-to-one, several $x$ values map to the same $y$, and the
+density of $Y$ collects a contribution from each. If $g(x)=y$ has solutions
+$x_1,\dots,x_k$,
+\[
+  f_Y(y) = \sum_{j=1}^{k} \frac{f_X(x_j)}{|g'(x_j)|}.
+\]
+
+\begin{example}[Square of a normal is chi-square]
+Let $Z \sim N(0,1)$ and $Y = Z^2$. For $y>0$ the equation $z^2=y$ has the two
+roots $z = \pm\sqrt y$, each with $|g'(z)| = 2\sqrt y$, so
+\[
+  f_Y(y) = \frac{\phi(\sqrt y) + \phi(-\sqrt y)}{2\sqrt y}
+         = \frac{1}{\sqrt{2\pi y}}\,e^{-y/2},
+\]
+using $\phi(z)=\tfrac{1}{\sqrt{2\pi}}e^{-z^2/2}$ and its symmetry. This is the
+$\chi^2_1$ density --- the reason squared normal errors turn into chi-square
+statistics throughout the course.
+\end{example}
+
+In higher dimensions the derivative becomes a Jacobian determinant: for an
+invertible smooth map $Y = g(X)$ with inverse $h$,
+\[
+  f_Y(y) = f_X\!\big(h(y)\big)\,\big|\det J_h(y)\big|,
+\]
+where $J_h$ is the matrix of partial derivatives of $h$. The same idea
+drives the normalizing-flow models of Part III, which chain many invertible
+maps and track the log-determinant at each step.
+
+A last subtlety makes inverse-transform sampling completely general. When
+$F$ has flat stretches or jumps --- a discrete or mixed variable --- it has
+no ordinary inverse, so one uses the \keyterm{quantile function}
+$F^{-1}(u) = \inf\{x : F(x) \ge u\}$. With this generalized inverse the
+probability integral transform still holds, which is why the same
+draw-a-uniform recipe samples discrete distributions too. Separating the
+uniform ``dependence'' from the marginal $F^{-1}$ in several dimensions is
+exactly the idea behind \keyterm{copulas}.
+
+\begin{summarybox}
+Every random variable has a cdf $F$; continuous ones also have a density
+$f = F'$. Pushing a continuous variable through its own cdf yields a uniform
+(the probability integral transform), and pushing a uniform through $F^{-1}$
+yields the variable back --- the basis of random sampling. A smooth transform
+$Y=g(X)$ has density $f_X(h(y))|h'(y)|$ in one dimension and
+$f_X(h(y))|\det J_h(y)|$ in several, summed over branches when $g$ is not
+one-to-one.
+\end{summarybox}
 
 \end{document}
