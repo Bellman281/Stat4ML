@@ -188,7 +188,7 @@ Learning*; Murphy, *Machine Learning: A Probabilistic Perspective*.
 |---|---|---|
 | 1 | Learning Algorithms Overview | **complete** |
 | 2 | Regression, Cross-Validation | **complete** |
-| 3 | Logistic, Ridge, Lasso Regression | slides only |
+| 3 | Logistic, Ridge, Lasso Regression | **complete** |
 | 4 | Recommendation Systems | not started |
 | 5 | Unsupervised Learning, PCA | slides only |
 | 6 | EM Algorithm | slides only |

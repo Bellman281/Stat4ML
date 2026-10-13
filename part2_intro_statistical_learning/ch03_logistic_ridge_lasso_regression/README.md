@@ -1,31 +1,32 @@
-# Chapter 03: Logistic, Ridge, Lasso Regression
+# Chapter 03: Logistic, Ridge, and Lasso Regression
 
 _Part II -- Introduction to Statistical Learning_
 
-**Status:** slides only -- the original lecture slides are in this folder and
-you can learn from them today; the written-out chapter isn't done yet.
-
-> **Note:** the slides in this folder are titled 'Regularization' and cover
-> logistic regression and ridge; Lasso is part of this chapter's scope but
-> isn't covered by them yet.
+**Status:** complete -- a written chapter, plus three exercises in each of
+Python and R, with a broken copy of each to fix.
 
 ## Contents
 
-- `ch03_text.tex` / `ch03_text.pdf` -- the chapter text
-- `figures/` -- chapter figures
+- `ch03_text.tex` / `ch03_text.pdf` -- the chapter: logistic regression (the
+  sigmoid, cross-entropy, the decision boundary); ridge and lasso as penalised
+  least squares; proofs that the logistic loss is convex, the ridge closed
+  form, and the lasso soft-threshold; and the geometry of sparsity. Includes a
+  worked Python snippet and `figures/logreg_panel.png`.
 - `source_slides/` -- the original lecture slides, exactly as taught
-- `exercises/python/`, `exercises/r/` -- the homework
-  exercise, a **broken** copy of it for you to debug, and a reference
-  solution, in each of the two languages
+- `exercises/python/`, `exercises/r/` -- three exercises, a **broken** copy
+  of each for you to debug, and a reference solution, in each language
 
-## Topics
+## Drilling by level
 
-- Logistic regression
-- MLE for simple logistic regression
-- Regularization
-- Ridge regression
-- Bias-variance tradeoff
-- Pros and cons of ridge regression
+- `exercise03` -- **core**: the sigmoid, cross-entropy, classification
+- `exercise04` -- **proof**: the ridge estimator, the lasso soft-threshold, convexity
+- `exercise05` -- **research**: the L1/L2 penalties and the elastic net
+
+```bash
+python3 drill.py --level bachelor   # core only
+python3 drill.py --level master     # core + proof
+python3 drill.py --level phd        # all three
+```
 
 ## Source
 

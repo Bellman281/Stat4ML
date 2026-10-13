@@ -1,16 +1,29 @@
-"""
-Chapter 03 exercise -- Logistic, Ridge, Lasso Regression
-STATUS: STUB -- not yet authored (solution). See repo ROADMAP.md.
+"""Chapter 3 -- reference solution (Core)."""
+# level: core
+import math
 
-Fill this in following the pattern used in Part I, Chapter 1/2:
-  - exercise03.py            a working, documented exercise
-  - exercise03_buggy.py      the SAME exercise with an intentional bug
-                                       (Rustlings-style: reader must fix it)
-  - solutions/exercise03_solution.py
-"""
+
+def sigmoid(z):
+    return 1.0 / (1.0 + math.exp(-z))
+
+
+def logistic_proba(w, x):
+    return sigmoid(sum(wi * xi for wi, xi in zip(w, x)))
+
+
+def cross_entropy(y, p):
+    return -(y * math.log(p) + (1 - y) * math.log(1 - p))
+
+
+def classify(p, threshold=0.5):
+    return 1 if p >= threshold else 0
+
 
 def main():
-    raise NotImplementedError("TODO: port this chapter's homework exercise")
+    print("sigmoid(0)        :", sigmoid(0.0))
+    print("proba([0,1,1],.)  :", logistic_proba([0, 1, 1], [1, 2, -2]))
+    print("cross_entropy     :", cross_entropy(1, 0.5))
+    print("classify(0.7)     :", classify(0.7))
 
 
 if __name__ == "__main__":
