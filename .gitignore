@@ -2,3 +2,13 @@
 drill_state.json
 __pycache__/
 *.pyc
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.out
+*.toc
+*.tmp
+*.synctex.gz
