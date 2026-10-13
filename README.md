@@ -1,70 +1,121 @@
 # Stat4ML
 
-**Statistics and Mathematics for Machine Learning, Deep Learning, Deep NLP,
-Reinforcement Learning, and LLM Training.**
+### The statistics behind machine learning — proven on paper, then debugged in code.
 
-A free, self-paced course in the statistics that modern machine learning
-actually runs on -- from probability and moments up through neural
-networks, Transformers, and LLMs. Every idea is worked out in full, then
-handed to you as code you run and fix yourself.
+A free, self-paced course in the mathematics that modern machine learning actually
+runs on — from probability and estimation up toward deep learning. Every idea is
+worked out in full (definitions, theorems, **real proofs**), then handed to you as
+code you run and fix yourself. Think *rustlings, for the math of ML*.
+
+<p align="center">
+  <img src="assets/drill.gif" width="620" alt="The drill loop: run the broken exercise, read the first failing check, fix it, watch it pass.">
+</p>
+
+Every exercise ships three ways — a from-scratch TODO, a **deliberately broken copy
+whose bug breaks a specific theorem from the chapter**, and a reference solution — in
+**Python and R**. You run it, read the first failing check, fix that one thing, and
+watch it go green. You meet every idea twice: once building it, once debugging it.
+
+## See the ideas move
+
+The chapters don't just state results — they show them happening.
+
+<table>
+<tr>
+<td align="center">
+  <img src="assets/clt.gif" width="400" alt="central limit theorem converging"><br/>
+  <sub><b>Central limit theorem</b> — sample means of skewed data become normal.</sub>
+</td>
+<td align="center">
+  <img src="assets/bayes.gif" width="400" alt="bayesian posterior updating"><br/>
+  <sub><b>Bayesian updating</b> — the posterior tightens onto the truth as data arrive.</sub>
+</td>
+</tr>
+</table>
 
 ## What's in a chapter
 
-- **The chapter, written out properly.** Not slide bullets -- prose with
-  real definitions, theorems, and worked examples, colour-typeset so you
-  can tell a definition from a theorem from an aside at a glance. PDF,
-  with the LaTeX source next to it.
-- **The original lecture slides**, exactly as taught, when they exist.
-- **Three homework exercises, each in Python and R.** Each one
-  covers a different piece of the chapter -- not the same formula three
-  times.
-- **A broken copy of every exercise.** Working code with a few bugs
-  planted in it on purpose, each one breaking a specific formula or
-  theorem from the chapter. Run the tests, watch them fail, fix them one
-  at a time. You meet every idea twice: once building it, once debugging
-  it.
+- **The chapter, written out properly.** Not slide bullets — prose with real
+  definitions, theorems, and worked proofs, colour-typeset so you can tell a
+  definition from a theorem from an aside at a glance. PDF, with the LaTeX source
+  beside it.
+- **Worked code, inline.** A short Python gallery next to the maths (the MLE for ten
+  distributions, the CLT across three sources, conjugate Bayesian updates), and a
+  simulation figure that makes the key theorem something you *watch happen*.
+- **Three exercises, in Python and R**, each covering a different piece of the chapter
+  — a from-scratch TODO, a broken copy to debug, and a reference solution.
+- **The original lecture slides and homework**, exactly as taught, when they exist.
 
-Nothing to install: the Python exercises use only the standard library,
-the R ones only base R, and nothing else.
-
-```bash
-python3 exercise01_buggy.py                                   # Python
-Rscript exercise01_buggy.R                                    # R
-```
+Nothing to install: the Python exercises use only the standard library, the R ones
+only base R.
 
 ## Drill it yourself
 
-`drill.py` walks the course one exercise at a time, rustlings-style: run it,
-read the first failing check, fix the file, watch it pass, move on. It only
-ever hands you exercises whose reference solution actually runs, so
-unfinished chapters are skipped automatically.
+`drill.py` walks the course one exercise at a time, rustlings-style: run it, read the
+first failing check, fix the file, watch it pass, move on. It only ever hands you
+exercises whose reference solution actually runs, so unfinished chapters are skipped.
 
 ```bash
 python3 drill.py           # run the next unfinished exercise
 python3 drill.py watch     # rerun automatically every time you save
 python3 drill.py list      # see every exercise and its status
-python3 drill.py verify    # check every ready exercise is sound (used in CI)
+python3 drill.py verify    # check every ready exercise is sound
 ```
 
 By default you fix the deliberately broken copies (`--track debug`); pass
-`--track build` to fill in the TODO versions from scratch instead, or
-`--track both` for the full pass. Python runs out of the box; add R with
-`--lang both` once `Rscript` is installed. Progress is kept in
-`drill_state.json`. Chapters whose exercises are tagged by difficulty can be drilled by level -- `--level bachelor|master|phd` serves only the tiers at or below that level (Chapter 6 in Part I is the first chapter with level-tagged exercises).
+`--track build` to fill in the TODO versions from scratch. Python runs out of the box;
+add R with `--lang both` once `Rscript` is installed.
+
+**Drill at your level.** Every exercise is tagged `core` / `proof` / `research`, so the
+course scales with you:
+
+```bash
+python3 drill.py --level bachelor   # core: results, intuition, code
+python3 drill.py --level master     # + the proofs
+python3 drill.py --level phd        # + research-grade extensions
+```
+
+## A look inside
+
+<table>
+<tr>
+<td align="center" width="50%">
+  <img src="part1_statistics_foundations/ch06_maximum_likelihood_estimation/figures/mle_sampling.png" width="380" alt=""><br/>
+  <sub>Ch.6 — the MLE's sampling distribution meets the Cramér–Rao floor.</sub>
+</td>
+<td align="center" width="50%">
+  <img src="part1_statistics_foundations/ch03_distribution_functions/figures/pit_panel.png" width="380" alt=""><br/>
+  <sub>Ch.3 — turning a uniform into any distribution, and back.</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="50%">
+  <img src="part1_statistics_foundations/ch04_conditional_and_multivariate_distributions/figures/bvn_panel.png" width="380" alt=""><br/>
+  <sub>Ch.4 — conditioning a bivariate normal.</sub>
+</td>
+<td align="center" width="50%">
+  <img src="part1_statistics_foundations/ch07_bayesian_estimation/figures/posterior_update.png" width="380" alt=""><br/>
+  <sub>Ch.7 — the posterior sharpening onto the true value.</sub>
+</td>
+</tr>
+</table>
 
 ## Start here
 
-Four chapters are finished end to end and are the best way in:
+**Part I (Statistics Foundations) is complete — eight chapters, end to end.** Read it
+in order from Chapter 0, or jump to a flagship chapter to see the format:
 
-| Chapter | Folder |
+| Chapter | Why start here |
 |---|---|
-| Matrix Algebra Review | [`part1_statistics_foundations/ch00_matrix_algebra_review/`](part1_statistics_foundations/ch00_matrix_algebra_review/) |
-| Probability Theory Foundations | [`part1_statistics_foundations/ch01_probability_theory_foundations/`](part1_statistics_foundations/ch01_probability_theory_foundations/) |
-| Moments | [`part1_statistics_foundations/ch02_moments/`](part1_statistics_foundations/ch02_moments/) |
-| Learning Algorithms Overview | [`part2_intro_statistical_learning/ch01_learning_algorithms_overview/`](part2_intro_statistical_learning/ch01_learning_algorithms_overview/) |
+| [Maximum Likelihood Estimation](part1_statistics_foundations/ch06_maximum_likelihood_estimation/) | proofs + an MLE cookbook for ten distributions + the efficiency simulation |
+| [Convergence Concepts](part1_statistics_foundations/ch05_convergence_concepts/) | the law of large numbers and the CLT, proven and simulated |
+| [Bayesian Estimation](part1_statistics_foundations/ch07_bayesian_estimation/) | conjugacy, credible intervals, and the bridge back to maximum likelihood |
 
-If you're new to the material, read Part I in order starting at Chapter 0.
-If you already know your probability, jump to Part II.
+If you're new to the material, start at
+[Chapter 0](part1_statistics_foundations/ch00_matrix_algebra_review/) and read Part I
+in order. You'll need calculus (chain rule, integration by parts —
+see [`PreReq0_Calculus.pdf`](PreReq0_Calculus.pdf)); Chapter 0 covers the matrix
+algebra from scratch.
 
 ## Course map
 
@@ -102,30 +153,17 @@ flowchart LR
     class CV,NLP,RL,GEN app
 ```
 
-## How far along each chapter is
+Each chapter is marked **complete** (written chapter + six exercises, three each in
+Python and R, with a broken copy of each), **slides only** (lecture slides are there to
+learn from; the written chapter isn't done), or **not started**.
 
-This is a work in progress, and the chapter lists below say plainly where
-each one stands:
+## Part I: Statistics Foundations for ML — complete
 
-- **complete** -- written chapter, plus six exercises (three each in
-  Python and R) and a broken copy of each to fix.
-- **slides only** -- the original lecture slides are in the folder and you
-  can learn from them today; the written-out chapter isn't done yet.
-- **not started** -- no slides and no text yet; the folder is a
-  placeholder.
+Probability theory and mathematical statistics: random variables, moments, the standard
+distributions and their transforms, convergence (the law of large numbers and the CLT),
+and estimation (maximum likelihood and Bayesian).
 
-## Part I: Statistics Foundation for ML
-
-Probability theory and mathematical statistics: sample spaces, random
-variables, moments, the standard discrete and continuous distributions,
-convergence concepts, and estimation (maximum likelihood and Bayesian).
-
-**Course text:** Casella, G., & Berger, R. (2002). *Statistical
-Inference* (2nd ed.). Cengage Learning.
-
-**You'll need first:** calculus (chain rule, integration by substitution
-and by parts) -- see [`PreReq0_Calculus.pdf`](PreReq0_Calculus.pdf) -- and
-matrix algebra, which Chapter 0 below covers from scratch.
+**Course text:** Casella, G., & Berger, R. (2002). *Statistical Inference* (2nd ed.).
 
 | # | Chapter | Status |
 |---|---|---|
@@ -138,18 +176,13 @@ matrix algebra, which Chapter 0 below covers from scratch.
 | 6 | Maximum Likelihood Estimation | **complete** |
 | 7 | Bayesian and Posterior Distribution Estimation | **complete** |
 
-Chapters 1-7 also carry the original homework PDF from the course, in each
-chapter's `homework/` folder.
-
 ## Part II: Introduction to Statistical Learning
 
-Regression, regularization, resampling, unsupervised learning, EM,
-clustering, and the on-ramp into neural networks and Transformers.
+Regression, regularization, resampling, unsupervised learning, EM, clustering, and the
+on-ramp into neural networks and Transformers.
 
-**Course texts:**
-- James, G., Witten, D., Hastie, T., & Tibshirani, R. *An Introduction to
-  Statistical Learning*.
-- Murphy, K. *Machine Learning: A Probabilistic Perspective*.
+**Course texts:** James, Witten, Hastie & Tibshirani, *An Introduction to Statistical
+Learning*; Murphy, *Machine Learning: A Probabilistic Perspective*.
 
 | # | Chapter | Status |
 |---|---|---|
@@ -169,22 +202,16 @@ clustering, and the on-ramp into neural networks and Transformers.
 
 ## Part III: Advanced Statistical Learning for DL
 
-The deep learning end of the sequence: automatic differentiation, AutoML,
-GANs, multi-armed bandits, neural architecture search, well-known vision
-models, advanced language models, NLP downstream tasks, speech processing,
-multi-modal models, Gaussian processes, and automatic feature extraction.
-
-Chapter 12 (Automatic Feature Extraction) has its original slides; the
-rest of this part is not started yet. See
-[`part3_advanced_statistical_learning/`](part3_advanced_statistical_learning/)
-for the full chapter list.
+The deep-learning end of the sequence: automatic differentiation, GANs, multi-armed
+bandits, well-known vision and language models, Gaussian processes, and more. See
+[`part3_advanced_statistical_learning/`](part3_advanced_statistical_learning/) for the
+full chapter list.
 
 ## Instructor
 
 **Omid Safarzadeh**
-LinkedIn: https://www.linkedin.com/in/omidsafarzadeh/
-Instagram: @deepdatascientists
+LinkedIn: https://www.linkedin.com/in/omidsafarzadeh/ · Instagram: @deepdatascientists
 
 ## License
 
-GNU General Public License v2 (GPLv2) -- see [`LICENSE`](LICENSE).
+GNU General Public License v2 (GPLv2) — see [`LICENSE`](LICENSE).
