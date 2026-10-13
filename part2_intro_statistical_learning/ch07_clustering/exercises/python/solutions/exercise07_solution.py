@@ -1,16 +1,25 @@
-"""
-Chapter 07 exercise -- Clustering
-STATUS: STUB -- not yet authored (solution). See repo ROADMAP.md.
+"""Chapter 7 -- reference solution (Core)."""
+# level: core
 
-Fill this in following the pattern used in Part I, Chapter 1/2:
-  - exercise07.py            a working, documented exercise
-  - exercise07_buggy.py      the SAME exercise with an intentional bug
-                                       (Rustlings-style: reader must fix it)
-  - solutions/exercise07_solution.py
-"""
+
+def sq_dist(a, b):
+    return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
+
+
+def nearest(point, centroids):
+    return min(range(len(centroids)), key=lambda k: sq_dist(point, centroids[k]))
+
+
+def centroid(points):
+    n = len(points)
+    return [sum(p[0] for p in points) / n, sum(p[1] for p in points) / n]
+
 
 def main():
-    raise NotImplementedError("TODO: port this chapter's homework exercise")
+    cs = [[0.0, 0.0], [5.0, 5.0]]
+    print("sq_dist :", sq_dist([0, 0], [3, 4]))
+    print("nearest :", nearest([4.0, 4.0], cs))
+    print("centroid:", centroid([[0, 0], [2, 0], [1, 6]]))
 
 
 if __name__ == "__main__":
