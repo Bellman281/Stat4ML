@@ -13,7 +13,7 @@ Perspective*).
 | 02 | [Regression, Cross-Validation](./ch02_regression_and_cross_validation/) | **complete** |
 | 03 | [Logistic, Ridge, Lasso Regression](./ch03_logistic_ridge_lasso_regression/) | **complete** |
 | 04 | [Recommendation Systems](./ch04_recommendation_systems/) | not started |
-| 05 | [Unsupervised Learning, PCA](./ch05_unsupervised_learning_and_pca/) | slides only |
+| 05 | [Unsupervised Learning, PCA](./ch05_unsupervised_learning_and_pca/) | **complete** |
 | 06 | [EM Algorithm](./ch06_em_algorithm/) | slides only |
 | 07 | [Clustering](./ch07_clustering/) | slides only |
 | 08 | [NN, Activation and Loss Functions](./ch08_nn_activation_and_loss_functions/) | slides only |

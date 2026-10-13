@@ -1,13 +1,13 @@
-# Chapter 05 exercise -- Unsupervised Learning, PCA
-# STATUS: STUB -- not yet authored (solution). See repo ROADMAP.md.
-#
-# Fill this in following the pattern used in Part I, Chapter 1/2:
-#   - exercise05.R
-#   - exercise05_buggy.R   (Rustlings-style: reader must fix it)
-#   - solutions/exercise05_solution.R
-
+# Chapter 5 -- reference solution (Core, R)
+# level: core
+center <- function(v) v - mean(v)
+variance <- function(v) mean((v - mean(v))^2)
+covariance <- function(x, y) mean((x - mean(x)) * (y - mean(y)))
+variance_explained_ratio <- function(eigvals) eigvals / sum(eigvals)
 main <- function() {
-  stop("TODO: port this chapter's homework exercise")
+  cat("center      :", center(c(1, 2, 3)), "\n")
+  cat("variance    :", variance(c(1, 2, 3)), "\n")
+  cat("covariance  :", covariance(c(1, 2, 3), c(1, 2, 3)), "\n")
+  cat("var ratio   :", variance_explained_ratio(c(3, 1)), "\n")
 }
-
 main()

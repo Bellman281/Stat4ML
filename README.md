@@ -190,7 +190,7 @@ Learning*; Murphy, *Machine Learning: A Probabilistic Perspective*.
 | 2 | Regression, Cross-Validation | **complete** |
 | 3 | Logistic, Ridge, Lasso Regression | **complete** |
 | 4 | Recommendation Systems | not started |
-| 5 | Unsupervised Learning, PCA | slides only |
+| 5 | Unsupervised Learning, PCA | **complete** |
 | 6 | EM Algorithm | slides only |
 | 7 | Clustering | slides only |
 | 8 | NN, Activation and Loss Functions | slides only |

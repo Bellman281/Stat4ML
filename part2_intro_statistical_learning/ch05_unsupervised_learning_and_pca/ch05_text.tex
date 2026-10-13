@@ -1,28 +1,151 @@
 \documentclass[11pt]{article}
 \usepackage{../../latex/stat4ml_style}
 
-\title{Unsupervised Learning, PCA \\ \large Part II -- Introduction to Statistical Learning}
+\title{Chapter 5: Unsupervised Learning and PCA \\ \large Part II --- Introduction to Statistical Learning}
 \author{Omid Safarzadeh}
 \date{}
 
 \begin{document}
 \maketitle
 
-\section*{This chapter isn't written yet}
-The written-out chapter is still to come. In the meantime the original
-lecture slides are in the \texttt{source\_slides/} folder next to this
-file, and you can work from them today. The topics they cover are listed
-below.
+\begin{abstract}
+\noindent
+Principal component analysis finds the few directions along which data vary
+the most, and throws the rest away. It is the workhorse of dimensionality
+reduction, and it has a striking double justification: the directions that
+\emph{capture the most variance} are exactly the ones that \emph{lose the
+least} when you reconstruct the data from them --- and both are the top
+eigenvectors of the covariance matrix. This chapter sets up the projection,
+proves that equivalence, and connects it to the singular value decomposition
+that computes it in practice.
+\end{abstract}
 
-\textit{Slides: \texttt{source\_slides/Chapter\_5\_\_Unsupervised\_Learning.pdf}, exactly as taught.}
+\tableofcontents
 
+% ======================================================================
+\section{Directions of greatest variance}
+% ======================================================================
 
+Centre the data so each feature has mean zero, and collect it in an
+$n\times d$ matrix $X$ with covariance $\Sigma = \tfrac1n X^\top X$. Project a
+point onto a unit direction $w$ and you get the scalar $w^\top x$; the
+variance of those projections across the data is
+\[
+  \operatorname{Var}(w^\top x) = w^\top \Sigma\, w.
+\]
+The \keyterm{first principal component} is the unit direction that makes this
+as large as possible; the second is the best direction orthogonal to it, and
+so on. Projecting onto the top $k$ components keeps the most variance any
+$k$ directions could.
 
-\section*{Planned topics}
-\begin{itemize}
-  \item Unsupervised learning
-  \item Principal component analysis (PCA)
-  \item t-SNE
-\end{itemize}
+In practice you do not search directions by hand --- the top component is the
+dominant eigenvector of $\Sigma$, which a few matrix-vector products find by
+\keyterm{power iteration}:
+
+\begin{lstlisting}[language=Python]
+def mat_vec(M, v):
+    return [sum(M[i][j]*v[j] for j in range(len(v))) for i in range(len(M))]
+
+def normalize(v):
+    s = sum(c*c for c in v) ** 0.5
+    return [c/s for c in v]
+
+def power_iteration(M, iters=300):          # top eigenvector of symmetric M
+    v = normalize([1.0] + [0.0]*(len(M)-1))
+    for _ in range(iters):
+        v = normalize(mat_vec(M, v))
+    lam = sum(vi*mi for vi, mi in zip(v, mat_vec(M, v)))   # Rayleigh quotient
+    return lam, v
+
+cov = [[2.0, 0.8], [0.8, 0.6]]
+lam, pc1 = power_iteration(cov)
+print(round(lam, 3))                        # 2.363  (largest eigenvalue)
+print([round(c, 3) for c in pc1])           # [0.911, 0.413]  (PC1 direction)
+\end{lstlisting}
+
+\noindent The eigenvalue is the variance captured along that component. The
+figure shows the two principal directions of a correlated cloud and the
+projection onto the first --- a single number per point that still holds most
+of the spread.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{figures/pca_panel.png}
+\end{figure}
+
+% ======================================================================
+\section{One answer to two questions}
+% ======================================================================
+
+PCA can be posed two ways, and they give the same components.
+
+\begin{theorem}[Variance maximisation]
+The unit vector $w$ maximising $w^\top\Sigma w$ is the eigenvector of
+$\Sigma$ with the largest eigenvalue, and the maximum value is that
+eigenvalue.
+\end{theorem}
+\begin{proof}
+Maximise $w^\top\Sigma w$ subject to $w^\top w = 1$. The Lagrangian is
+$w^\top\Sigma w - \lambda(w^\top w - 1)$; setting its gradient to zero gives
+\[
+  \Sigma w = \lambda w,
+\]
+so $w$ is an eigenvector and $\lambda$ its eigenvalue. At such a $w$ the
+objective is $w^\top\Sigma w = \lambda$, so the maximum is attained at the
+\emph{largest} eigenvalue. The spectral theorem guarantees $\Sigma$ (symmetric,
+positive semidefinite) has an orthonormal eigenbasis, which gives the
+remaining components in order.
+\end{proof}
+
+\begin{theorem}[Reconstruction-error minimisation]
+Among all rank-$k$ orthogonal projections $P = WW^\top$, the one minimising
+the reconstruction error $\sum_i \|x_i - P x_i\|^2$ is the projection onto the
+top $k$ eigenvectors of $\Sigma$ --- the same components.
+\end{theorem}
+\begin{proof}[Sketch]
+By the Pythagorean theorem $\|x\|^2 = \|Px\|^2 + \|x - Px\|^2$, so minimising
+the reconstruction error $\sum_i\|x_i - Px_i\|^2$ is the same as maximising
+the retained energy $\sum_i\|Px_i\|^2 = \operatorname{tr}(W^\top \Sigma W)$.
+That trace is maximised, over orthonormal $W$, by the top $k$ eigenvectors
+(a direct consequence of the first theorem applied one direction at a time).
+\end{proof}
+
+\noindent So ``keep the most variance'' and ``lose the least information'' are
+not two heuristics that happen to agree --- they are the same optimisation,
+and its solution is the eigenvectors of the covariance matrix.
+
+% ======================================================================
+\section{Singular values, how many components, and the fine print}
+% ======================================================================
+
+In practice PCA is computed from the \keyterm{singular value decomposition}
+$X = U D V^\top$, not by forming $\Sigma$. The right singular vectors
+(columns of $V$) are the principal components, and the singular values relate
+to the eigenvalues of $\Sigma$ by $\sigma_j^2 = n\lambda_j$. Working from $X$
+directly is more numerically stable than squaring it into $X^\top X$.
+
+How many components to keep is read from the eigenvalues: the fraction of
+variance explained by component $j$ is $\lambda_j / \sum_\ell \lambda_\ell$,
+and you keep enough that the cumulative fraction crosses a threshold --- the
+``elbow'' of the \keyterm{scree plot}. The error you accept is exactly the
+variance you drop, $\sum_{j>k}\lambda_j$.
+
+Two cautions keep PCA honest. It is \emph{linear}: it finds flat subspaces, so
+data lying on a curved manifold needs \keyterm{kernel PCA} or a nonlinear
+method. And it equates variance with importance, so features must be put on a
+common scale first (standardise, or PCA just tracks whichever feature has the
+biggest units). Within those limits, PCA is the first thing to reach for when
+there are more dimensions than you can look at.
+
+\begin{summarybox}
+PCA projects onto the directions of greatest variance, which are the top
+eigenvectors of the covariance $\Sigma$ --- found by power iteration or, in
+practice, the SVD. The components maximise retained variance
+$w^\top\Sigma w$ and, equivalently, minimise reconstruction error; both reduce
+to $\Sigma w = \lambda w$, so the two views give one answer. The variance
+explained by component $j$ is $\lambda_j/\sum_\ell\lambda_\ell$, which is how
+you choose how many to keep. PCA is linear and scale-sensitive, so standardise
+first.
+\end{summarybox}
 
 \end{document}

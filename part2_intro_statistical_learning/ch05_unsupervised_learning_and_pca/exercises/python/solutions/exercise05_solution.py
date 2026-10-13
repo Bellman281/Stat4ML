@@ -1,16 +1,30 @@
-"""
-Chapter 05 exercise -- Unsupervised Learning, PCA
-STATUS: STUB -- not yet authored (solution). See repo ROADMAP.md.
+"""Chapter 5 -- reference solution (Core)."""
+# level: core
+def center(v):
+    m = sum(v) / len(v)
+    return [vi - m for vi in v]
 
-Fill this in following the pattern used in Part I, Chapter 1/2:
-  - exercise05.py            a working, documented exercise
-  - exercise05_buggy.py      the SAME exercise with an intentional bug
-                                       (Rustlings-style: reader must fix it)
-  - solutions/exercise05_solution.py
-"""
+
+def variance(v):
+    m = sum(v) / len(v)
+    return sum((vi - m) ** 2 for vi in v) / len(v)
+
+
+def covariance(x, y):
+    xbar = sum(x) / len(x); ybar = sum(y) / len(y)
+    return sum((xi - xbar) * (yi - ybar) for xi, yi in zip(x, y)) / len(x)
+
+
+def variance_explained_ratio(eigvals):
+    total = sum(eigvals)
+    return [e / total for e in eigvals]
+
 
 def main():
-    raise NotImplementedError("TODO: port this chapter's homework exercise")
+    print("center      :", center([1, 2, 3]))
+    print("variance    :", variance([1, 2, 3]))
+    print("covariance  :", covariance([1, 2, 3], [1, 2, 3]))
+    print("var ratio   :", variance_explained_ratio([3, 1]))
 
 
 if __name__ == "__main__":
