@@ -96,4 +96,23 @@
   urlcolor=s4mlOrange,
 }
 
+% ---------------------------------------------------------------------
+% Code listings and figures (in-chapter worked snippets)
+% ---------------------------------------------------------------------
+\RequirePackage{graphicx}
+\RequirePackage{listings}
+\definecolor{s4mlCodeBg}{HTML}{F6F8FA}
+\lstdefinestyle{s4ml}{
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\color{s4mlBlue}\bfseries,
+  commentstyle=\color{s4mlGreen}\itshape,
+  stringstyle=\color{s4mlOrange},
+  showstringspaces=false, breaklines=true,
+  frame=single, framerule=0.6pt, rulecolor=\color{s4mlGray},
+  backgroundcolor=\color{s4mlCodeBg},
+  xleftmargin=4pt, xrightmargin=4pt,
+  aboveskip=10pt, belowskip=6pt, numbers=none,
+}
+\lstset{style=s4ml}
+
 \endinput

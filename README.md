@@ -50,7 +50,7 @@ By default you fix the deliberately broken copies (`--track debug`); pass
 `--track build` to fill in the TODO versions from scratch instead, or
 `--track both` for the full pass. Python runs out of the box; add R with
 `--lang both` once `Rscript` is installed. Progress is kept in
-`drill_state.json`. Chapters whose exercises are tagged by difficulty can be drilled by level -- `--level bachelor|master|phd` serves only the tiers at or below that level (Chapter 6 in Part I is the first fully-tiered example).
+`drill_state.json`. Chapters whose exercises are tagged by difficulty can be drilled by level -- `--level bachelor|master|phd` serves only the tiers at or below that level (Chapter 6 in Part I is the first chapter with level-tagged exercises).
 
 ## Start here
 
