@@ -11,9 +11,9 @@ you can learn from them today; the written-out chapter isn't done yet.
 - `figures/` -- chapter figures
 - `source_slides/` -- the original lecture slides, exactly as taught
 - `homework/` -- the original homework PDF from the course
-- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- the homework
+- `exercises/python/`, `exercises/r/` -- the homework
   exercise, a **broken** copy of it for you to debug, and a reference
-  solution, in each of the three languages
+  solution, in each of the two languages
 
 ## Topics
 

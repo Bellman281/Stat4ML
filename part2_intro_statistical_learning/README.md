@@ -24,7 +24,7 @@ Perspective*).
 | 13 | [Large Language Models](./ch13_large_language_models/) | not started |
 
 **complete** means a written chapter plus three exercises in each of
-Python, R, and Rust, with a broken copy of each to fix. **slides only**
+Python and R, with a broken copy of each to fix. **slides only**
 means the original lecture slides are in the chapter folder and you can
 learn from them today, but the written-out chapter isn't done yet. **not
 started** means there's no deck and no text for that topic yet.

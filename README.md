@@ -15,7 +15,7 @@ handed to you as code you run and fix yourself.
   can tell a definition from a theorem from an aside at a glance. PDF,
   with the LaTeX source next to it.
 - **The original lecture slides**, exactly as taught, when they exist.
-- **Three homework exercises, each in Python, R, and Rust.** Each one
+- **Three homework exercises, each in Python and R.** Each one
   covers a different piece of the chapter -- not the same formula three
   times.
 - **A broken copy of every exercise.** Working code with a few bugs
@@ -25,14 +25,32 @@ handed to you as code you run and fix yourself.
   it.
 
 Nothing to install: the Python exercises use only the standard library,
-the R ones only base R, and the Rust ones are single files that compile
-with `rustc` -- no Cargo, no crates, no network.
+the R ones only base R, and nothing else.
 
 ```bash
 python3 exercise01_buggy.py                                   # Python
 Rscript exercise01_buggy.R                                    # R
-rustc --edition 2021 --test exercise01_buggy.rs -o /tmp/t && /tmp/t   # Rust
 ```
+
+## Drill it yourself
+
+`drill.py` walks the course one exercise at a time, rustlings-style: run it,
+read the first failing check, fix the file, watch it pass, move on. It only
+ever hands you exercises whose reference solution actually runs, so
+unfinished chapters are skipped automatically.
+
+```bash
+python3 drill.py           # run the next unfinished exercise
+python3 drill.py watch     # rerun automatically every time you save
+python3 drill.py list      # see every exercise and its status
+python3 drill.py verify    # check every ready exercise is sound (used in CI)
+```
+
+By default you fix the deliberately broken copies (`--track debug`); pass
+`--track build` to fill in the TODO versions from scratch instead, or
+`--track both` for the full pass. Python runs out of the box; add R with
+`--lang both` once `Rscript` is installed. Progress is kept in
+`drill_state.json`. Chapters whose exercises are tagged by difficulty can be drilled by level -- `--level bachelor|master|phd` serves only the tiers at or below that level (Chapter 6 in Part I is the first fully-tiered example).
 
 ## Start here
 
@@ -89,8 +107,8 @@ flowchart LR
 This is a work in progress, and the chapter lists below say plainly where
 each one stands:
 
-- **complete** -- written chapter, plus nine exercises (three each in
-  Python, R, and Rust) and a broken copy of each to fix.
+- **complete** -- written chapter, plus six exercises (three each in
+  Python and R) and a broken copy of each to fix.
 - **slides only** -- the original lecture slides are in the folder and you
   can learn from them today; the written-out chapter isn't done yet.
 - **not started** -- no slides and no text yet; the folder is a
@@ -117,7 +135,7 @@ matrix algebra, which Chapter 0 below covers from scratch.
 | 3 | Distribution Functions | slides only |
 | 4 | Conditional and Multivariate Distributions | slides only |
 | 5 | Convergence Concepts | slides only |
-| 6 | Maximum Likelihood Estimation | slides only |
+| 6 | Maximum Likelihood Estimation | **complete** |
 | 7 | Bayesian and Posterior Distribution Estimation | slides only |
 
 Chapters 1-7 also carry the original homework PDF from the course, in each

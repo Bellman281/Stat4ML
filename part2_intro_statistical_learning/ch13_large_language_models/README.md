@@ -8,9 +8,9 @@ _Part II -- Introduction to Statistical Learning_
 
 - `ch13_text.tex` / `ch13_text.pdf` -- the chapter text
 - `figures/` -- chapter figures
-- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- the homework
+- `exercises/python/`, `exercises/r/` -- the homework
   exercise, a **broken** copy of it for you to debug, and a reference
-  solution, in each of the three languages
+  solution, in each of the two languages
 
 ## Topics
 

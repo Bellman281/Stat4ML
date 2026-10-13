@@ -8,7 +8,7 @@ reinforcement learning, and large-language-model training. "Spoon-fed"
 means every chapter comes with: expanded prose text, not just slide
 bullets, colorfully typeset so definitions, theorems, examples, and
 editorial asides are easy to tell apart at a glance; at least three
-working homework exercises per chapter in Python, R, and Rust, each
+working homework exercises per chapter in Python and R, each
 covering a different piece of the chapter's material; and a
 deliberately broken copy of every exercise, in every language, so you
 learn each idea twice -- once building it, once debugging it. Nothing is

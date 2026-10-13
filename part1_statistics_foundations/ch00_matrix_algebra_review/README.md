@@ -3,7 +3,7 @@
 _Part I -- Statistics Foundation for ML_
 
 **Status:** complete -- written chapter, plus three exercises in each of
-Python, R, and Rust with a broken copy of each to fix.
+Python and R with a broken copy of each to fix.
 
 Matrix algebra was originally handed out as a prerequisite slide deck,
 `PreReq1_Matrix_Calculus.pdf`. It is written out here as a full chapter
@@ -18,9 +18,9 @@ backpropagation's Jacobians.
 - `figures/` -- chapter figures
 - `source_slides/PreReq1_Matrix_Calculus.pdf` -- the original prerequisite
   slide deck, exactly as handed out
-- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- three homework
+- `exercises/python/`, `exercises/r/` -- three homework
   exercises, each with a **broken** copy for you to debug and a reference
-  solution, in each of the three languages
+  solution, in each of the two languages
 
 ## Topics
 

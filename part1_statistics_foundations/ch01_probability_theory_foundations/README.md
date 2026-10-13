@@ -3,7 +3,7 @@
 _Part I -- Statistics Foundation for ML_
 
 **Status:** complete -- written chapter, plus three exercises in each of
-Python, R, and Rust with a broken copy of each to fix.
+Python and R with a broken copy of each to fix.
 
 ## Contents
 
@@ -11,9 +11,9 @@ Python, R, and Rust with a broken copy of each to fix.
 - `figures/` -- chapter figures
 - `source_slides/` -- the original lecture slides, exactly as taught
 - `homework/` -- the original homework PDF from the course
-- `exercises/python/`, `exercises/r/`, `exercises/rust/` -- the homework
+- `exercises/python/`, `exercises/r/` -- the homework
   exercise, a **broken** copy of it for you to debug, and a reference
-  solution, in each of the three languages
+  solution, in each of the two languages
 
 ## Topics
 
