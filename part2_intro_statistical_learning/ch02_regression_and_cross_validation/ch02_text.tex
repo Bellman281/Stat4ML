@@ -1,33 +1,201 @@
 \documentclass[11pt]{article}
 \usepackage{../../latex/stat4ml_style}
 
-\title{Regression, Cross-Validation \\ \large Part II -- Introduction to Statistical Learning}
+\title{Chapter 2: Regression and Cross-Validation \\ \large Part II --- Introduction to Statistical Learning}
 \author{Omid Safarzadeh}
 \date{}
 
 \begin{document}
 \maketitle
 
-\section*{This chapter isn't written yet}
-The written-out chapter is still to come. In the meantime the original
-lecture slides are in the \texttt{source\_slides/} folder next to this
-file, and you can work from them today. The topics they cover are listed
-below.
+\begin{abstract}
+\noindent
+Linear regression is the first real learning algorithm, and the template for
+every one after it: choose a model, write down a loss, minimise it, then ask
+how well the fit will generalise. This chapter derives least squares and its
+closed-form solution, proves the two results that justify it --- the normal
+equations and the Gauss--Markov theorem --- decomposes prediction error into
+bias and variance, and shows how cross-validation estimates that error from
+the data alone. That last tool is how you choose model complexity before you
+ever touch a test set.
+\end{abstract}
 
-\textit{Slides: \texttt{source\_slides/Chapter\_2\_\_Cross\_Validation.pdf}, exactly as taught.}
+\tableofcontents
 
-\textit{Note: the slide deck above is titled 'Cross\_Validation'; this chapter
-also covers the regression material that goes with it.}
+% ======================================================================
+\section{The linear model and least squares}
+% ======================================================================
 
-\section*{Planned topics}
-\begin{itemize}
-  \item Regression
-  \item The least squares approach
-  \item Multiple linear regression
-  \item Bias-variance tradeoff
-  \item Validation
-  \item Leave-one-out cross-validation
-  \item k-fold cross-validation
-\end{itemize}
+We model an output $y$ as a linear function of inputs plus noise,
+\[
+  y = \beta_0 + \beta_1 x_1 + \dots + \beta_p x_p + \varepsilon,
+  \qquad\text{or in matrix form}\qquad
+  y = X\beta + \varepsilon,
+\]
+with $X$ the $n\times(p{+}1)$ design matrix (a column of ones for the
+intercept). \keyterm{Least squares} picks the coefficients that make the
+residuals smallest in total square:
+
+\begin{definition}[Least-squares estimator]
+$\hat\beta = \arg\min_\beta \; \mathrm{RSS}(\beta)$, where
+$\mathrm{RSS}(\beta) = \|y - X\beta\|^2 = \sum_{i=1}^n (y_i - x_i^\top\beta)^2$.
+\end{definition}
+
+Setting the gradient to zero gives the \keyterm{normal equations}
+$X^\top X\,\hat\beta = X^\top y$, so whenever $X^\top X$ is invertible,
+\[
+  \hat\beta = (X^\top X)^{-1} X^\top y.
+\]
+For a single predictor this collapses to formulas you can read off directly:
+the slope is the covariance of $x$ and $y$ over the variance of $x$, and the
+line passes through the means,
+\[
+  \hat\beta_1 = \frac{\sum_i (x_i-\bar x)(y_i-\bar y)}{\sum_i (x_i-\bar x)^2},
+  \qquad
+  \hat\beta_0 = \bar y - \hat\beta_1\,\bar x.
+\]
+Quality of fit is summarised by $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$, the
+fraction of the variance in $y$ the model explains, where
+$\mathrm{TSS} = \sum_i (y_i-\bar y)^2$. In code it is all a few sums:
+
+\begin{lstlisting}[language=Python]
+def simple_linear_regression(x, y):
+    n = len(x); xbar = sum(x)/n; ybar = sum(y)/n
+    sxy = sum((xi-xbar)*(yi-ybar) for xi, yi in zip(x, y))
+    sxx = sum((xi-xbar)**2 for xi in x)
+    b1 = sxy / sxx                       # slope     = Sxy / Sxx
+    b0 = ybar - b1 * xbar                # intercept = ybar - b1*xbar
+    return b0, b1
+
+def r_squared(x, y, b0, b1):
+    ybar = sum(y) / len(y)
+    ss_res = sum((yi - (b0 + b1*xi))**2 for xi, yi in zip(x, y))
+    ss_tot = sum((yi - ybar)**2 for yi in y)
+    return 1 - ss_res / ss_tot
+
+x = [1, 2, 3, 4, 5]; y = [2.1, 3.9, 6.1, 7.9, 10.2]
+b0, b1 = simple_linear_regression(x, y)
+print(round(b0, 3), round(b1, 3))        # -0.02 2.02
+print(round(r_squared(x, y, b0, b1), 4)) # 0.9983
+\end{lstlisting}
+
+\noindent Multiple regression is the same idea with the matrix normal
+equations in place of the two sums. But a good fit to the data in hand is not
+the goal --- a good fit to \emph{new} data is. A flexible enough model can
+drive the training error to zero and still predict terribly, which is the
+whole problem the rest of the chapter is about.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{figures/overfit_panel.png}
+\end{figure}
+
+\noindent As the polynomial degree rises, the training error keeps falling
+while the cross-validation error turns back up: the model starts fitting
+noise. The sweet spot is the degree that minimises the validation curve.
+
+% ======================================================================
+\section{Why least squares, and what error it makes}
+% ======================================================================
+
+Two results justify least squares, and one identity explains its errors.
+
+\begin{theorem}[Normal equations]
+$\hat\beta$ minimises $\mathrm{RSS}$ if and only if
+$X^\top X\,\hat\beta = X^\top y$.
+\end{theorem}
+\begin{proof}
+$\mathrm{RSS}(\beta) = (y-X\beta)^\top(y-X\beta)$. Its gradient is
+$\nabla_\beta \mathrm{RSS} = -2X^\top(y - X\beta)$. Setting it to zero gives
+$X^\top X\beta = X^\top y$. The function is convex (its Hessian $2X^\top X$ is
+positive semidefinite), so the stationary point is a global minimum.
+\end{proof}
+
+\begin{theorem}[Gauss--Markov]
+Assume $E[\varepsilon]=0$ and $\operatorname{Cov}(\varepsilon)=\sigma^2 I$.
+Among all \emph{linear unbiased} estimators of $\beta$, the least-squares
+estimator has the smallest variance --- it is BLUE (best linear unbiased
+estimator).
+\end{theorem}
+\begin{proof}[Sketch]
+Any linear estimator has the form $\tilde\beta = Cy$, and unbiasedness
+forces $CX = I$. Write $C = (X^\top X)^{-1}X^\top + D$. The constraint
+$CX = I$ then forces $DX = 0$.
+Expanding $\operatorname{Cov}(\tilde\beta) = \sigma^2 CC^\top$ and using
+$DX=0$ gives
+\[
+  \operatorname{Cov}(\tilde\beta) = \sigma^2(X^\top X)^{-1} + \sigma^2 DD^\top.
+\]
+The second term is positive semidefinite, so no unbiased linear estimator
+beats least squares.
+\end{proof}
+
+Even the best unbiased fit still makes errors, and they split into three
+named pieces. For a test point $x_0$ with truth $f(x_0)$ and noisy outcome
+$y_0 = f(x_0)+\varepsilon$, the expected squared error of a fitted
+$\hat f$ is
+
+\begin{theorem}[Bias--variance decomposition]
+\[
+  E\big[(y_0 - \hat f(x_0))^2\big]
+    = \underbrace{\big(f(x_0) - E[\hat f(x_0)]\big)^2}_{\text{bias}^2}
+    + \underbrace{\operatorname{Var}\!\big(\hat f(x_0)\big)}_{\text{variance}}
+    + \underbrace{\sigma^2}_{\text{irreducible}}.
+\]
+\end{theorem}
+\begin{proof}
+Condition on $x_0$ and add and subtract $E[\hat f(x_0)]$ inside the square;
+the cross terms vanish because $\varepsilon$ is independent of $\hat f$ and
+$E[\hat f] - \hat f$ has mean zero. What remains is the squared bias, the
+variance of $\hat f$, and $\operatorname{Var}(\varepsilon)=\sigma^2$.
+\end{proof}
+
+\noindent A simple model has high bias and low variance; a flexible one has
+low bias and high variance. The validation curve in the figure is this
+trade-off made visible --- and the irreducible $\sigma^2$ is the floor no
+model can cross.
+
+% ======================================================================
+\section{Estimating test error: cross-validation}
+% ======================================================================
+
+Training error is an optimistic estimate of test error --- the model was
+chosen to fit that very data --- so it cannot be used to choose complexity.
+\keyterm{Cross-validation} estimates test error honestly by holding data out
+of the fit. In \keyterm{$k$-fold} CV the data are split into $k$ blocks; each
+block is scored once by a model trained on the other $k-1$, and the $k$ scores
+are averaged. \keyterm{Leave-one-out} CV (LOOCV) is the $k=n$ extreme: each
+point is predicted by a model fit on all the others.
+
+LOOCV looks like it needs $n$ refits, but for a linear model it is free. Let
+$h_{ii}$ be the $i$th diagonal of the \keyterm{hat matrix}
+$H = X(X^\top X)^{-1}X^\top$ (the \emph{leverage} of point $i$). Then
+
+\begin{theorem}[LOOCV shortcut]
+\[
+  \mathrm{CV}_{\text{LOO}}
+    = \frac{1}{n}\sum_{i=1}^n \left(\frac{y_i - \hat y_i}{1 - h_{ii}}\right)^2,
+\]
+where $\hat y_i$ is the fitted value from the \emph{full} fit. No refitting is
+needed: one fit gives every leave-one-out error.
+\end{theorem}
+
+\noindent The choice of $k$ is itself a bias--variance trade-off, now about
+the error \emph{estimate}: LOOCV is nearly unbiased but its $n$ fits are
+highly correlated, so the estimate has high variance; small $k$ has the
+opposite. In practice $k=5$ or $k=10$ is the usual compromise. With the CV
+curve in hand, model selection is just ``pick the complexity that minimises
+it'' --- the dashed line in the figure.
+
+\begin{summarybox}
+Least squares minimises $\|y - X\beta\|^2$, solved by the normal equations
+$\hat\beta = (X^\top X)^{-1}X^\top y$; Gauss--Markov makes it the best linear
+unbiased estimator. Its expected error splits into
+$\text{bias}^2 + \text{variance} + \sigma^2$, and flexibility trades the
+first two off. Training error cannot measure this trade-off, but
+cross-validation can --- $k$-fold or the no-refit LOOCV shortcut
+$\frac1n\sum((y_i-\hat y_i)/(1-h_{ii}))^2$ --- which is how you choose model
+complexity from data alone.
+\end{summarybox}
 
 \end{document}

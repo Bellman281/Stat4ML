@@ -1,31 +1,33 @@
-# Chapter 02: Regression, Cross-Validation
+# Chapter 02: Regression and Cross-Validation
 
 _Part II -- Introduction to Statistical Learning_
 
-**Status:** slides only -- the original lecture slides are in this folder and
-you can learn from them today; the written-out chapter isn't done yet.
-
-> **Note:** the slide deck in this folder is titled `Cross_Validation`; this
-> chapter also covers the regression material that goes with it.
+**Status:** complete -- a written chapter, plus three exercises in each of
+Python and R, with a broken copy of each to fix.
 
 ## Contents
 
-- `ch02_text.tex` / `ch02_text.pdf` -- the chapter text
-- `figures/` -- chapter figures
+- `ch02_text.tex` / `ch02_text.pdf` -- the chapter: the linear model and
+  least squares (normal equations, R^2); the normal-equations and
+  Gauss-Markov proofs and the bias-variance decomposition; and
+  cross-validation (k-fold, and the no-refit LOOCV leverage shortcut).
+  Includes a worked Python regression snippet and `figures/overfit_panel.png`
+  (the training-vs-validation error curve).
 - `source_slides/` -- the original lecture slides, exactly as taught
-- `exercises/python/`, `exercises/r/` -- the homework
-  exercise, a **broken** copy of it for you to debug, and a reference
-  solution, in each of the two languages
+- `exercises/python/`, `exercises/r/` -- three exercises, a **broken** copy
+  of each for you to debug, and a reference solution, in each language
 
-## Topics
+## Drilling by level
 
-- Regression
-- The least squares approach
-- Multiple linear regression
-- Bias-variance tradeoff
-- Validation
-- Leave-one-out cross-validation
-- k-fold cross-validation
+- `exercise02` -- **core**: simple linear regression and R^2
+- `exercise03` -- **proof**: the bias-variance decomposition
+- `exercise04` -- **research**: k-fold sizes and the LOOCV leverage shortcut
+
+```bash
+python3 drill.py --level bachelor   # core only
+python3 drill.py --level master     # core + proof
+python3 drill.py --level phd        # all three
+```
 
 ## Source
 
