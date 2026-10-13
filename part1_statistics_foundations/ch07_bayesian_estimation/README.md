@@ -1,27 +1,34 @@
-# Chapter 07: Bayesian and Posterior Distribution Estimation
+# Chapter 07: Bayesian Estimation
 
 _Part I -- Statistics Foundation for ML_
 
-**Status:** slides only -- the original lecture slides are in this folder and
-you can learn from them today; the written-out chapter isn't done yet.
+**Status:** complete -- a written chapter, plus three exercises in each of
+Python and R, with a broken copy of each to fix.
 
 ## Contents
 
-- `ch07_text.tex` / `ch07_text.pdf` -- the chapter text
-- `figures/` -- chapter figures
+- `ch07_text.tex` / `ch07_text.pdf` -- the chapter: prior, likelihood, and
+  posterior; conjugate families (Beta-Binomial, Gamma-Poisson, Normal-Normal)
+  with proofs; posterior mean, MAP, credible intervals and the posterior
+  predictive; and the Bernstein-von Mises link back to the maximum-likelihood
+  estimator. Includes a worked Python conjugacy snippet and
+  `figures/posterior_update.png` (the posterior tightening as data arrive).
 - `source_slides/` -- the original lecture slides, exactly as taught
 - `homework/` -- the original homework PDF from the course
-- `exercises/python/`, `exercises/r/` -- the homework
-  exercise, a **broken** copy of it for you to debug, and a reference
-  solution, in each of the two languages
+- `exercises/python/`, `exercises/r/` -- three exercises, a **broken** copy
+  of each for you to debug, and a reference solution, in each language
 
-## Topics
+## Drilling by level
 
-- Computing the posterior
-- Maximum a posteriori (MAP) estimation
-- Posterior mean
-- MAP properties
-- Bayesian linear regression
+- `exercise07` -- **core**: the Beta-Binomial posterior, its mean, and the MAP estimate
+- `exercise08` -- **proof**: Normal-Normal conjugacy (precisions add)
+- `exercise09` -- **research**: Gamma-Poisson, posterior prediction, Bernstein-von Mises
+
+```bash
+python3 drill.py --level bachelor   # core only
+python3 drill.py --level master     # core + proof
+python3 drill.py --level phd        # all three
+```
 
 ## Source
 

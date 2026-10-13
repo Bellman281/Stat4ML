@@ -136,7 +136,7 @@ matrix algebra, which Chapter 0 below covers from scratch.
 | 4 | Conditional and Multivariate Distributions | **complete** |
 | 5 | Convergence Concepts | **complete** |
 | 6 | Maximum Likelihood Estimation | **complete** |
-| 7 | Bayesian and Posterior Distribution Estimation | slides only |
+| 7 | Bayesian and Posterior Distribution Estimation | **complete** |
 
 Chapters 1-7 also carry the original homework PDF from the course, in each
 chapter's `homework/` folder.

@@ -1,13 +1,12 @@
-# Chapter 07 exercise -- Bayesian and Posterior Distribution Estimation
-# STATUS: STUB -- not yet authored (solution). See repo ROADMAP.md.
-#
-# Fill this in following the pattern used in Part I, Chapter 1/2:
-#   - exercise07.R
-#   - exercise07_buggy.R   (Rustlings-style: reader must fix it)
-#   - solutions/exercise07_solution.R
-
+# Chapter 7 -- reference solution (Core, R)
+# level: core
+beta_binomial_posterior <- function(alpha, beta, k, n) c(alpha + k, beta + n - k)
+posterior_mean <- function(alpha, beta) alpha / (alpha + beta)
+beta_map <- function(alpha, beta) (alpha - 1) / (alpha + beta - 2)
 main <- function() {
-  stop("TODO: port this chapter's homework exercise")
+  post <- beta_binomial_posterior(1, 1, 8, 10)
+  cat("posterior params :", post, "\n")
+  cat("posterior mean   :", posterior_mean(post[1], post[2]), "\n")
+  cat("MAP estimate     :", beta_map(post[1], post[2]), "\n")
 }
-
 main()

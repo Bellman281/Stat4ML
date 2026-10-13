@@ -1,16 +1,36 @@
 """
-Chapter 07 exercise -- Bayesian and Posterior Distribution Estimation
-STATUS: STUB -- not yet authored. See repo ROADMAP.md.
+Chapter 7 exercise -- Beta-Binomial updating (Core)
+Part I: Statistics Foundation for ML
 
-Fill this in following the pattern used in Part I, Chapter 1/2:
-  - exercise07.py            a working, documented exercise
-  - exercise07_buggy.py      the SAME exercise with an intentional bug
-                                       (Rustlings-style: reader must fix it)
-  - solutions/exercise07_solution.py
+HOMEWORK: implement each TODO using ch07_text.tex Section 1 (the
+Beta-Binomial posterior, its mean, and the MAP estimate).
+
+Run with:  python3 exercise07.py
+Reference solution: solutions/exercise07_solution.py
 """
+# level: core
+def beta_binomial_posterior(alpha, beta, k, n):
+    """Posterior parameters after k successes in n trials with a
+    Beta(alpha, beta) prior: (alpha + k, beta + n - k)."""
+    raise NotImplementedError("TODO: beta_binomial_posterior")
+
+
+def posterior_mean(alpha, beta):
+    """Mean of Beta(alpha, beta): alpha / (alpha + beta)."""
+    raise NotImplementedError("TODO: posterior_mean")
+
+
+def beta_map(alpha, beta):
+    """Mode (MAP) of Beta(alpha, beta) for alpha, beta > 1:
+    (alpha - 1) / (alpha + beta - 2)."""
+    raise NotImplementedError("TODO: beta_map")
+
 
 def main():
-    raise NotImplementedError("TODO: port this chapter's homework exercise")
+    post = beta_binomial_posterior(1, 1, 8, 10)
+    print("posterior params :", post)
+    print("posterior mean   :", posterior_mean(*post))
+    print("MAP estimate     :", beta_map(*post))
 
 
 if __name__ == "__main__":

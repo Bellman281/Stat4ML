@@ -16,7 +16,7 @@ Safarzadeh, themselves built on Casella & Berger, *Statistical Inference*
 | 04 | [Conditional and Multivariate Distributions](./ch04_conditional_and_multivariate_distributions/) | **complete** |
 | 05 | [Convergence Concepts](./ch05_convergence_concepts/) | **complete** |
 | 06 | [Maximum Likelihood Estimation](./ch06_maximum_likelihood_estimation/) | **complete** |
-| 07 | [Bayesian and Posterior Distribution Estimation](./ch07_bayesian_estimation/) | slides only |
+| 07 | [Bayesian and Posterior Distribution Estimation](./ch07_bayesian_estimation/) | **complete** |
 
 **complete** means a written chapter plus three exercises in each of
 Python and R, with a broken copy of each to fix. **slides only**
