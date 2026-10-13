@@ -1,16 +1,33 @@
-"""
-Chapter 05 exercise -- Convergence Concepts
-STATUS: STUB -- not yet authored (solution). See repo ROADMAP.md.
+"""Chapter 5 -- reference solution (Core)."""
+# level: core
+import math
 
-Fill this in following the pattern used in Part I, Chapter 1/2:
-  - exercise05.py            a working, documented exercise
-  - exercise05_buggy.py      the SAME exercise with an intentional bug
-                                       (Rustlings-style: reader must fix it)
-  - solutions/exercise05_solution.py
-"""
+
+def var_of_sample_mean(sigma2, n):
+    return sigma2 / n
+
+
+def chebyshev_bound(sigma2, n, eps):
+    return sigma2 / (n * eps ** 2)
+
+
+def running_mean(data):
+    out, total = [], 0.0
+    for i, x in enumerate(data, start=1):
+        total += x
+        out.append(total / i)
+    return out
+
+
+def clt_standardized(xbar, mu, sigma, n):
+    return (xbar - mu) / (sigma / math.sqrt(n))
+
 
 def main():
-    raise NotImplementedError("TODO: port this chapter's homework exercise")
+    print("Var(Xbar) sigma2=4,n=100 :", var_of_sample_mean(4.0, 100))
+    print("Chebyshev bound           :", chebyshev_bound(4.0, 100, 0.5))
+    print("running mean of [2,4,6]   :", running_mean([2, 4, 6]))
+    print("standardized (1.6,1,2,100):", clt_standardized(1.6, 1.0, 2.0, 100))
 
 
 if __name__ == "__main__":
