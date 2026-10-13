@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# convenience wrapper: ./drill [args]  ==  python3 drill.py [args]
+exec python3 "$(dirname "$0")/drill.py" "$@"
