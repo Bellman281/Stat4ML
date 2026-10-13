@@ -1,31 +1,173 @@
 \documentclass[11pt]{article}
 \usepackage{../../latex/stat4ml_style}
 
-\title{Conditional and Multivariate Distributions \\ \large Part I -- Statistics Foundation for ML}
+\title{Chapter 4: Conditional and Multivariate Distributions \\ \large Part I --- Statistics Foundation for ML}
 \author{Omid Safarzadeh}
 \date{}
 
 \begin{document}
 \maketitle
 
-\section*{This chapter isn't written yet}
-The written-out chapter is still to come. In the meantime the original
-lecture slides are in the \texttt{source\_slides/} folder next to this
-file, and you can work from them today. The topics they cover are listed
-below.
+\begin{abstract}
+\noindent
+Most interesting questions are about several quantities at once, and about
+what one tells you regarding another. This chapter sets up joint
+distributions, pulls out the marginal and conditional distributions that
+live inside them, and defines independence. Two identities --- the law of
+total expectation and the law of total variance --- let you compute a mean
+or a variance by conditioning, and the bivariate and multivariate normal
+give the formula for the conditional that reappears later as linear
+regression and as the Gaussian-process posterior.
+\end{abstract}
 
-\textit{Slides: \texttt{source\_slides/STAT4ML\_Slide\_4\_\_Multivariate\_Dist\_.pdf}, exactly as taught.}
+\tableofcontents
 
+% ======================================================================
+\section{Joint, marginal, and conditional}
+% ======================================================================
 
+For two variables $X$ and $Y$ the \keyterm{joint} distribution is a mass
+function $f(x,y) = P(X=x, Y=y)$ (discrete) or a density $f(x,y)$ with
+$P\big((X,Y)\in A\big) = \iint_A f$ (continuous). Everything about the pair
+is in $f$; the single-variable distributions are recovered by summing or
+integrating the other variable away.
 
-\section*{Planned topics}
-\begin{itemize}
-  \item Joint and marginal distributions
-  \item Conditional distributions and independence
-  \item Bivariate transformations
-  \item Hierarchical models and mixtures
-  \item Bivariate normal distribution
-  \item Multivariate distributions
-\end{itemize}
+\begin{definition}[Marginal and conditional]
+The \keyterm{marginal} of $X$ is
+$f_X(x) = \sum_y f(x,y)$ (or $\int f(x,y)\,dy$). The \keyterm{conditional} of
+$Y$ given $X=x$, for $f_X(x) > 0$, is
+\[
+  f_{Y\mid X}(y \mid x) = \frac{f(x,y)}{f_X(x)}.
+\]
+\end{definition}
+
+The conditional is itself a distribution in $y$ (it is non-negative and sums
+to $1$), so it has a mean of its own, the \keyterm{conditional expectation}
+$E[Y \mid X = x] = \sum_y y\, f_{Y\mid X}(y\mid x)$. $X$ and $Y$ are
+\keyterm{independent} when the joint factors, $f(x,y) = f_X(x)\,f_Y(y)$,
+equivalently when $f_{Y\mid X}(y\mid x) = f_Y(y)$ --- knowing $X$ tells you
+nothing about $Y$.
+
+Everything in this section is mechanical once you have the joint table, which
+makes it a good thing to compute rather than memorise:
+
+\begin{lstlisting}[language=Python]
+joint = {(0, 0): 0.3, (0, 1): 0.2, (1, 0): 0.1, (1, 1): 0.4}   # P(X=x, Y=y)
+
+def marginal_x(j):
+    out = {}
+    for (x, y), p in j.items():
+        out[x] = out.get(x, 0.0) + p
+    return out
+
+def conditional_y_given_x(j, x0):
+    px = sum(p for (x, y), p in j.items() if x == x0)
+    return {y: p / px for (x, y), p in j.items() if x == x0}
+
+print(marginal_x(joint))                # {0: 0.5, 1: 0.5}
+print(conditional_y_given_x(joint, 0))  # {0: 0.6, 1: 0.4}
+print(conditional_y_given_x(joint, 1))  # {0: 0.2, 1: 0.8}  -- X shifts Y
+\end{lstlisting}
+
+\noindent Because $P(Y{=}1\mid X)$ moves from $0.4$ to $0.8$ as $X$ goes
+from $0$ to $1$, these two are \emph{not} independent --- $X$ carries real
+information about $Y$.
+
+% ======================================================================
+\section{Computing by conditioning}
+% ======================================================================
+
+Conditioning is not just descriptive; it is a tool for computing means and
+variances of a single variable by splitting on another. Both laws below are
+used constantly, from mixture models to the bias--variance decomposition.
+
+\begin{theorem}[Law of total expectation]
+$E[X] = E\big[E[X \mid Y]\big]$.
+\end{theorem}
+\begin{proof}
+Write the inner expectation out and swap the order of summation:
+\begin{align*}
+  E\big[E[X\mid Y]\big]
+    &= \sum_y E[X\mid Y=y]\,f_Y(y)
+     = \sum_y \sum_x x\, \frac{f(x,y)}{f_Y(y)}\, f_Y(y) \\
+    &= \sum_x x \sum_y f(x,y)
+     = \sum_x x\, f_X(x) = E[X].
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Law of total variance]
+$\operatorname{Var}(X) = E\big[\operatorname{Var}(X\mid Y)\big]
+  + \operatorname{Var}\big(E[X\mid Y]\big)$.
+\end{theorem}
+\begin{proof}
+Let $m(Y) = E[X\mid Y]$. By definition
+$\operatorname{Var}(X\mid Y) = E[X^2\mid Y] - m(Y)^2$, so
+$E[\operatorname{Var}(X\mid Y)] = E[X^2] - E[m(Y)^2]$ by the law of total
+expectation. Also
+$\operatorname{Var}(m(Y)) = E[m(Y)^2] - (E[m(Y)])^2 = E[m(Y)^2] - (E[X])^2$.
+Adding the two lines, the $E[m(Y)^2]$ terms cancel and
+$E[X^2] - (E[X])^2 = \operatorname{Var}(X)$ remains.
+\end{proof}
+
+\noindent In words: total variance is the average of the within-group
+variances plus the variance of the group means --- ``unexplained'' plus
+``explained'' spread. That split is exactly the bias--variance decomposition
+in disguise.
+
+% ======================================================================
+\section{The bivariate and multivariate normal}
+% ======================================================================
+
+For jointly normal variables the conditional distribution has a clean closed
+form, and it is linear in the conditioning value.
+
+\begin{theorem}[Bivariate normal conditional]
+If $(X,Y)$ is bivariate normal with means $\mu_X,\mu_Y$, standard deviations
+$\sigma_X,\sigma_Y$ and correlation $\rho$, then $Y \mid X=x$ is normal with
+\[
+  E[Y\mid X=x] = \mu_Y + \rho\,\frac{\sigma_Y}{\sigma_X}\,(x - \mu_X),
+  \qquad
+  \operatorname{Var}(Y\mid X=x) = \sigma_Y^2\,(1 - \rho^2).
+\]
+\end{theorem}
+
+The conditional mean is a straight line in $x$ --- this is where linear
+regression comes from --- and the conditional variance is \emph{smaller}
+than the marginal $\sigma_Y^2$ by the factor $1-\rho^2$: conditioning on a
+correlated variable removes a share of the uncertainty. The figure shows a
+sample with $\rho = 0.7$; the slice of $Y$ at $X \approx 1$ matches the
+normal the formula predicts.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{figures/bvn_panel.png}
+\end{figure}
+
+The same statement in full generality uses vectors and matrices. Partition a
+multivariate normal vector as $(X_1, X_2)$ with mean $(\mu_1,\mu_2)$ and
+covariance blocks $\Sigma_{11},\Sigma_{12},\Sigma_{21},\Sigma_{22}$. Then
+$X_1 \mid X_2 = x_2$ is normal with
+\[
+  \mu_{1\mid 2} = \mu_1 + \Sigma_{12}\Sigma_{22}^{-1}(x_2 - \mu_2),
+  \qquad
+  \Sigma_{1\mid 2} = \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}.
+\]
+This single formula is the engine of Gaussian-process regression in Part III:
+predicting at new inputs is conditioning a big multivariate normal on the
+observed outputs. A warning worth keeping: zero correlation does \emph{not}
+mean independence in general --- but for variables that are \emph{jointly}
+normal, uncorrelated does imply independent, because $\rho = 0$ collapses the
+conditional mean to $\mu_Y$ and the joint density factors.
+
+\begin{summarybox}
+A joint distribution $f(x,y)$ contains the marginals $f_X,f_Y$ (sum the other
+variable away) and the conditionals $f_{Y\mid X} = f(x,y)/f_X(x)$;
+independence is $f = f_X f_Y$. The law of total expectation
+($E[X]=E[E[X\mid Y]]$) and the law of total variance
+($\operatorname{Var}(X)=E[\operatorname{Var}(X\mid Y)]+\operatorname{Var}(E[X\mid Y])$)
+compute by conditioning. For the normal, $X_1\mid X_2$ is again normal with a
+linear mean $\mu_1+\Sigma_{12}\Sigma_{22}^{-1}(x_2-\mu_2)$ and reduced
+covariance $\Sigma_{11}-\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}$.
+\end{summarybox}
 
 \end{document}

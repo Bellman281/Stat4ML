@@ -13,7 +13,7 @@ Safarzadeh, themselves built on Casella & Berger, *Statistical Inference*
 | 01 | [Probability Theory Foundations](./ch01_probability_theory_foundations/) | **complete** |
 | 02 | [Moments](./ch02_moments/) | **complete** |
 | 03 | [Distribution Functions](./ch03_distribution_functions/) | **complete** |
-| 04 | [Conditional and Multivariate Distributions](./ch04_conditional_and_multivariate_distributions/) | slides only |
+| 04 | [Conditional and Multivariate Distributions](./ch04_conditional_and_multivariate_distributions/) | **complete** |
 | 05 | [Convergence Concepts](./ch05_convergence_concepts/) | **complete** |
 | 06 | [Maximum Likelihood Estimation](./ch06_maximum_likelihood_estimation/) | **complete** |
 | 07 | [Bayesian and Posterior Distribution Estimation](./ch07_bayesian_estimation/) | slides only |
