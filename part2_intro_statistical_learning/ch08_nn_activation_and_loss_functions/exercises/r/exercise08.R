@@ -1,13 +1,25 @@
-# Chapter 08 exercise -- NN, Activation and Loss Functions
-# STATUS: STUB -- not yet authored. See repo ROADMAP.md.
-#
-# Fill this in following the pattern used in Part I, Chapter 1/2:
-#   - exercise08.R
-#   - exercise08_buggy.R   (Rustlings-style: reader must fix it)
-#   - solutions/exercise08_solution.R
+# Chapter 8 exercise -- activation functions (Core tier)
+# level: core
+# HOMEWORK: ch08_text.tex Section 1.  Rscript exercise08.R
+# softmax must be the STABLE version: subtract max(zs) before exp().
 
-main <- function() {
-  stop("TODO: port this chapter's homework exercise")
+sigmoid <- function(z) {
+  # TODO: 1 / (1 + exp(-z))
+  stop("TODO: sigmoid")
+}
+relu <- function(z) {
+  # TODO: max(0, z)
+  stop("TODO: relu")
+}
+softmax <- function(zs) {
+  # TODO: stable softmax -> probabilities summing to 1 (subtract max(zs) first)
+  stop("TODO: softmax")
 }
 
+main <- function() {
+  cat("sigmoid(0) :", sigmoid(0), "\n")
+  cat("relu(-2,3) :", relu(-2), relu(3), "\n")
+  cat("softmax    :", softmax(c(1, 1, 1)), "\n")
+  cat("softmax big:", softmax(c(1000, 1000)), "\n")
+}
 main()

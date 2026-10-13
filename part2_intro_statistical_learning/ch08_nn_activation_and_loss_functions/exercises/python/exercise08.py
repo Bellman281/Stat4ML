@@ -1,16 +1,39 @@
 """
-Chapter 08 exercise -- NN, Activation and Loss Functions
-STATUS: STUB -- not yet authored. See repo ROADMAP.md.
+Chapter 8 exercise -- activation functions (Core tier)
+Part II: Introduction to Statistical Learning
 
-Fill this in following the pattern used in Part I, Chapter 1/2:
-  - exercise08.py            a working, documented exercise
-  - exercise08_buggy.py      the SAME exercise with an intentional bug
-                                       (Rustlings-style: reader must fix it)
-  - solutions/exercise08_solution.py
+HOMEWORK: implement each TODO using ch08_text.tex Section 1. Three activations:
+two scalar (sigmoid, relu) and one vector (softmax). softmax must be the
+NUMERICALLY STABLE version -- subtract the max logit before exponentiating.
+
+Run with:  python3 exercise08.py
+Reference solution: solutions/exercise08_solution.py
 """
+# level: core
+import math
+
+
+def sigmoid(z):
+    """1 / (1 + e^{-z})."""
+    raise NotImplementedError("TODO: sigmoid")
+
+
+def relu(z):
+    """max(0, z)."""
+    raise NotImplementedError("TODO: relu")
+
+
+def softmax(zs):
+    """Stable softmax of a list of logits -> list of probabilities that sum to 1.
+    Subtract max(zs) from every logit before exponentiating."""
+    raise NotImplementedError("TODO: softmax")
+
 
 def main():
-    raise NotImplementedError("TODO: port this chapter's homework exercise")
+    print("sigmoid(0) :", sigmoid(0))
+    print("relu(-2,3) :", relu(-2), relu(3))
+    print("softmax    :", softmax([1.0, 1.0, 1.0]))
+    print("softmax big:", softmax([1000.0, 1000.0]))  # must not overflow
 
 
 if __name__ == "__main__":

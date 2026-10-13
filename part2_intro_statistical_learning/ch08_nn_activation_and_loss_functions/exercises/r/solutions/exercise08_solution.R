@@ -1,13 +1,15 @@
-# Chapter 08 exercise -- NN, Activation and Loss Functions
-# STATUS: STUB -- not yet authored (solution). See repo ROADMAP.md.
-#
-# Fill this in following the pattern used in Part I, Chapter 1/2:
-#   - exercise08.R
-#   - exercise08_buggy.R   (Rustlings-style: reader must fix it)
-#   - solutions/exercise08_solution.R
-
-main <- function() {
-  stop("TODO: port this chapter's homework exercise")
+# Chapter 8 -- reference solution (Core, R)
+# level: core
+sigmoid <- function(z) 1 / (1 + exp(-z))
+relu <- function(z) max(0, z)
+softmax <- function(zs) {
+  e <- exp(zs - max(zs))
+  e / sum(e)
 }
-
+main <- function() {
+  cat("sigmoid(0) :", sigmoid(0), "\n")
+  cat("relu(-2,3) :", relu(-2), relu(3), "\n")
+  cat("softmax    :", softmax(c(1, 1, 1)), "\n")
+  cat("softmax big:", softmax(c(1000, 1000)), "\n")
+}
 main()
