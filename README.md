@@ -125,23 +125,22 @@ How the parts build on each other, and where each one lands in practice:
 flowchart LR
     A["Part I<br/>Statistics Foundations<br/>probability - moments - MLE - Bayesian"]
     B["Part II<br/>Introduction to Statistical Learning<br/>regression - PCA - EM - clustering"]
-    C["Part III (planned)<br/>Statistical Foundations of Deep Learning & RL<br/>learning theory - variational inference - bandits & policy gradients"]
+    C["Part III (in progress)<br/>Statistical Foundations of Deep Learning & RL<br/>learning theory - estimation - stochastic approximation - bandits & RL"]
 
     A --> B --> C
 
     classDef part fill:#4C6EF5,color:#fff,stroke:#333,stroke-width:1px
-    classDef planned fill:#adb5bd,color:#fff,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5
-    class A,B part
-    class C planned
+    class A,B,C part
 ```
 
 Part III reads every deep-learning and reinforcement-learning method through the
 statistics underneath it — the method is the example, the statistics is the subject.
-It is planned scope; chapter folders are created as each chapter is actually written.
+Chapter folders are created as each chapter is written, so the repo never advertises
+an empty stub.
 
-Each chapter is marked **complete** (written chapter + six exercises, three each in
-Python and R, with a broken copy of each), **slides only** (lecture slides are there to
-learn from; the written chapter isn't done), or **not started**.
+Each chapter is marked **complete** (written chapter + six exercises — three each in
+Python and R, with a deliberately broken copy of each), **planned** (scoped but not yet
+written), or **not started**.
 
 ## Part I: Statistics Foundations for ML — complete
 
@@ -162,7 +161,7 @@ and estimation (maximum likelihood and Bayesian).
 | 6 | Maximum Likelihood Estimation | **complete** |
 | 7 | Bayesian and Posterior Distribution Estimation | **complete** |
 
-## Part II: Introduction to Statistical Learning
+## Part II: Introduction to Statistical Learning — 7 of 8 complete
 
 Regression, regularization, resampling, unsupervised learning, EM, clustering, and one
 hands-on neural-network chapter as the on-ramp into Part III.
@@ -184,20 +183,22 @@ Learning*; Murphy, *Machine Learning: A Probabilistic Perspective*.
 The deep-learning architecture topics that used to sit here (CNNs, RNN/LSTM, Transformers,
 LLMs) move to Part III, recast as statistics rather than architecture tours.
 
-## Part III: Statistical Foundations of Deep Learning & Reinforcement Learning — planned
+## Part III: Statistical Foundations of Deep Learning & Reinforcement Learning — in progress
 
 Not a tour of architectures. Each chapter is a statistical subfield, taught with proofs,
 using deep-learning and reinforcement-learning methods as the running examples. This is
 the course's "zero to advanced DL" payoff, told in a statistician's language.
+
+**Three of ten chapters are complete (ch01–ch03); the rest are scoped below.**
 
 **Course texts:** Shalev-Shwartz & Ben-David, *Understanding Machine Learning*; Sutton &
 Barto, *Reinforcement Learning: An Introduction*; Murphy, *Probabilistic Machine Learning*.
 
 | # | Chapter | Covers | Status |
 |---|---|---|---|
-| 1 | Statistical Learning Theory | bias–variance, concentration inequalities, VC / Rademacher / PAC, margins; double descent | planned |
-| 2 | Estimation & Losses | losses as MLE (MSE = Gaussian, cross-entropy = multinomial), regularization as priors/MAP, the score function | planned |
-| 3 | Stochastic Approximation & Optimisation | SGD as Robbins–Monro, convergence, implicit regularisation | planned |
+| 1 | [Statistical Learning Theory](part3_statistical_foundations_of_deep_learning/ch01_statistical_learning_theory/) | bias–variance, concentration inequalities, VC / Rademacher / PAC, margins; double descent | **complete** |
+| 2 | [Estimation & Losses](part3_statistical_foundations_of_deep_learning/ch02_estimation_and_losses/) | losses as MLE (MSE = Gaussian, cross-entropy = multinomial), regularization as priors/MAP, the score function | **complete** |
+| 3 | [Stochastic Approximation & Optimisation](part3_statistical_foundations_of_deep_learning/ch03_stochastic_approximation/) | SGD as Robbins–Monro, convergence, implicit regularisation | **complete** |
 | 4 | Monte Carlo & Variational Inference | MC estimation, importance sampling, MCMC; the ELBO and the VAE | planned |
 | 5 | Information Theory for Learning | entropy, KL, cross-entropy, mutual information, proper scoring rules, perplexity | planned |
 | 6 | Markov Decision Processes & Dynamic Programming | MDPs, the Bellman operator as a contraction, value/policy iteration, MC & TD evaluation | planned |
