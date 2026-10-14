@@ -1,0 +1,135 @@
+\documentclass[11pt]{article}
+\usepackage{../../latex/stat4ml_style}
+
+\title{Chapter 10: Uncertainty and Modern Generative Models \\ \large Part III --- Statistical Foundations of Deep Learning \& Reinforcement Learning}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+A model that only predicts is half a model; the other half is knowing when not to
+trust it, and generating new data from what it learned. This closing chapter
+gathers three statistical ideas that give modern deep learning both. Conformal
+prediction turns any model into one with a \emph{finite-sample, distribution-free}
+coverage guarantee --- valid prediction sets with no assumption about the data or
+the model. Calibration asks the sharper question of whether a classifier's
+probabilities mean what they say, and measures the gap. And score matching ---
+learning the gradient of the log-density --- is the statistical engine inside
+diffusion models, which generate by learning to reverse the addition of noise.
+Each is a clean piece of statistics doing work people now take for granted.
+\end{abstract}
+
+\tableofcontents
+
+% ======================================================================
+\section{Conformal prediction}
+% ======================================================================
+
+A point prediction says nothing about its own reliability. \keyterm{Conformal
+prediction} wraps any predictor in a set that is guaranteed to contain the truth
+a chosen fraction of the time --- with no distributional assumptions and for any
+sample size.
+
+\begin{definition}[Split conformal prediction]
+Split the data into a training part and a \keyterm{calibration} part. Fit any
+predictor $\hat f$ on the training part. On the calibration part compute
+\keyterm{nonconformity scores} $s_i = |y_i - \hat f(x_i)|$, and let $q$ be the
+$\lceil (n+1)(1-\alpha)\rceil / n$ empirical quantile of the $s_i$. The prediction
+set for a new $x$ is $[\hat f(x)-q,\ \hat f(x)+q]$.
+\end{definition}
+
+\begin{theorem}[Marginal coverage]
+If the calibration and test points are exchangeable, the conformal set covers the
+true $y$ with probability at least $1-\alpha$:
+$\Pr\big(y\in[\hat f(x)-q,\hat f(x)+q]\big) \ge 1-\alpha$.
+\end{theorem}
+\begin{proof}[Proof idea]
+By exchangeability the test score $s_{\text{new}}=|y-\hat f(x)|$ is equally likely
+to land in any position among the $n+1$ scores $\{s_1,\dots,s_n,s_{\text{new}}\}$.
+The set fails only when $s_{\text{new}}$ exceeds the chosen quantile, which happens
+for at most $\lceil (n+1)(1-\alpha)\rceil$ of the $n+1$ equally likely ranks,
+i.e.\ with probability at most $\alpha$.
+\end{proof}
+
+The guarantee leans on nothing but exchangeability --- not on $\hat f$ being
+correct, nor on the noise being Gaussian. The left panel shows a $90\%$ band built
+this way; measured on fresh data it covers $90.4\%$, exactly the promised rate.
+The band's \emph{width} reflects the model's accuracy (a good $\hat f$ gives tight
+bands), but its \emph{coverage} is guaranteed regardless.
+
+% ======================================================================
+\section{Calibration}
+% ======================================================================
+
+A classifier that outputs $0.9$ should be right $90\%$ of the time on the inputs
+it is that confident about. When this holds the model is \keyterm{calibrated}; when
+it does not, its probabilities are misleading even if its top-1 accuracy is good
+(modern networks are often badly overconfident).
+
+\begin{definition}[Calibration and ECE]
+A model is \keyterm{calibrated} if $\Pr(y=1\mid \hat p = p)=p$ for all $p$. The
+\keyterm{expected calibration error} bins predictions by confidence and averages
+the gap between confidence and accuracy,
+\[
+  \mathrm{ECE} = \sum_{b} \frac{|B_b|}{N}\,\big|\operatorname{acc}(B_b) - \operatorname{conf}(B_b)\big|.
+\]
+\end{definition}
+
+The \keyterm{reliability diagram} plots accuracy against confidence per bin; a
+calibrated model lies on the diagonal, and ECE is its average vertical distance
+from it. The middle panel shows a calibrated model tracking the diagonal and an
+overconfident one bowing away from it. Calibration is a proper-scoring-rule story
+(Chapter~5): cross-entropy is minimised by the true probabilities, so a
+well-trained model should be calibrated --- that it often is not, after modern
+training, is why post-hoc recalibration (temperature scaling) is standard.
+
+% ======================================================================
+\section{Score matching and diffusion}
+% ======================================================================
+
+To \emph{generate} data you need its distribution $p(x)$, but the normalising
+constant of a flexible $p$ is intractable. The escape is to learn not $p$ but its
+\keyterm{score}, the gradient of the log-density $\nabla_x\log p(x)$ --- which does
+not involve the normaliser at all, since the constant vanishes under the
+gradient.
+
+\begin{definition}[Denoising score matching]
+Add Gaussian noise, $\tilde x = x + \sigma\varepsilon$ with
+$\varepsilon\sim N(0,I)$, and train a network $s_\theta$ to predict the score of
+the noised data by regressing on the noise:
+\[
+  \min_\theta\ \mathbb{E}\big\|\,s_\theta(\tilde x) - \nabla_{\tilde x}\log p_\sigma(\tilde x\mid x)\,\big\|^2,
+  \qquad \nabla_{\tilde x}\log p_\sigma(\tilde x\mid x) = -\frac{\tilde x - x}{\sigma^2}.
+\]
+Learning the score reduces to the supervised problem of denoising.
+\end{definition}
+
+The score is a vector field pointing toward higher density, as the right panel
+shows for a two-mode distribution: the arrows flow into the modes. A
+\keyterm{diffusion model} uses this twice over. A fixed forward process gradually
+turns data into pure noise; the model learns the score at every noise level; and
+to \keyterm{generate}, it starts from noise and follows the learned score
+``uphill'', step by step, reversing the diffusion back to a sample from $p$.
+Generation is gradient ascent on a learned log-density --- the same score function
+that ran through maximum likelihood (Chapter~2) and the policy gradient
+(Chapter~7), now driving a sampler. The course ends where it is fitting: the
+score, one of statistics' oldest objects, at the centre of its newest models.
+
+\begin{summarybox}
+Conformal prediction wraps any model in prediction sets with a finite-sample,
+distribution-free coverage guarantee $\ge 1-\alpha$, resting only on
+exchangeability: calibrate nonconformity scores and use their
+$(1-\alpha)$-quantile. Calibration asks whether predicted probabilities match
+empirical frequencies; the reliability diagram and ECE measure the gap, and
+proper scoring rules (Chapter~5) say a well-fit model should be calibrated.
+Generative modelling learns the score $\nabla_x\log p$ (no normaliser needed) by
+denoising score matching; a diffusion model learns the score across noise levels
+and generates by following it from noise back to data --- gradient ascent on a
+learned log-density, the score function of Chapters~2 and~7 at the heart of modern
+generative AI.
+\end{summarybox}
+
+\end{document}
