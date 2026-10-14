@@ -25,7 +25,6 @@ Machine Learning*.
 **complete** means a written chapter plus six exercises (three each in Python and
 R, with a broken copy of each). All ten chapters are complete.
 
-> The original `part3_advanced_statistical_learning/` folder held an
-> architecture/applications tour (AutoML, GANs, NAS, vision/speech/multimodal).
-> It is superseded by this statistics-first spine; its one surviving slide deck
-> (feature extraction) will be folded into the relevant chapter as it is written.
+> The earlier `advanced_statistical_learning` architecture-tour material (AutoML, GANs,
+> NAS, vision/speech/multimodal) has been retired; its statistical content lives in the
+> chapters above, taught through its statistical subject rather than the architecture.

@@ -181,7 +181,7 @@ Learning*; Murphy, *Machine Learning: A Probabilistic Perspective*.
 | 8 | NN, Activation and Loss Functions | **complete** |
 
 The deep-learning architecture topics that used to sit here (CNNs, RNN/LSTM, Transformers,
-LLMs) move to Part III, recast as statistics rather than architecture tours.
+LLMs) now live in Part III, recast as statistics rather than architecture tours.
 
 ## Part III: Statistical Foundations of Deep Learning & Reinforcement Learning — complete
 
@@ -208,10 +208,10 @@ Barto, *Reinforcement Learning: An Introduction*; Murphy, *Probabilistic Machine
 | 9 | [Gaussian Processes & the Infinite-Width Limit](part3_statistical_foundations_of_deep_learning/ch09_gaussian_processes/) | GP regression, the kernel view, the infinitely-wide-network = GP result | **complete** |
 | 10 | [Uncertainty & Modern Generative Models](part3_statistical_foundations_of_deep_learning/ch10_uncertainty_and_generative_models/) | conformal prediction, calibration; score matching and diffusion | **complete** |
 
-**Note on the old `part3_advanced_statistical_learning/` folder:** its original scope
-(AutoML, GANs, NAS, famous vision models, speech, multimodal, …) was an architecture/
-applications tour, now superseded by the statistics-first spine above. It is kept only
-for its one surviving slide deck and can be retired.
+The earlier architecture-tour material (an `advanced_statistical_learning` folder of
+AutoML, GANs, NAS, vision/speech/multimodal chapters, and Part II CNN/RNN/Transformer/LLM
+stubs) has been retired: its statistical content now lives in the spine above, taught
+through its statistical subject rather than the architecture.
 
 ## Instructor
 
