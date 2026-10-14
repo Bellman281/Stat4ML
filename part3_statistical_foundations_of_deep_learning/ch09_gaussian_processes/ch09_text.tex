@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage{../../latex/stat4ml_style}
+
+\title{Chapter 9: Gaussian Processes and the Infinite-Width Limit \\ \large Part III --- Statistical Foundations of Deep Learning \& Reinforcement Learning}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+A Gaussian process is a probability distribution not over numbers but over
+\emph{functions}: any finite set of its values is jointly Gaussian, with
+covariance set by a kernel that encodes which inputs should have similar outputs.
+This makes nonparametric regression exact and Bayesian --- condition on data and
+the posterior is again a GP, giving not just a predicted curve but a calibrated
+uncertainty that is small near the data and large away from it. The chapter
+closes with the result that ties this back to deep learning: a neural network of
+infinite width, with random weights, \emph{is} a Gaussian process. The central
+limit theorem does it --- each output is a sum of many independent random
+contributions --- so the Bayesian prior implied by a wide network is a GP with a
+kernel you can write down.
+\end{abstract}
+
+\tableofcontents
+
+% ======================================================================
+\section{A distribution over functions}
+% ======================================================================
+
+\begin{definition}[Gaussian process]
+A \keyterm{Gaussian process} $f\sim\mathcal{GP}(m,k)$ is a collection of random
+variables $\{f(x)\}$ such that any finite subset $(f(x_1),\dots,f(x_n))$ is
+jointly Gaussian, with mean $m(x_i)$ and covariance
+$\operatorname{Cov}(f(x_i),f(x_j))=k(x_i,x_j)$.
+\end{definition}
+
+The \keyterm{kernel} $k$ is the whole model. The common choice, the \keyterm{RBF}
+(squared-exponential) kernel $k(x,x')=\exp(-\|x-x'\|^2/2\ell^2)$, says nearby
+inputs are strongly correlated and distant ones nearly independent, so samples
+from the prior are smooth --- the left panel draws five of them. A GP is
+nonparametric: it does not fix a functional form with finitely many parameters,
+it places a prior directly on the space of functions through the kernel.
+
+% ======================================================================
+\section{Regression is conditioning}
+% ======================================================================
+
+Because everything is jointly Gaussian, learning is just conditioning a
+multivariate normal (Part~I, Chapter~4). Given training inputs $X$ with noisy
+outputs $y$ and a test point $x_\star$, stack them; the joint is Gaussian, and the
+conditional $f(x_\star)\mid y$ is Gaussian with closed-form mean and variance.
+
+\begin{theorem}[GP predictive distribution]
+With kernel matrix $K=k(X,X)$, noise $\sigma^2$, and cross-covariance
+$k_\star = k(x_\star,X)$,
+\[
+  \mathbb{E}[f(x_\star)\mid y] = k_\star (K+\sigma^2 I)^{-1} y,
+  \qquad
+  \operatorname{Var}[f(x_\star)\mid y] = k(x_\star,x_\star) - k_\star (K+\sigma^2 I)^{-1} k_\star^\top.
+\]
+\end{theorem}
+\begin{proof}
+$(f(x_\star), y)$ is jointly Gaussian with covariance blocks
+$k(x_\star,x_\star)$, $k_\star$, and $K+\sigma^2 I$. The Gaussian conditioning
+formula --- for jointly normal $(a,b)$, $\mathbb{E}[a\mid b]=\mu_a +
+\Sigma_{ab}\Sigma_{bb}^{-1}(b-\mu_b)$ and
+$\operatorname{Var}[a\mid b]=\Sigma_{aa}-\Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba}$
+--- applied with $\mu=0$ gives exactly the two expressions.
+\end{proof}
+
+The middle panel shows the result: the posterior mean interpolates the data, and
+the $\pm 2$-standard-deviation band pinches to nearly zero at each observation and
+balloons where there are none. This calibrated ``I don't know away from the
+data'' is what a plain network's point prediction lacks --- and it comes for free
+from conditioning a Gaussian. The cost is the $(K+\sigma^2 I)^{-1}$, an $n\times
+n$ solve, which is why exact GPs are reserved for smaller $n$.
+
+% ======================================================================
+\section{A wide network is a Gaussian process}
+% ======================================================================
+
+The link to deep learning is a theorem of Neal (1996). Take a one-hidden-layer
+network with $H$ units,
+\[
+  f(x) = \frac{1}{\sqrt H}\sum_{j=1}^H v_j\,\phi(w_j^\top x + b_j),
+\]
+and put independent zero-mean priors on the weights $v_j,w_j,b_j$.
+
+\begin{theorem}[Infinite-width networks are GPs]
+As $H\to\infty$, the function $f$ converges to a Gaussian process. For any inputs,
+the outputs $(f(x_1),\dots,f(x_n))$ are jointly Gaussian with covariance
+$k(x,x')=\mathbb{E}\big[v^2\big]\,\mathbb{E}_{w,b}\big[\phi(w^\top x+b)\phi(w^\top x'+b)\big]$.
+\end{theorem}
+\begin{proof}[Proof sketch]
+For fixed inputs, $f(x)$ is a sum of $H$ i.i.d.\ terms $v_j\phi(w_j^\top x+b_j)$,
+each with mean zero and finite variance, scaled by $1/\sqrt H$. By the central
+limit theorem (Part~I, Chapter~5) the sum converges to a Gaussian; applied jointly
+to several inputs (the multivariate CLT) the whole vector is jointly Gaussian, so
+$f$ is a GP. Its covariance is the per-unit expectation above, since the units are
+independent.
+\end{proof}
+
+So the central limit theorem of Part~I resurfaces as a statement about neural
+networks: the prior over functions implied by a wide, randomly-initialised network
+is a Gaussian process with a specific kernel --- the \keyterm{neural network
+Gaussian process} (NNGP) kernel. The right panel is the theorem happening: the
+distribution of a single output over random weights is sharply non-Gaussian at
+width $1$, and by width $200$ it has become the Gaussian the CLT predicts. This is
+the bridge between the two halves of the course --- the Bayesian, kernel view of a
+neural network is literally a Gaussian process --- and it is why GPs, kernels, and
+deep networks are studied together.
+
+\begin{summarybox}
+A Gaussian process is a distribution over functions: any finite set of values is
+jointly Gaussian with covariance given by a kernel $k$, which encodes smoothness
+(e.g.\ the RBF kernel). Regression is Gaussian conditioning (Chapter~4): the
+predictive mean $k_\star(K+\sigma^2 I)^{-1}y$ interpolates the data and the
+predictive variance gives calibrated uncertainty, small at the data and large
+away from it, at the cost of an $n\times n$ solve. The tie to deep learning is
+Neal's theorem: a one-hidden-layer network with random weights and
+$1/\sqrt H$ scaling converges, as $H\to\infty$, to a Gaussian process by the
+central limit theorem (Chapter~5), with the NNGP kernel as its covariance --- the
+Bayesian prior of a wide network is a GP.
+\end{summarybox}
+
+\end{document}
