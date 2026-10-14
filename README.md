@@ -124,34 +124,20 @@ How the parts build on each other, and where each one lands in practice:
 ```mermaid
 flowchart LR
     A["Part I<br/>Statistics Foundations<br/>probability - moments - MLE - Bayesian"]
-    B["Part II<br/>Intro to Statistical Learning<br/>regression - PCA - EM - neural nets"]
-    C["Part III<br/>Advanced Statistical Learning<br/>autodiff - GANs - vision/language models"]
-    D["Part IV (planned)<br/>Reinforcement Learning"]
-    E["Part V (planned)<br/>LLM Training"]
-
-    CV[Computer Vision]
-    NLP[NLP & LLMs]
-    RL[Reinforcement Learning]
-    GEN[Generative AI]
+    B["Part II<br/>Introduction to Statistical Learning<br/>regression - PCA - EM - clustering"]
+    C["Part III (planned)<br/>Statistical Foundations of Deep Learning & RL<br/>learning theory - variational inference - bandits & policy gradients"]
 
     A --> B --> C
-    C -.-> D
-    C -.-> E
-    B --> CV
-    B --> NLP
-    C --> CV
-    C --> NLP
-    C --> GEN
-    D -.-> RL
-    E -.-> NLP
 
     classDef part fill:#4C6EF5,color:#fff,stroke:#333,stroke-width:1px
     classDef planned fill:#adb5bd,color:#fff,stroke:#333,stroke-width:1px,stroke-dasharray: 5 5
-    classDef app fill:#12b886,color:#fff,stroke:#333,stroke-width:1px
-    class A,B,C part
-    class D,E planned
-    class CV,NLP,RL,GEN app
+    class A,B part
+    class C planned
 ```
+
+Part III reads every deep-learning and reinforcement-learning method through the
+statistics underneath it — the method is the example, the statistics is the subject.
+It is planned scope; chapter folders are created as each chapter is actually written.
 
 Each chapter is marked **complete** (written chapter + six exercises, three each in
 Python and R, with a broken copy of each), **slides only** (lecture slides are there to
@@ -178,8 +164,8 @@ and estimation (maximum likelihood and Bayesian).
 
 ## Part II: Introduction to Statistical Learning
 
-Regression, regularization, resampling, unsupervised learning, EM, clustering, and the
-on-ramp into neural networks and Transformers.
+Regression, regularization, resampling, unsupervised learning, EM, clustering, and one
+hands-on neural-network chapter as the on-ramp into Part III.
 
 **Course texts:** James, Witten, Hastie & Tibshirani, *An Introduction to Statistical
 Learning*; Murphy, *Machine Learning: A Probabilistic Perspective*.
@@ -192,20 +178,38 @@ Learning*; Murphy, *Machine Learning: A Probabilistic Perspective*.
 | 4 | Recommendation Systems | not started |
 | 5 | Unsupervised Learning, PCA | **complete** |
 | 6 | EM Algorithm | **complete** |
-| 7 | Clustering | slides only |
-| 8 | NN, Activation and Loss Functions | slides only |
-| 9 | Convolutional Neural Networks | not started |
-| 10 | RNN, LSTM | not started |
-| 11 | Language Models and Tokenization | not started |
-| 12 | Transformers | slides only |
-| 13 | Large Language Models | not started |
+| 7 | Clustering | **complete** |
+| 8 | NN, Activation and Loss Functions | **complete** |
 
-## Part III: Advanced Statistical Learning for DL
+The deep-learning architecture topics that used to sit here (CNNs, RNN/LSTM, Transformers,
+LLMs) move to Part III, recast as statistics rather than architecture tours.
 
-The deep-learning end of the sequence: automatic differentiation, GANs, multi-armed
-bandits, well-known vision and language models, Gaussian processes, and more. See
-[`part3_advanced_statistical_learning/`](part3_advanced_statistical_learning/) for the
-full chapter list.
+## Part III: Statistical Foundations of Deep Learning & Reinforcement Learning — planned
+
+Not a tour of architectures. Each chapter is a statistical subfield, taught with proofs,
+using deep-learning and reinforcement-learning methods as the running examples. This is
+the course's "zero to advanced DL" payoff, told in a statistician's language.
+
+**Course texts:** Shalev-Shwartz & Ben-David, *Understanding Machine Learning*; Sutton &
+Barto, *Reinforcement Learning: An Introduction*; Murphy, *Probabilistic Machine Learning*.
+
+| # | Chapter | Covers | Status |
+|---|---|---|---|
+| 1 | Statistical Learning Theory | bias–variance, concentration inequalities, VC / Rademacher / PAC, margins; double descent | planned |
+| 2 | Estimation & Losses | losses as MLE (MSE = Gaussian, cross-entropy = multinomial), regularization as priors/MAP, the score function | planned |
+| 3 | Stochastic Approximation & Optimisation | SGD as Robbins–Monro, convergence, implicit regularisation | planned |
+| 4 | Monte Carlo & Variational Inference | MC estimation, importance sampling, MCMC; the ELBO and the VAE | planned |
+| 5 | Information Theory for Learning | entropy, KL, cross-entropy, mutual information, proper scoring rules, perplexity | planned |
+| 6 | Markov Decision Processes & Dynamic Programming | MDPs, the Bellman operator as a contraction, value/policy iteration, MC & TD evaluation | planned |
+| 7 | Bandits & Policy-Gradient RL | regret, UCB from concentration, Thompson sampling; REINFORCE as the likelihood-ratio estimator, baselines as control variates, off-policy importance sampling | planned |
+| 8 | Probabilistic Sequence & Language Models | the chain rule of probability, n-gram → neural LM, perplexity = cross-entropy; word2vec as implicit PMI factorisation; attention as kernel smoothing | planned |
+| 9 | Gaussian Processes & the Infinite-Width Limit | GP regression, the kernel view, the infinitely-wide-network = GP result | planned |
+| 10 | Uncertainty & Modern Generative Models *(advanced)* | conformal prediction, calibration; score matching and diffusion | planned |
+
+**Note on the old `part3_advanced_statistical_learning/` folder:** its original scope
+(AutoML, GANs, NAS, famous vision models, speech, multimodal, …) was an architecture/
+applications tour. It is superseded by the statistics-first spine above; those folders
+will be reorganised into the chapters above as each one is actually written.
 
 ## Instructor
 
