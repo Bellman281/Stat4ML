@@ -1,0 +1,144 @@
+\documentclass[11pt]{article}
+\usepackage{../../latex/stat4ml_style}
+
+\title{Chapter 2: Estimation and Losses \\ \large Part III --- Statistical Foundations of Deep Learning \& Reinforcement Learning}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Every loss a network minimises is a likelihood in disguise, and every
+regulariser is a prior. Squared error is the negative log-likelihood of Gaussian
+noise, cross-entropy is the negative log-likelihood of a categorical label, and
+once you see losses this way the choice of loss stops being arbitrary --- it is a
+claim about the noise. The same move explains regularisation: adding a penalty is
+multiplying the likelihood by a prior and maximising the posterior instead, with
+the $L_2$ penalty a Gaussian prior and the $L_1$ penalty a Laplace prior whose
+sharp peak at zero is exactly why lasso gives sparse weights. Threading both is
+the \emph{score function}, the gradient of the log-likelihood, whose expectation
+is zero at the truth --- the quantity estimation, and later policy gradients,
+are built on.
+\end{abstract}
+
+\tableofcontents
+
+% ======================================================================
+\section{Losses are negative log-likelihoods}
+% ======================================================================
+
+A probabilistic model says the data were drawn from $p(y\mid x;\theta)$. The
+\keyterm{maximum likelihood} estimate maximises $\prod_i p(y_i\mid x_i;\theta)$,
+or equivalently minimises the \keyterm{negative log-likelihood}
+$-\sum_i \log p(y_i\mid x_i;\theta)$. Different noise models give different
+losses --- and they are the losses deep learning already uses.
+
+\begin{theorem}[Squared error is Gaussian MLE]
+If $y = f_\theta(x) + \varepsilon$ with $\varepsilon\sim N(0,\sigma^2)$, then the
+negative log-likelihood is
+\[
+  -\sum_i \log p(y_i\mid x_i)
+   = \frac{n}{2}\log(2\pi\sigma^2) + \frac{1}{2\sigma^2}\sum_i\big(y_i-f_\theta(x_i)\big)^2.
+\]
+Only the last term depends on $\theta$, so maximising the likelihood is exactly
+minimising the sum of squared errors.
+\end{theorem}
+\begin{proof}
+Substitute the Gaussian density $p(y_i\mid x_i)=
+(2\pi\sigma^2)^{-1/2}\exp(-(y_i-f_\theta(x_i))^2/2\sigma^2)$, take logs, and sum.
+The $\theta$-free terms are constant in the optimisation, leaving the SSE scaled
+by $1/2\sigma^2$.
+\end{proof}
+
+\noindent The left panel of the figure makes the point concretely: the sum of
+squared errors and the Gaussian negative log-likelihood, plotted against a
+candidate slope, are the \emph{same} curve up to an affine transform, with the
+same minimiser. The identical argument with a categorical likelihood gives
+\keyterm{cross-entropy}: $-\sum_i \log p_{\text{model}}(y_i\mid x_i)$ with
+$p_{\text{model}}$ the softmax output is the multinomial negative log-likelihood
+(Part~II, Chapter~8). The loss is never arbitrary --- it names the noise.
+
+% ======================================================================
+\section{Regularisation is a prior}
+% ======================================================================
+
+Maximum likelihood overfits when the model is flexible. The Bayesian repair is a
+\keyterm{prior} $p(\theta)$: instead of maximising the likelihood, maximise the
+posterior $p(\theta\mid \text{data}) \propto p(\text{data}\mid\theta)\,p(\theta)$
+--- \keyterm{maximum a posteriori} (MAP) estimation. Taking logs turns the product
+into a sum, so MAP minimises
+\[
+  \underbrace{-\sum_i \log p(y_i\mid x_i;\theta)}_{\text{loss}}
+  \;\; \underbrace{-\,\log p(\theta)}_{\text{penalty}}.
+\]
+The penalty \emph{is} the negative log-prior.
+
+\begin{theorem}[Ridge is a Gaussian prior]
+A Gaussian prior $\theta\sim N(0,\tau^2 I)$ contributes
+$-\log p(\theta) = \tfrac{1}{2\tau^2}\|\theta\|^2 + \text{const}$. Combined with
+the Gaussian likelihood of Theorem~1.1, MAP minimises
+$\tfrac{1}{2\sigma^2}\sum_i(y_i-f_\theta(x_i))^2 + \tfrac{1}{2\tau^2}\|\theta\|^2$,
+which is ridge regression with $\lambda = \sigma^2/\tau^2$.
+\end{theorem}
+\begin{proof}
+The log of $p(\theta)\propto \exp(-\|\theta\|^2/2\tau^2)$ is
+$-\|\theta\|^2/2\tau^2$ up to a constant. Add it to the negative log-likelihood
+and multiply through by $2\sigma^2$: the objective is
+$\sum_i(y_i-f_\theta(x_i))^2 + (\sigma^2/\tau^2)\|\theta\|^2$, the ridge objective
+with $\lambda=\sigma^2/\tau^2$.
+\end{proof}
+
+Swap the Gaussian prior for a \keyterm{Laplace prior}
+$p(\theta)\propto \exp(-\|\theta\|_1/b)$ and the penalty becomes
+$\|\theta\|_1$ --- the lasso. The middle panel shows why the two behave
+differently: the Laplace density has a sharp peak at zero, so its MAP estimate is
+pulled onto zero for any weight the data do not strongly support, giving
+\keyterm{sparsity}; the smooth Gaussian only shrinks. The right panel is the
+geometric version --- the $L_1$ ``ball'' is a diamond, and the squared-error
+contours first touch it at a corner, where a coordinate is exactly zero.
+
+% ======================================================================
+\section{The score function}
+% ======================================================================
+
+Both sections rest on one object: the \keyterm{score}, the gradient of the
+log-likelihood with respect to the parameter,
+\[
+  s(\theta) = \nabla_\theta \log p(y\mid x;\theta).
+\]
+The MLE is where the total score vanishes, $\sum_i s(\theta)=0$, and the two
+facts that make the score central are that, at the true parameter, its
+expectation is zero and its variance is the \keyterm{Fisher information}.
+
+\begin{theorem}[The score has mean zero]
+Under regularity conditions, $\mathbb{E}_{y\sim p(\cdot;\theta)}[s(\theta)] = 0$.
+\end{theorem}
+\begin{proof}
+$\mathbb{E}[s(\theta)] = \int \big(\nabla_\theta \log p\big)\,p\,dy
+ = \int \frac{\nabla_\theta p}{p}\,p\,dy = \nabla_\theta\!\int p\,dy
+ = \nabla_\theta 1 = 0$, using $\nabla_\theta\log p = \nabla_\theta p / p$ and
+swapping gradient and integral.
+\end{proof}
+
+For the Gaussian mean, $s(\mu)=(y-\mu)/\sigma^2$, and $\sum_i s(\mu)=0$ gives
+$\hat\mu = \bar y$ --- the sample mean is the score equation's solution. This is
+not a curiosity: the identity $\nabla_\theta\log p = (\nabla_\theta p)/p$ is the
+\keyterm{log-derivative trick}, and it returns in Chapter~7 as the engine of the
+policy-gradient estimator, where the ``likelihood'' is a policy and the score is
+differentiated through sampled actions.
+
+\begin{summarybox}
+A loss is a negative log-likelihood: squared error is the NLL of Gaussian noise,
+cross-entropy the NLL of a categorical label, so the choice of loss is a claim
+about the noise. A regulariser is a negative log-prior: MAP minimises
+loss~$+$~penalty, with the $L_2$ penalty a Gaussian prior
+($\lambda=\sigma^2/\tau^2$) and the $L_1$ penalty a Laplace prior whose peak at
+zero yields sparsity. Both rest on the score $s(\theta)=\nabla_\theta\log p$,
+whose expectation is zero at the truth (Fisher information is its variance), and
+whose log-derivative identity $\nabla\log p=\nabla p/p$ reappears as the
+policy-gradient estimator in Chapter~7.
+\end{summarybox}
+
+\end{document}
