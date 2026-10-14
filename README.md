@@ -161,10 +161,10 @@ and estimation (maximum likelihood and Bayesian).
 | 6 | Maximum Likelihood Estimation | **complete** |
 | 7 | Bayesian and Posterior Distribution Estimation | **complete** |
 
-## Part II: Introduction to Statistical Learning — 7 of 8 complete
+## Part II: Introduction to Statistical Learning — complete
 
-Regression, regularization, resampling, unsupervised learning, EM, clustering, and one
-hands-on neural-network chapter as the on-ramp into Part III.
+Regression, regularization, recommendation systems, unsupervised learning, EM, clustering,
+and one hands-on neural-network chapter as the on-ramp into Part III.
 
 **Course texts:** James, Witten, Hastie & Tibshirani, *An Introduction to Statistical
 Learning*; Murphy, *Machine Learning: A Probabilistic Perspective*.
@@ -174,7 +174,7 @@ Learning*; Murphy, *Machine Learning: A Probabilistic Perspective*.
 | 1 | Learning Algorithms Overview | **complete** |
 | 2 | Regression, Cross-Validation | **complete** |
 | 3 | Logistic, Ridge, Lasso Regression | **complete** |
-| 4 | Recommendation Systems | not started |
+| 4 | Recommendation Systems | **complete** |
 | 5 | Unsupervised Learning, PCA | **complete** |
 | 6 | EM Algorithm | **complete** |
 | 7 | Clustering | **complete** |

@@ -1,13 +1,14 @@
-# Chapter 04 exercise -- Recommendation Systems
-# STATUS: STUB -- not yet authored (solution). See repo ROADMAP.md.
-#
-# Fill this in following the pattern used in Part I, Chapter 1/2:
-#   - exercise04.R
-#   - exercise04_buggy.R   (Rustlings-style: reader must fix it)
-#   - solutions/exercise04_solution.R
-
-main <- function() {
-  stop("TODO: port this chapter's homework exercise")
+# Chapter 4 -- reference solution (Core, R)
+# level: core
+predict_rating <- function(p, q) sum(p * q)
+squared_error <- function(r, p, q) {
+  e <- r - predict_rating(p, q)
+  e * e
 }
-
+rmse <- function(preds, actuals) sqrt(mean((preds - actuals)^2))
+main <- function() {
+  cat("predict       :", predict_rating(c(1, 2), c(2, 0.5)), "\n")
+  cat("squared_error :", squared_error(5, c(1, 2), c(2, 0.5)), "\n")
+  cat("rmse          :", rmse(c(3, 2, 5), c(4, 2, 4)), "\n")
+}
 main()

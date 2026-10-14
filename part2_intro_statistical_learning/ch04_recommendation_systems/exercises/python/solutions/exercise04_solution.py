@@ -1,16 +1,27 @@
-"""
-Chapter 04 exercise -- Recommendation Systems
-STATUS: STUB -- not yet authored (solution). See repo ROADMAP.md.
+"""Chapter 4 -- reference solution (Core)."""
+# level: core
+import math
 
-Fill this in following the pattern used in Part I, Chapter 1/2:
-  - exercise04.py            a working, documented exercise
-  - exercise04_buggy.py      the SAME exercise with an intentional bug
-                                       (Rustlings-style: reader must fix it)
-  - solutions/exercise04_solution.py
-"""
+
+def predict(p, q):
+    return sum(pi * qi for pi, qi in zip(p, q))
+
+
+def squared_error(r, p, q):
+    e = r - predict(p, q)
+    return e * e
+
+
+def rmse(preds, actuals):
+    n = len(preds)
+    mse = sum((pr - ac) ** 2 for pr, ac in zip(preds, actuals)) / n
+    return math.sqrt(mse)
+
 
 def main():
-    raise NotImplementedError("TODO: port this chapter's homework exercise")
+    print("predict        :", predict([1.0, 2.0], [2.0, 0.5]))
+    print("squared_error  :", squared_error(5.0, [1.0, 2.0], [2.0, 0.5]))
+    print("rmse           :", rmse([3.0, 2.0, 5.0], [4.0, 2.0, 4.0]))
 
 
 if __name__ == "__main__":
