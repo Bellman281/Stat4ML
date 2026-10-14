@@ -1,0 +1,151 @@
+\documentclass[11pt]{article}
+\usepackage{../../latex/stat4ml_style}
+
+\title{Chapter 1: Statistical Learning Theory \\ \large Part III --- Statistical Foundations of Deep Learning \& Reinforcement Learning}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Why should a model that fits the training data also fit data it has never seen?
+That question --- generalisation --- is the one statistical learning theory
+answers, and the answer is a concentration argument: the training error is an
+average of independent terms, so it concentrates around the true error, and the
+only thing that can break the link is a hypothesis class rich enough to chase
+the noise. This chapter builds the bound from Hoeffding's inequality to the
+finite-class guarantee, names the capacity measures (VC dimension, Rademacher
+complexity) that extend it to infinite classes, and reads the bias--variance
+trade-off and the modern surprise of double descent through the same lens. It
+is the spine the rest of Part III hangs on: every method that follows is an
+attempt to fit without overfitting.
+\end{abstract}
+
+\tableofcontents
+
+% ======================================================================
+\section{Risk, empirical risk, and the gap between them}
+% ======================================================================
+
+Fix a distribution $\mathcal{D}$ over pairs $(x,y)$ and a loss $\ell$. The
+object we actually care about is the \keyterm{risk} --- the expected loss of a
+hypothesis $h$ on fresh data,
+\[
+  R(h) = \mathbb{E}_{(x,y)\sim\mathcal{D}}\big[\ell(h(x),y)\big],
+\]
+but $\mathcal{D}$ is unknown, so we cannot evaluate it. What we can evaluate, on
+a sample $S=\{(x_i,y_i)\}_{i=1}^n$ drawn i.i.d.\ from $\mathcal{D}$, is the
+\keyterm{empirical risk}
+\[
+  \widehat R_S(h) = \frac1n\sum_{i=1}^n \ell(h(x_i),y_i).
+\]
+\keyterm{Empirical risk minimisation} (ERM) returns the hypothesis
+$\hat h = \arg\min_{h\in\mathcal{H}} \widehat R_S(h)$ from a class $\mathcal{H}$.
+The whole game is the \keyterm{generalisation gap} $R(\hat h) - \widehat R_S(\hat h)$:
+training error is what we see, true error is what we want, and learning theory
+bounds the difference.
+
+For a \emph{single, fixed} $h$ the gap is easy, because $\widehat R_S(h)$ is an
+average of $n$ i.i.d.\ terms with mean $R(h)$. The law of large numbers says it
+converges; concentration says how fast.
+
+% ======================================================================
+\section{Concentration: why training error tracks true error}
+% ======================================================================
+
+\begin{theorem}[Hoeffding's inequality]
+Let $Z_1,\dots,Z_n$ be independent with $Z_i\in[a,b]$ and mean $\mu$. Then for
+any $\varepsilon>0$,
+\[
+  \Pr\!\left(\Big|\tfrac1n\textstyle\sum_i Z_i - \mu\Big| \ge \varepsilon\right)
+  \;\le\; 2\exp\!\left(-\frac{2n\varepsilon^2}{(b-a)^2}\right).
+\]
+\end{theorem}
+
+With a bounded loss in $[0,1]$ and $Z_i=\ell(h(x_i),y_i)$, this says the
+empirical risk of a fixed $h$ is within $\varepsilon$ of its true risk with
+probability at least $1-2e^{-2n\varepsilon^2}$ --- the gap shrinks like
+$1/\sqrt n$. The middle panel of the figure shows exactly this: several running
+empirical means fold into the true mean, trapped inside the Hoeffding band
+$\pm\sqrt{\log(2/\delta)/(2n)}$.
+
+The catch is ERM. It does not pick a fixed $h$; it picks the $h$ that looks best
+\emph{on this sample}, so $\widehat R_S(\hat h)$ is a biased, optimistic estimate.
+The fix is to make the guarantee hold for every $h$ in the class at once, with a
+union bound.
+
+\begin{theorem}[Finite-class generalisation bound]
+Let $\mathcal{H}$ be finite and the loss lie in $[0,1]$. With probability at
+least $1-\delta$ over the sample, every $h\in\mathcal{H}$ satisfies
+\[
+  R(h) \;\le\; \widehat R_S(h) + \sqrt{\frac{\log|\mathcal{H}| + \log(2/\delta)}{2n}}.
+\]
+\end{theorem}
+\begin{proof}
+Fix $h$. By Hoeffding, $\Pr\big(R(h)-\widehat R_S(h) \ge \varepsilon\big)\le
+e^{-2n\varepsilon^2}$. Apply the union bound over the $|\mathcal{H}|$ hypotheses:
+the probability that \emph{any} one violates the gap is at most
+$|\mathcal{H}|\,e^{-2n\varepsilon^2}$. Set this equal to $\delta$ and solve for
+$\varepsilon=\sqrt{(\log|\mathcal{H}|+\log(1/\delta))/(2n)}$; the two-sided
+$\log(2/\delta)$ version follows by accounting for both tails.
+\end{proof}
+
+Read the bound. The gap grows with $\log|\mathcal{H}|$ --- the richer the class,
+the more ways to get lucky on the training sample --- and shrinks with $n$.
+That single inequality is the whole moral of the field: \emph{generalisation =
+fit $-$ capacity/$\sqrt n$}.
+
+% ======================================================================
+\section{Infinite classes, and the bias--variance picture}
+% ======================================================================
+
+$\log|\mathcal{H}|$ is useless when $\mathcal{H}$ is infinite --- every linear
+classifier, every network. The repair is to measure \emph{effective} size by
+how many label patterns the class can realise. The \keyterm{VC dimension}
+$d_{\mathrm{VC}}(\mathcal{H})$ is the largest number of points the class can
+\keyterm{shatter} (label in all $2^d$ possible ways); it replaces
+$\log|\mathcal{H}|$ in a bound of the same shape,
+\[
+  R(h) \;\lesssim\; \widehat R_S(h)
+       + \sqrt{\frac{d_{\mathrm{VC}}\,\log(n/d_{\mathrm{VC}}) + \log(1/\delta)}{n}}.
+\]
+\keyterm{Rademacher complexity} is the tighter, data-dependent cousin: it
+measures how well the class can fit a vector of random $\pm1$ signs --- literal
+noise --- so a class that can fit noise generalises less. Both make the same
+point as the finite bound, with capacity now a property of the class's shape
+rather than its cardinality.
+
+This is the statistical content of the \keyterm{bias--variance trade-off}. A
+small class has high \emph{bias} (it cannot represent the truth) but low
+\emph{variance} (it cannot chase the noise); a large class is the reverse. Test
+error is their sum, so it falls, bottoms out, and rises --- the U-shape in the
+left panel, where polynomial degree plays the role of capacity.
+
+\begin{example}[Double descent]
+The classical U is not the end of the story. Push the capacity \emph{past} the
+point where the model can interpolate the training set exactly ($p=n$
+parameters) and test error, after spiking at the interpolation threshold,
+\emph{falls again} --- the right panel. At $p=n$ there is exactly one
+zero-training-error fit and it is wildly unstable; beyond it, many interpolating
+fits exist and gradient methods select the smallest-norm one, which is smooth
+and generalises. Classical theory describes the first descent; modern
+over-parameterised models live on the second. The bound is not wrong --- the
+right capacity measure is the norm of the solution, not the raw parameter count.
+\end{example}
+
+\begin{summarybox}
+Learning theory bounds the generalisation gap $R(h)-\widehat R_S(h)$. For a
+fixed $h$, Hoeffding gives an $O(1/\sqrt n)$ gap; ERM needs the bound to hold
+uniformly over $\mathcal{H}$, which a union bound buys at the cost of a
+$\sqrt{\log|\mathcal{H}|/n}$ capacity term. For infinite classes, VC dimension
+and Rademacher complexity replace $\log|\mathcal{H}|$, giving
+$R(h)\lesssim\widehat R_S(h)+\sqrt{\text{capacity}/n}$. This is the
+bias--variance trade-off: too little capacity biases, too much chases noise,
+test error is U-shaped --- except that past the interpolation threshold,
+over-parameterised models descend a second time, because the operative capacity
+is the norm of the solution, not the parameter count.
+\end{summarybox}
+
+\end{document}
