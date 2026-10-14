@@ -125,7 +125,7 @@ How the parts build on each other, and where each one lands in practice:
 flowchart LR
     A["Part I<br/>Statistics Foundations<br/>probability - moments - MLE - Bayesian"]
     B["Part II<br/>Introduction to Statistical Learning<br/>regression - PCA - EM - clustering"]
-    C["Part III (in progress)<br/>Statistical Foundations of Deep Learning & RL<br/>learning theory - estimation - stochastic approximation - bandits & RL"]
+    C["Part III<br/>Statistical Foundations of Deep Learning & RL<br/>learning theory - estimation - stochastic approximation - bandits & RL"]
 
     A --> B --> C
 
@@ -183,13 +183,14 @@ Learning*; Murphy, *Machine Learning: A Probabilistic Perspective*.
 The deep-learning architecture topics that used to sit here (CNNs, RNN/LSTM, Transformers,
 LLMs) move to Part III, recast as statistics rather than architecture tours.
 
-## Part III: Statistical Foundations of Deep Learning & Reinforcement Learning — in progress
+## Part III: Statistical Foundations of Deep Learning & Reinforcement Learning — complete
 
 Not a tour of architectures. Each chapter is a statistical subfield, taught with proofs,
 using deep-learning and reinforcement-learning methods as the running examples. This is
 the course's "zero to advanced DL" payoff, told in a statistician's language.
 
-**Three of ten chapters are complete (ch01–ch03); the rest are scoped below.**
+**All ten chapters are complete** — each a written chapter with proofs, a computed
+figure, and six drills (three each in Python and R, with a broken copy of each).
 
 **Course texts:** Shalev-Shwartz & Ben-David, *Understanding Machine Learning*; Sutton &
 Barto, *Reinforcement Learning: An Introduction*; Murphy, *Probabilistic Machine Learning*.
@@ -199,18 +200,18 @@ Barto, *Reinforcement Learning: An Introduction*; Murphy, *Probabilistic Machine
 | 1 | [Statistical Learning Theory](part3_statistical_foundations_of_deep_learning/ch01_statistical_learning_theory/) | bias–variance, concentration inequalities, VC / Rademacher / PAC, margins; double descent | **complete** |
 | 2 | [Estimation & Losses](part3_statistical_foundations_of_deep_learning/ch02_estimation_and_losses/) | losses as MLE (MSE = Gaussian, cross-entropy = multinomial), regularization as priors/MAP, the score function | **complete** |
 | 3 | [Stochastic Approximation & Optimisation](part3_statistical_foundations_of_deep_learning/ch03_stochastic_approximation/) | SGD as Robbins–Monro, convergence, implicit regularisation | **complete** |
-| 4 | Monte Carlo & Variational Inference | MC estimation, importance sampling, MCMC; the ELBO and the VAE | planned |
-| 5 | Information Theory for Learning | entropy, KL, cross-entropy, mutual information, proper scoring rules, perplexity | planned |
-| 6 | Markov Decision Processes & Dynamic Programming | MDPs, the Bellman operator as a contraction, value/policy iteration, MC & TD evaluation | planned |
-| 7 | Bandits & Policy-Gradient RL | regret, UCB from concentration, Thompson sampling; REINFORCE as the likelihood-ratio estimator, baselines as control variates, off-policy importance sampling | planned |
-| 8 | Probabilistic Sequence & Language Models | the chain rule of probability, n-gram → neural LM, perplexity = cross-entropy; word2vec as implicit PMI factorisation; attention as kernel smoothing | planned |
-| 9 | Gaussian Processes & the Infinite-Width Limit | GP regression, the kernel view, the infinitely-wide-network = GP result | planned |
-| 10 | Uncertainty & Modern Generative Models *(advanced)* | conformal prediction, calibration; score matching and diffusion | planned |
+| 4 | [Monte Carlo & Variational Inference](part3_statistical_foundations_of_deep_learning/ch04_monte_carlo_and_variational_inference/) | MC estimation, importance sampling; the ELBO and the VAE | **complete** |
+| 5 | [Information Theory for Learning](part3_statistical_foundations_of_deep_learning/ch05_information_theory/) | entropy, KL, cross-entropy, mutual information, perplexity | **complete** |
+| 6 | [Markov Decision Processes & Dynamic Programming](part3_statistical_foundations_of_deep_learning/ch06_markov_decision_processes/) | MDPs, the Bellman operator as a contraction, value/policy iteration, MC & TD evaluation | **complete** |
+| 7 | [Bandits & Policy-Gradient RL](part3_statistical_foundations_of_deep_learning/ch07_bandits_and_policy_gradients/) | regret, UCB, Thompson sampling; REINFORCE as the likelihood-ratio estimator, baselines as control variates | **complete** |
+| 8 | [Probabilistic Sequence & Language Models](part3_statistical_foundations_of_deep_learning/ch08_probabilistic_sequence_models/) | the chain rule, n-gram → neural LM, perplexity = cross-entropy; word2vec as PMI factorisation; attention as kernel smoothing | **complete** |
+| 9 | [Gaussian Processes & the Infinite-Width Limit](part3_statistical_foundations_of_deep_learning/ch09_gaussian_processes/) | GP regression, the kernel view, the infinitely-wide-network = GP result | **complete** |
+| 10 | [Uncertainty & Modern Generative Models](part3_statistical_foundations_of_deep_learning/ch10_uncertainty_and_generative_models/) | conformal prediction, calibration; score matching and diffusion | **complete** |
 
 **Note on the old `part3_advanced_statistical_learning/` folder:** its original scope
 (AutoML, GANs, NAS, famous vision models, speech, multimodal, …) was an architecture/
-applications tour. It is superseded by the statistics-first spine above; those folders
-will be reorganised into the chapters above as each one is actually written.
+applications tour, now superseded by the statistics-first spine above. It is kept only
+for its one surviving slide deck and can be retired.
 
 ## Instructor
 
