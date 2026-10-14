@@ -1,0 +1,138 @@
+\documentclass[11pt]{article}
+\usepackage{../../latex/stat4ml_style}
+
+\title{Chapter 7: Bandits and Policy-Gradient Reinforcement Learning \\ \large Part III --- Statistical Foundations of Deep Learning \& Reinforcement Learning}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Two statistical problems sit under reinforcement learning's action side.
+The first is the explore--exploit trade-off, in its purest form the
+\keyterm{multi-armed bandit}: pull arms to maximise reward while learning which
+arm is best, and the right amount of exploration falls out of a concentration
+inequality (UCB) or a posterior (Thompson sampling), with regret that grows only
+logarithmically. The second is \emph{optimising} a policy you can only sample
+from --- and its answer is the \keyterm{policy gradient}, which is nothing but the
+score function of Chapter~2 applied to a policy. The gradient of expected reward
+equals the expected reward times the score, an identity that lets you
+differentiate through a sampling step, and subtracting a baseline --- a control
+variate --- cuts its variance without biasing it.
+\end{abstract}
+
+\tableofcontents
+
+% ======================================================================
+\section{Bandits: exploration from a confidence bound}
+% ======================================================================
+
+A \keyterm{$K$-armed bandit} offers arms with unknown mean rewards
+$\mu_1,\dots,\mu_K$; each round you pull one and see a noisy reward. The cost of
+not knowing the best arm $\mu^\star=\max_k\mu_k$ is the \keyterm{regret}
+$\mathrm{Reg}(T)=\sum_{t=1}^T(\mu^\star-\mu_{a_t})$. Pulling greedily can lock
+onto a wrong arm forever (linear regret); exploring at a constant rate
+($\epsilon$-greedy) wastes a constant fraction of pulls, also linear. The art is
+to explore \emph{just enough}, and Hoeffding says how much.
+
+\begin{definition}[Upper confidence bound]
+After $n_k$ pulls of arm $k$ with empirical mean $\hat\mu_k$, the \keyterm{UCB}
+index is
+\[
+  \hat\mu_k + \sqrt{\frac{c\log t}{n_k}},
+\]
+and UCB1 pulls the arm of largest index.
+\end{definition}
+
+The bonus is exactly a Hoeffding confidence width (Chapter~1): with high
+probability $\mu_k\le\hat\mu_k+\sqrt{c\log t/n_k}$, so the index is an
+\emph{optimistic} estimate of the arm's value. Optimism forces exploration of
+under-sampled arms (small $n_k$, large bonus) but lets the bonus shrink as
+evidence accumulates, which yields \keyterm{logarithmic} regret,
+$\mathrm{Reg}(T)=O\!\big(\sum_{k:\Delta_k>0}\tfrac{\log T}{\Delta_k}\big)$ with
+$\Delta_k=\mu^\star-\mu_k$. \keyterm{Thompson sampling} reaches the same
+logarithmic regret by a Bayesian route: keep a posterior over each arm's mean,
+draw one sample from each, and pull the arm with the largest sample --- arms the
+posterior is unsure about are sampled optimistically on their own. The left panel
+of the figure shows both staying sub-linear while $\epsilon$-greedy's regret grows
+as a straight line and eventually overtakes them.
+
+% ======================================================================
+\section{The policy gradient is the score function}
+% ======================================================================
+
+Now the harder problem: adjust a parameterised policy $\pi_\theta(a\mid s)$ to
+maximise expected reward $J(\theta)=\mathbb{E}_{a\sim\pi_\theta}[R(a)]$. The reward
+depends on $\theta$ only through the \emph{sampling} distribution, so we cannot
+differentiate $R$ --- but we can differentiate the probability, with the
+log-derivative trick of Chapter~2.
+
+\begin{theorem}[Policy gradient / REINFORCE]
+$\displaystyle \nabla_\theta J(\theta)
+ = \mathbb{E}_{a\sim\pi_\theta}\!\big[R(a)\,\nabla_\theta\log\pi_\theta(a)\big].$
+\end{theorem}
+\begin{proof}
+$\nabla_\theta J = \nabla_\theta\sum_a \pi_\theta(a)R(a)
+ = \sum_a R(a)\,\nabla_\theta\pi_\theta(a)$. Multiply and divide by
+$\pi_\theta(a)$ and use $\nabla_\theta\pi_\theta=\pi_\theta\nabla_\theta\log\pi_\theta$
+(the log-derivative identity):
+\[
+  \nabla_\theta J = \sum_a \pi_\theta(a)\,R(a)\,\nabla_\theta\log\pi_\theta(a)
+   = \mathbb{E}_{a\sim\pi_\theta}\big[R(a)\,\nabla_\theta\log\pi_\theta(a)\big].
+\]
+\end{proof}
+
+The quantity $\nabla_\theta\log\pi_\theta(a)$ is the \keyterm{score} --- the exact
+object from Chapter~2's maximum likelihood, now of a policy. The expectation is
+estimated by sampling: take an action, observe its reward, and nudge $\theta$ in
+the direction $R(a)\nabla\log\pi_\theta(a)$. This is \keyterm{REINFORCE}, and it
+turns ``optimise through a sampler'' into an ordinary stochastic gradient ascent
+(Chapter~3).
+
+% ======================================================================
+\section{Baselines are control variates}
+% ======================================================================
+
+REINFORCE is unbiased but noisy, because $R(a)$ can be large and its scale inflates
+every gradient. The fix is a \keyterm{baseline} $b$: subtract it from the reward.
+
+\begin{theorem}[A baseline does not bias the gradient]
+For any constant $b$, $\;\mathbb{E}_{a\sim\pi_\theta}\!\big[(R(a)-b)\nabla\log\pi_\theta(a)\big]
+= \nabla_\theta J(\theta)$.
+\end{theorem}
+\begin{proof}
+It suffices that the subtracted term vanishes:
+$\mathbb{E}[b\,\nabla\log\pi_\theta(a)] = b\sum_a \pi_\theta(a)\nabla\log\pi_\theta(a)
+= b\sum_a \nabla\pi_\theta(a) = b\,\nabla\!\sum_a\pi_\theta(a) = b\,\nabla 1 = 0$,
+using the mean-zero-score identity of Chapter~2.
+\end{proof}
+
+So the baseline is a \keyterm{control variate}: it changes the variance of the
+estimator but not its mean, and the variance-minimising $b$ is a reward-magnitude
+weighted average of the returns (close to, but not exactly, the mean reward). The
+middle panel shows REINFORCE with a baseline learning faster and more smoothly
+than without; the right panel plots the estimator's variance against $b$, a clean
+parabola minimised near the mean reward. In full RL the natural baseline is the
+\emph{value function} $V(s)$ (Chapter~6), and $R-V(s)$ is the \keyterm{advantage}
+--- the actor--critic architecture is exactly this pairing. Finally, when the data
+come from a different behaviour policy $\mu$, the same log-derivative machinery
+corrects for it by \keyterm{importance sampling} (Chapter~4), reweighting each
+sampled return by $\pi_\theta(a)/\mu(a)$ --- \keyterm{off-policy} policy
+gradients.
+
+\begin{summarybox}
+In a $K$-armed bandit, regret is the price of not knowing the best arm; greedy
+and $\epsilon$-greedy give linear regret, while UCB (an optimistic Hoeffding
+confidence bound, Chapter~1) and Thompson sampling (a posterior draw) give
+logarithmic regret. To optimise a sampled policy, the policy-gradient theorem
+gives $\nabla_\theta J = \mathbb{E}[R(a)\nabla\log\pi_\theta(a)]$ via the
+log-derivative trick, where $\nabla\log\pi_\theta$ is the Chapter~2 score;
+REINFORCE is the stochastic-gradient estimate. A baseline $b$ leaves the gradient
+unbiased (mean-zero score) but cuts its variance --- a control variate --- with
+the value function as the natural choice ($R-V$ is the advantage, i.e.\
+actor--critic), and importance sampling (Chapter~4) extends it off-policy.
+\end{summarybox}
+
+\end{document}
