@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage{../../latex/stat4ml_style}
+
+\title{Chapter 3: Stochastic Approximation and Optimisation \\ \large Part III --- Statistical Foundations of Deep Learning \& Reinforcement Learning}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Stochastic gradient descent is not a deep-learning invention --- it is Robbins
+and Monro's 1951 stochastic approximation, the statistical method for solving an
+equation you can only observe through noise. Training minimises the risk, whose
+gradient we never see exactly; a minibatch gives a noisy, unbiased estimate of
+it, and SGD is exactly Robbins--Monro applied to the equation $\nabla R=0$. That
+lineage hands us the convergence theory for free: the step sizes must shrink,
+but not too fast --- $\sum a_t=\infty$ so the iterate can still travel any
+distance, and $\sum a_t^2<\infty$ so the injected noise averages away. This
+chapter derives those two conditions, shows the noise ball a constant step
+leaves behind, and explains why the noise itself is a regulariser.
+\end{abstract}
+
+\tableofcontents
+
+% ======================================================================
+\section{Solving an equation you can only see through noise}
+% ======================================================================
+
+We want a stationary point of the risk, a $\theta$ with $\nabla R(\theta)=0$.
+We cannot evaluate $\nabla R$ --- it is an expectation over the data
+distribution --- but a single example or minibatch gives an \emph{unbiased}
+estimate: $\mathbb{E}[\widehat{\nabla R}] = \nabla R$. This is precisely the
+setting \keyterm{Robbins--Monro} solved: find the root of a function $g$ when you
+observe only $g(\theta)+\text{noise}$.
+
+\begin{definition}[Stochastic approximation]
+Given noisy observations $Y_t = g(\theta_t) + \varepsilon_t$ with
+$\mathbb{E}[\varepsilon_t]=0$, the Robbins--Monro iteration is
+\[
+  \theta_{t+1} = \theta_t - a_t\, Y_t,
+\]
+with a \keyterm{step-size} (or learning-rate) sequence $a_t>0$.
+\end{definition}
+
+Set $g=\nabla R$ and $Y_t=\widehat{\nabla R}(\theta_t)$ and the iteration is
+stochastic gradient descent, $\theta_{t+1}=\theta_t - a_t\,\widehat{\nabla
+R}(\theta_t)$. SGD is not an approximation to ``real'' gradient descent; it is
+the exact statistical procedure for optimising an expectation from samples. The
+only design choice is the step-size schedule, and that choice is governed by two
+conditions.
+
+% ======================================================================
+\section{The two step-size conditions}
+% ======================================================================
+
+\begin{theorem}[Robbins--Monro conditions]
+If the steps satisfy
+\[
+  \sum_{t=1}^\infty a_t = \infty \qquad\text{and}\qquad \sum_{t=1}^\infty a_t^2 < \infty,
+\]
+then (under mild regularity) $\theta_t$ converges to a root of $g$ almost surely.
+\end{theorem}
+
+The two conditions pull in opposite directions, and reading them is the whole
+lesson. The first, $\sum a_t=\infty$, says the steps must not shrink so fast
+that their total travel is bounded --- otherwise the iterate could get stuck
+before reaching the root, however far away it starts. The second,
+$\sum a_t^2<\infty$, says they must shrink fast enough that the accumulated
+\emph{noise} --- which enters squared, through its variance --- stays finite and
+averages away. The canonical schedule $a_t=1/t$ threads both: $\sum 1/t$
+diverges like $\log t$, while $\sum 1/t^2 = \pi^2/6$ converges. The middle panel
+of the figure shows exactly this pair of curves.
+
+A \emph{constant} step violates the second condition, and the consequence is
+visible in the left panel: the iterate does not converge to $\theta^\star$ but
+settles into a \keyterm{noise ball} around it whose radius is set by the step
+size. For a quadratic risk with curvature $H$ and gradient-noise variance
+$\sigma^2$, the stationary variance of constant-step SGD is, to leading order,
+\[
+  \operatorname{Var}(\theta_\infty) \;\approx\; \frac{a\,\sigma^2}{2H},
+\]
+linear in the step size $a$: halve the step and you halve the noise floor. The
+right panel is the same fact as rates --- $a_t=1/t$ drives the error down like
+$1/t$, while a constant step plateaus at that floor.
+
+\begin{example}[Why not just use tiny constant steps?]
+Because the first condition then bites: a very small constant step has a low
+noise floor but crawls, and a schedule that decays to zero is what gets both the
+travel and the averaging. In practice one often holds the step constant to move
+fast, then decays it to settle --- a direct reading of the two conditions.
+\end{example}
+
+% ======================================================================
+\section{The noise is a feature}
+% ======================================================================
+
+There is a second reason SGD dominates in deep learning, beyond cheapness: its
+noise \keyterm{regularises}. Full-batch gradient descent heads for the nearest
+stationary point, sharp or flat; the stochastic gradient's fluctuations let the
+iterate escape sharp, narrow minima and settle in \keyterm{flat} ones, which
+empirically generalise better (a flat minimum is robust to the parameter
+perturbation that a test-train shift resembles). This is \keyterm{implicit
+regularisation}: no penalty is written down, yet the \emph{dynamics} bias the
+solution --- toward flat minima, and, for over-parameterised linear models,
+toward the minimum-norm interpolant, the same object that made the second
+descent of Chapter~1 generalise.
+
+The stability threshold sharpens the picture. On a quadratic with curvature $H$,
+gradient descent with constant step $a$ contracts only if $a < 2/H$; above
+$2/H$ it diverges. So the usable step size is set by the sharpest direction of
+the loss, which is why learning rates and curvature (and hence normalisation,
+which controls curvature) are inseparable in practice.
+
+\begin{summarybox}
+SGD is Robbins--Monro stochastic approximation applied to $\nabla R=0$: a
+minibatch is an unbiased noisy gradient, and $\theta_{t+1}=\theta_t-a_t
+\widehat{\nabla R}$ solves the root equation from samples. Convergence needs
+$\sum a_t=\infty$ (enough travel) and $\sum a_t^2<\infty$ (noise averages away);
+$a_t=1/t$ satisfies both, a constant step violates the second and leaves a noise
+ball of variance $\approx a\sigma^2/2H$. The gradient noise is not only
+tolerable but useful --- it biases SGD toward flat, minimum-norm solutions
+(implicit regularisation) --- while the constant-step stability limit $a<2/H$
+ties the usable learning rate to the loss curvature.
+\end{summarybox}
+
+\end{document}
