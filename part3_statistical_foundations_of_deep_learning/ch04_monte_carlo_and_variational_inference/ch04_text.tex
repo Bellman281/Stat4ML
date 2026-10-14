@@ -1,0 +1,133 @@
+\documentclass[11pt]{article}
+\usepackage{../../latex/stat4ml_style}
+
+\title{Chapter 4: Monte Carlo and Variational Inference \\ \large Part III --- Statistical Foundations of Deep Learning \& Reinforcement Learning}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Most quantities a modern model needs --- an expected loss, a posterior mean, a
+marginal likelihood --- are integrals with no closed form. There are two ways to
+attack an intractable integral, and this chapter is about both. \keyterm{Monte
+Carlo} estimates it by sampling: the average of a function over random draws is
+an unbiased estimate of its expectation, with error that falls like
+$1/\sqrt n$ regardless of dimension, and importance sampling reweights draws
+from a convenient proposal when the target is hard to sample. \keyterm{Variational
+inference} takes the opposite tack: it turns the integral into an
+\emph{optimisation}, maximising a tractable lower bound --- the ELBO --- on the
+log-evidence. That bound is the same one that drove EM in Part~II, and it is the
+objective the variational autoencoder trains.
+\end{abstract}
+
+\tableofcontents
+
+% ======================================================================
+\section{Monte Carlo estimation}
+% ======================================================================
+
+To estimate $\mu = \mathbb{E}_{p}[f(X)] = \int f(x)p(x)\,dx$, draw
+$X_1,\dots,X_n\sim p$ and average.
+
+\begin{theorem}[The Monte Carlo estimator is unbiased, with $1/\sqrt n$ error]
+Let $\hat\mu_n = \tfrac1n\sum_{i=1}^n f(X_i)$ with $X_i\sim p$ i.i.d.\ and
+$\operatorname{Var}_p(f(X))=\sigma^2<\infty$. Then $\mathbb{E}[\hat\mu_n]=\mu$ and
+$\operatorname{Var}(\hat\mu_n)=\sigma^2/n$, so the standard error is
+$\sigma/\sqrt n$.
+\end{theorem}
+\begin{proof}
+Linearity of expectation gives $\mathbb{E}[\hat\mu_n]=\mu$, and independence
+gives
+\[
+  \operatorname{Var}(\hat\mu_n)=\frac1{n^2}\sum_i\operatorname{Var}(f(X_i))=\frac{\sigma^2}{n},
+\]
+whose square root is the standard error.
+\end{proof}
+
+The decisive feature is what is \emph{absent}: the rate $1/\sqrt n$ does not
+depend on the dimension of $x$. A grid quadrature needs $k^d$ points in $d$
+dimensions; Monte Carlo needs the same $n$ for a given accuracy whether $d$ is
+one or a million. That is why it, and not quadrature, is how expectations are
+computed in deep learning. The left panel shows the estimator of $\mathbb{E}[X^2]$
+settling onto the truth inside its shrinking $\pm 1.96\,\sigma/\sqrt n$ band.
+
+\begin{definition}[Importance sampling]
+When $p$ is hard to sample, draw from a proposal $q$ and reweight:
+\[
+  \mu = \mathbb{E}_p[f(X)] = \mathbb{E}_q\!\left[f(X)\,\tfrac{p(X)}{q(X)}\right]
+      \approx \frac1n\sum_{i=1}^n f(X_i)\,\tfrac{p(X_i)}{q(X_i)},\quad X_i\sim q.
+\]
+The ratio $w(x)=p(x)/q(x)$ is the \keyterm{importance weight}.
+\end{definition}
+
+Importance sampling is unbiased for any $q$ with $q>0$ wherever $fp\ne 0$, but
+its variance depends sharply on the match between $q$ and $f p$. Its signature
+use is rare events: to estimate $P(X>4)$ for a standard normal, naive Monte
+Carlo almost never draws a sample past $4$ and returns zero, while sampling from
+a proposal centred out in the tail and reweighting gives a tight estimate --- the
+middle panel, where importance sampling tracks the true $3.2\times10^{-5}$ and
+naive Monte Carlo is useless.
+
+% ======================================================================
+\section{Variational inference: the integral as an optimisation}
+% ======================================================================
+
+Sometimes the integral we want is the \keyterm{evidence}
+$p(x) = \int p(x,z)\,dz$, the normaliser of a posterior over a latent $z$.
+Sampling it well can be hard, so variational inference replaces integration with
+optimisation: introduce a tractable family $q(z)$ and push it as close to the
+posterior as possible. The lever is the \keyterm{evidence lower bound}.
+
+\begin{theorem}[The ELBO and its gap]
+For any distribution $q(z)$,
+\[
+  \log p(x) = \underbrace{\mathbb{E}_{q}\!\left[\log\frac{p(x,z)}{q(z)}\right]}_{\mathrm{ELBO}(q)}
+            + \underbrace{\mathrm{KL}\big(q(z)\,\|\,p(z\mid x)\big)}_{\ge 0}.
+\]
+Hence $\mathrm{ELBO}(q)\le \log p(x)$, with equality iff $q(z)=p(z\mid x)$.
+\end{theorem}
+\begin{proof}
+Write $p(x,z)=p(z\mid x)p(x)$ inside the ELBO:
+$\mathbb{E}_q[\log p(z\mid x)+\log p(x)-\log q(z)]
+= \log p(x) - \mathrm{KL}(q\|p(z\mid x))$, since $\mathbb{E}_q[\log p(x)]=\log
+p(x)$ and the remaining terms are $-\mathrm{KL}$. Rearranging gives the identity,
+and $\mathrm{KL}\ge 0$ gives the bound.
+\end{proof}
+
+Because $\log p(x)$ is fixed, maximising the ELBO over $q$ \emph{minimises} the
+KL to the true posterior --- the right panel shows the ELBO as a function of a
+Gaussian $q$'s mean, rising to touch $\log p(x)$ exactly when $q$ hits the
+posterior, with the KL as the shaded gap. This is the same decomposition that
+made EM a monotone ascent in Part~II, Chapter~6: EM's E-step is the special case
+where the posterior is tractable and $q$ can be set equal to it; variational
+inference is what you do when it is not, optimising the ELBO over a restricted
+family instead.
+
+\begin{example}[The variational autoencoder]
+The \keyterm{VAE} is variational inference with neural networks doing the
+bookkeeping. An encoder network outputs the parameters of $q(z\mid x)$, a decoder
+network parameterises $p(x\mid z)$, and the training objective is the ELBO,
+$\mathbb{E}_{q}[\log p(x\mid z)] - \mathrm{KL}(q(z\mid x)\,\|\,p(z))$ --- a
+reconstruction term minus a KL to the prior. The ELBO's expectation is estimated
+by Monte Carlo (Section~1), closing the circle: variational inference turns the
+integral into an optimisation, and Monte Carlo estimates the one expectation
+that remains.
+\end{example}
+
+\begin{summarybox}
+Monte Carlo estimates an intractable integral $\mathbb{E}_p[f]$ by averaging
+samples: unbiased, with dimension-free standard error $\sigma/\sqrt n$;
+importance sampling reweights draws from a proposal $q$ by $w=p/q$ and is the
+tool for rare events. Variational inference turns the evidence integral into an
+optimisation via the ELBO: $\log p(x)=\mathrm{ELBO}(q)+\mathrm{KL}(q\|p(z\mid
+x))$, so maximising the (tractable) ELBO minimises KL to the posterior. EM is the
+tractable-posterior special case (Part~II Ch.~6); the VAE is the neural case,
+with an encoder for $q$, a decoder for $p(x\mid z)$, and the ELBO --- a
+reconstruction minus a KL --- as its loss, its expectation estimated by Monte
+Carlo.
+\end{summarybox}
+
+\end{document}
