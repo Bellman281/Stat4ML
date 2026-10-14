@@ -1,0 +1,134 @@
+\documentclass[11pt]{article}
+\usepackage{../../latex/stat4ml_style}
+
+\title{Chapter 5: Information Theory for Learning \\ \large Part III --- Statistical Foundations of Deep Learning \& Reinforcement Learning}
+\author{Omid Safarzadeh}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+The loss that trains almost every classifier and language model --- cross-entropy
+--- is an information-theoretic quantity, and reading it that way explains what
+training actually does. Entropy measures the uncertainty in a distribution;
+cross-entropy measures the cost of using the \emph{wrong} distribution to encode
+the right one; and the two differ by exactly the KL divergence. Because the
+entropy of the truth is a constant, minimising cross-entropy is minimising KL to
+the truth --- the model is being pulled onto the data distribution, nothing more.
+This chapter proves that decomposition, shows why KL is non-negative (so
+cross-entropy can never beat entropy), connects mutual information to what a
+feature tells you about a label, and ends at perplexity, which is just
+cross-entropy wearing different units.
+\end{abstract}
+
+\tableofcontents
+
+% ======================================================================
+\section{Entropy, cross-entropy, and KL}
+% ======================================================================
+
+\begin{definition}[Entropy, cross-entropy, KL]
+For distributions $p,q$ over the same outcomes,
+\[
+  H(p) = -\sum_x p(x)\log p(x),\quad
+  H(p,q) = -\sum_x p(x)\log q(x),\quad
+  \mathrm{KL}(p\|q) = \sum_x p(x)\log\frac{p(x)}{q(x)}.
+\]
+$H(p)$ is the \keyterm{entropy} (uncertainty in $p$), $H(p,q)$ the
+\keyterm{cross-entropy} (cost of coding $p$ with a code built for $q$), and
+$\mathrm{KL}$ the \keyterm{divergence} from $p$ to $q$.
+\end{definition}
+
+The three are one identity apart, and that identity is why cross-entropy is the
+loss.
+
+\begin{theorem}[Cross-entropy is entropy plus divergence]
+$H(p,q) = H(p) + \mathrm{KL}(p\|q)$.
+\end{theorem}
+\begin{proof}
+Expand the KL: $\mathrm{KL}(p\|q) = \sum_x p(x)\log p(x) - \sum_x p(x)\log q(x)
+= -H(p) + H(p,q)$. Rearranging gives the identity.
+\end{proof}
+
+When a classifier minimises cross-entropy against the data, $p$ is the (fixed)
+true label distribution and $q$ the model. Since $H(p)$ does not depend on the
+model, \emph{minimising $H(p,q)$ is minimising $\mathrm{KL}(p\|q)$} --- the model
+is pulled toward the truth, and the best it can ever do is $H(p)$, the entropy
+floor. The middle panel of the figure is this exact picture: cross-entropy as a
+function of the model $q$ bottoms out at $q=p$, touching the horizontal entropy
+floor, with the KL as the gap above it.
+
+\begin{theorem}[Gibbs' inequality]
+$\mathrm{KL}(p\|q)\ge 0$, with equality iff $p=q$.
+\end{theorem}
+\begin{proof}
+Using $\log t \le t-1$ for $t>0$ (with equality at $t=1$),
+\[
+  -\mathrm{KL}(p\|q) = \sum_x p(x)\log\frac{q(x)}{p(x)}
+   \le \sum_x p(x)\!\left(\frac{q(x)}{p(x)}-1\right) = \sum_x q(x) - \sum_x p(x) = 0.
+\]
+So $\mathrm{KL}\ge 0$; equality needs $q(x)/p(x)=1$ everywhere, i.e.\ $p=q$.
+\end{proof}
+
+So cross-entropy can never be smaller than entropy: no model encodes the data
+better than the data's own distribution. One caution the definition makes plain:
+KL is \emph{not symmetric}, $\mathrm{KL}(p\|q)\ne\mathrm{KL}(q\|p)$ in general ---
+which is why the forward KL (used in maximum likelihood) and the reverse KL (used
+in some variational methods) produce different fits.
+
+% ======================================================================
+\section{Mutual information}
+% ======================================================================
+
+\begin{definition}[Mutual information]
+$I(X;Y) = H(X) - H(X\mid Y) = \sum_{x,y} p(x,y)\log\dfrac{p(x,y)}{p(x)p(y)}$.
+\end{definition}
+
+Mutual information is how much knowing $Y$ reduces the uncertainty in $X$ --- the
+entropy of $X$ minus the entropy that remains once $Y$ is known. It is
+$\mathrm{KL}\big(p(x,y)\,\|\,p(x)p(y)\big)$, the divergence between the joint and
+the product of the marginals, so by Gibbs' inequality $I(X;Y)\ge 0$, zero exactly
+when $X$ and $Y$ are independent. This is the information-theoretic meaning of a
+useful feature: a representation $Y$ is informative about a label $X$ to the
+extent that $I(X;Y)$ is large. (The \keyterm{information bottleneck} proposes that
+good representations maximise $I(Y;\text{label})$ while minimising
+$I(Y;\text{input})$ --- a clean idea, though whether it \emph{explains} deep
+learning is still debated, and we state it as a lens, not a law.)
+
+% ======================================================================
+\section{Perplexity}
+% ======================================================================
+
+Language models report \keyterm{perplexity}, and it is not a new quantity --- it
+is the cross-entropy, exponentiated.
+
+\begin{definition}[Perplexity]
+For a model with per-token cross-entropy $H$ (in nats), the perplexity is
+$\mathrm{PPL} = e^{H}$.
+\end{definition}
+
+Perplexity is the \emph{effective vocabulary size} the model is choosing among:
+a model as uncertain as a uniform guess over $V$ tokens has cross-entropy
+$\log V$ and perplexity $V$; a perfect model has cross-entropy $0$ and perplexity
+$1$. The right panel plots the exponential link, with a uniform model over ten
+thousand tokens at perplexity $10{,}000$ and a cross-entropy of two nats at
+perplexity $7.4$. Reporting perplexity rather than loss changes nothing
+mathematically --- $e^{(\cdot)}$ is monotone, so minimising one minimises the
+other --- but it puts the number on the interpretable scale of ``how many equally
+likely choices.''
+
+\begin{summarybox}
+Entropy $H(p)$ is uncertainty; cross-entropy $H(p,q)$ is the cost of coding $p$
+with $q$; they satisfy $H(p,q)=H(p)+\mathrm{KL}(p\|q)$, so minimising
+cross-entropy against fixed data minimises $\mathrm{KL}$ to the truth, floored at
+$H(p)$. Gibbs' inequality gives $\mathrm{KL}\ge 0$ (equality iff $p=q$), so no
+model beats the data's own entropy, and KL's asymmetry separates forward- from
+reverse-KL fits. Mutual information $I(X;Y)=H(X)-H(X\mid Y)=
+\mathrm{KL}(p(x,y)\|p(x)p(y))\ge 0$ measures what a feature says about a label.
+Perplexity is $e^{H}$ --- cross-entropy on the scale of effective vocabulary
+size.
+\end{summarybox}
+
+\end{document}
